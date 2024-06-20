@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.FormatSize
 import androidx.compose.material.icons.filled.NetworkCell
 import androidx.compose.material.icons.filled.NetworkPing
 import androidx.compose.material.icons.filled.NetworkWifi
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
@@ -82,7 +83,7 @@ class RequestScreen : Screen {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
-                        imageVector = Icons.Default.NetworkWifi,
+                        imageVector = Icons.Default.Public,
                         contentDescription = "Network icon",
                         modifier = Modifier.width(24.dp)
                     )

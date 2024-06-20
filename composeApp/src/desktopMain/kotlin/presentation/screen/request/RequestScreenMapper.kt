@@ -25,7 +25,7 @@ class RequestScreenMapper {
         return when {
             this < ONE -> "${(this * SIZE).toInt()} $KB"
             this < SIZE -> "${this.toInt()} $KB"
-            else -> "${this / SIZE} $MB"
+            else -> String.format("%.2f $MB", this / SIZE)
         }
     }
 

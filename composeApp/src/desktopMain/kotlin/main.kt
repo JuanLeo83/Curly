@@ -1,8 +1,9 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import data.repository.RequestRepositoryImpl
-import data.source.remote.SampleRemoteSource
-import data.source.remote.SampleRemoteSourceImpl
+import data.source.remote.RemoteMapper
+import data.source.remote.RequestRemoteSource
+import data.source.remote.RequestRemoteSourceImpl
 import domain.repository.RequestRepository
 import domain.usecase.DoRequestUseCase
 import org.koin.core.context.startKoin
@@ -35,8 +36,9 @@ private fun initKoin() {
 }
 
 private val dataModule = module {
-    single<SampleRemoteSource> { SampleRemoteSourceImpl() }
-    factory<RequestRepository> { RequestRepositoryImpl() }
+    factory { RemoteMapper() }
+    single<RequestRemoteSource> { RequestRemoteSourceImpl(get()) }
+    factory<RequestRepository> { RequestRepositoryImpl(get()) }
 }
 
 private val domainModule = module {

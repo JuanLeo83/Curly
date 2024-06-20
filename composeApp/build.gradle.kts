@@ -20,6 +20,11 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.content.negociation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.serialization.kotlinx.xml)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -30,6 +35,7 @@ kotlin {
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.koin)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.ktor.client.cio)
         }
     }
 }

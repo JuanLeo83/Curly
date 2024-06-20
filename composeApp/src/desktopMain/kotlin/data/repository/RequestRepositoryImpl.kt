@@ -1,26 +1,12 @@
 package data.repository
 
+import data.source.remote.RequestRemoteSource
 import domain.model.RequestParams
 import domain.model.RequestResult
 import domain.repository.RequestRepository
 
-class RequestRepositoryImpl : RequestRepository {
+class RequestRepositoryImpl(private val source: RequestRemoteSource) : RequestRepository {
     override suspend fun doRequest(params: RequestParams): Result<RequestResult> {
-        return Result.success(
-            RequestResult(
-                statusCode = 200,
-                responseTime = 151,
-                size = 1.71,
-                body = """
-                    {
-                        "message": "Hello, World!"
-                        "data": {
-                            "id": 1,
-                            "name": "John Doe",
-                            "email": "johndoe@mail.com"
-                    }
-                """.trimIndent()
-            )
-        )
+        return source.doRequest(params.method, params.url)
     }
 }
