@@ -25,6 +25,7 @@ kotlin {
             implementation(libs.ktor.client.content.negociation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.serialization.kotlinx.xml)
+            implementation(libs.log.napier)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

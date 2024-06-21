@@ -22,18 +22,24 @@ class RequestScreenMapper {
     }
 
     private fun Double.formatSize(): String {
+        val kb = SIZE
+        val mb = kb * SIZE
+        val gb = mb * SIZE
+
         return when {
-            this < ONE -> "${(this * SIZE).toInt()} $KB"
-            this < SIZE -> "${this.toInt()} $KB"
-            else -> String.format("%.2f $MB", this / SIZE)
+            this < kb -> "$this $BYTE"
+            this < mb -> String.format(KB_FORMAT, this / kb)
+            this < gb -> String.format(MB_FORMAT, this / mb)
+            else -> String.format(GB_FORMAT, this / gb)
         }
     }
 
     private companion object {
         const val MILLIS = "ms"
-        const val KB = "KB"
-        const val MB = "MB"
-        const val ONE = 1
+        const val BYTE = "B"
+        const val KB_FORMAT = "%.2f KB"
+        const val MB_FORMAT = "%.2f MB"
+        const val GB_FORMAT = "%.2f GB"
         const val SIZE = 1024
     }
 

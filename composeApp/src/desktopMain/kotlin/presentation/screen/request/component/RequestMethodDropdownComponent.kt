@@ -1,6 +1,7 @@
 package presentation.screen.request.component
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import domain.model.RequestMethod
 
@@ -31,7 +33,7 @@ import domain.model.RequestMethod
 fun RequestMethodDropdownComponent(
     modifier: Modifier = Modifier,
     optionSelected: RequestMethod = RequestMethod.GET,
-    onOptionSelected: (RequestMethod) -> Unit
+    onOptionSelected: (RequestMethod) -> Unit = {}
 ) {
     val defaultRotationAngle = 0f
     val rotationAngle = -180f
@@ -40,6 +42,11 @@ fun RequestMethodDropdownComponent(
     val rotation: Float by animateFloatAsState(
         if (expanded) rotationAngle else defaultRotationAngle
     )
+
+    fun onClickItem(method: RequestMethod) {
+        onOptionSelected(method)
+        expanded = false
+    }
 
     Column {
         Row(
@@ -54,7 +61,11 @@ fun RequestMethodDropdownComponent(
                 ).clickable { expanded = true }
                 .padding(8.dp)
         ) {
-            Text(text = optionSelected.value, color = selectColor(optionSelected))
+            Text(
+                text = optionSelected.value,
+                fontWeight = FontWeight.Bold,
+                color = selectColor(optionSelected)
+            )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Open Menu",
@@ -65,40 +76,13 @@ fun RequestMethodDropdownComponent(
         DropdownMenu(modifier = modifier,
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
-            RequestMethodMenuItem(RequestMethod.GET) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.POST) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.PUT) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.PATCH) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.DELETE) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.HEAD) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
-
-            RequestMethodMenuItem(RequestMethod.OPTIONS) { method ->
-                onOptionSelected(method)
-                expanded = false
-            }
+            RequestMethodMenuItem(RequestMethod.GET, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.POST, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.PUT, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.PATCH, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.DELETE, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.HEAD, optionSelected, ::onClickItem)
+            RequestMethodMenuItem(RequestMethod.OPTIONS, optionSelected, ::onClickItem)
         }
     }
 }
@@ -106,13 +90,24 @@ fun RequestMethodDropdownComponent(
 @Composable
 private fun RequestMethodMenuItem(
     requestMethod: RequestMethod,
+    optionSelected: RequestMethod,
     onOptionSelected: (RequestMethod) -> Unit
 ) {
-    DropdownMenuItem(onClick = {
-        onOptionSelected(requestMethod)
-    }) {
+    val backgroundColor = if (optionSelected == requestMethod) {
+        Color.LightGray
+    } else {
+        Color.Transparent
+    }
+
+    DropdownMenuItem(
+        modifier = Modifier.background(color = backgroundColor),
+        onClick = {
+            onOptionSelected(requestMethod)
+        }
+    ) {
         Text(
             text = requestMethod.value,
+            fontWeight = FontWeight.Bold,
             color = selectColor(requestMethod)
         )
     }
