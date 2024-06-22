@@ -22,6 +22,7 @@ class RequestScreenModel(
 
     fun sendRequest() = screenModelScope.launch {
         val params = mapper.mapToRequestParams(state.value)
+        mutableState.value = state.value.copy(url = params.url)
         doRequestUseCase(params).fold(
             onSuccess = ::requestSuccessHandler,
             onFailure = ::requestFailureHandler

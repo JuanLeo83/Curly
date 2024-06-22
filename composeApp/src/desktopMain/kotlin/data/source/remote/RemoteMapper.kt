@@ -26,10 +26,18 @@ class RemoteMapper {
         return RequestResult(
             statusCode = response.status.value,
             responseTime = response.responseTime.timestamp - response.requestTime.timestamp,
-            size = response.body<ByteArray>().size.toDouble(),
+            size = getSize(response),
             type = getBodyType(response),
             body = response.bodyAsText()
         )
+    }
+
+    private suspend fun getSize(response: HttpResponse): Double {
+        val headersSize = response.headers.toString().toByteArray().size.toDouble()
+        val bodySize = response.headers[CONTENT_LENGTH]?.toDouble()
+            ?: response.body<ByteArray>().size.toDouble()
+
+        return headersSize + bodySize
     }
 
     private fun getBodyType(response: HttpResponse): BodyType {
@@ -37,8 +45,9 @@ class RemoteMapper {
         return when {
             contentType?.contains(JSON) == true -> BodyType.JSON
             contentType?.contains(HTML) == true -> BodyType.HTML
-            contentType?.contains(APP_XML) == true ||
-            contentType?.contains(TEXT_XML) == true -> BodyType.XML
+            contentType?.contains(APP_XML) == true || contentType?.contains(TEXT_XML) == true ->
+                BodyType.XML
+
             contentType?.contains(TEXT) == true -> BodyType.TEXT
             else -> BodyType.TEXT
         }
@@ -46,6 +55,7 @@ class RemoteMapper {
 
     private companion object {
         const val CONTENT_TYPE = "Content-Type"
+        const val CONTENT_LENGTH = "Content-Length"
         const val JSON = "application/json"
         const val HTML = "text/html"
         const val APP_XML = "application/xml"
