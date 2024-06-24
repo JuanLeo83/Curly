@@ -25,6 +25,8 @@ class RequestScreenMapper {
             statusCode = result.statusCode.toString(),
             responseTime = "${result.responseTime} $MILLIS",
             size = result.size.formatSize(),
+            type = result.type,
+            rawBody = result.body,
             body = formatBody(result)
         )
     }

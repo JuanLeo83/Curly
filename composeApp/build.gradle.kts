@@ -30,12 +30,12 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(compose.materialIconsExtended)
+            implementation(libs.kotlinx.coroutines.swing)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.koin)
-            implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.cio)
         }
     }
