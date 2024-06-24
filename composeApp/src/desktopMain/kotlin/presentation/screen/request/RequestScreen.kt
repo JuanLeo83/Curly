@@ -30,9 +30,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import domain.model.BodyType
 import presentation.screen.request.component.JsonText
-import presentation.screen.request.component.MarkupTextComponent
 import presentation.screen.request.component.RequestMethodDropdownComponent
 import presentation.screen.request.component.ResponseStatsComponent
+import presentation.screen.request.component.markuptext.MarkupTextComponent
 
 class RequestScreen : Screen {
 

@@ -1,0 +1,13 @@
+package presentation.screen.request.component.markuptext
+
+enum class XmlElementType {
+    OPEN_TAG_SYMBOL, // <
+    TAG_NAME,
+    ATTRIBUTE_NAME,
+    EQUAL_SYMBOL,
+    ATTRIBUTE_VALUE,
+    CLOSE_TAG_SYMBOL, // > or />
+    OPEN_END_TAG_SYMBOL, // </
+    END_TAG_NAME,
+    TAG_CONTENT
+}
