@@ -1,4 +1,4 @@
-package presentation.screen.request.component.markuptext
+package presentation.screen.request.component.response.markuptext
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

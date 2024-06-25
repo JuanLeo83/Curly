@@ -21,16 +21,31 @@ class RequestScreenModel(
     }
 
     fun sendRequest() = screenModelScope.launch {
+        if (state.value.url.isEmpty()) return@launch
+
         val params = mapper.mapToRequestParams(state.value)
-        mutableState.value = state.value.copy(url = params.url)
+        mutableState.value = state.value.copy(url = params.url, isLoading = true)
         doRequestUseCase(params).fold(
             onSuccess = ::requestSuccessHandler,
             onFailure = ::requestFailureHandler
         )
     }
 
+    fun showPretty() {
+        mutableState.value = state.value.copy(
+            responseViewMode = ResponseViewMode.PRETTY
+        )
+    }
+
+    fun showRaw() {
+        mutableState.value = state.value.copy(
+            responseViewMode = ResponseViewMode.RAW
+        )
+    }
+
     private fun requestSuccessHandler(result: RequestResult) {
         mutableState.value = state.value.copy(
+            isLoading = false,
             responseData = mapper.mapToResponseData(result),
             errorMessage = ""
         )
@@ -38,6 +53,7 @@ class RequestScreenModel(
 
     private fun requestFailureHandler(throwable: Throwable) {
         mutableState.value = state.value.copy(
+            isLoading = false,
             responseData = null,
             errorMessage = throwable.message ?: ""
         )

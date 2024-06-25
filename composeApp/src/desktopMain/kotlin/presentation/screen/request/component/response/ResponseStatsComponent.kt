@@ -1,4 +1,4 @@
-package presentation.screen.request.component
+package presentation.screen.request.component.response
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

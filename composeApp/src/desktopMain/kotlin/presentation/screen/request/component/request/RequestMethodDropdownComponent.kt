@@ -1,4 +1,4 @@
-package presentation.screen.request.component
+package presentation.screen.request.component.request
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
