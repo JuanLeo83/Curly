@@ -16,7 +16,10 @@ class RequestScreenModel(
 ) : StateScreenModel<RequestScreenState>(RequestScreenState()) {
 
     fun setUrl(url: String) {
-        mutableState.value = state.value.copy(url = url)
+        mutableState.value = state.value.copy(
+            url = url,
+            requestParams = getRequestParams(url)
+        )
     }
 
     fun setRequestMethod(method: RequestMethod) {
@@ -35,15 +38,11 @@ class RequestScreenModel(
     }
 
     fun showPretty() {
-        mutableState.value = state.value.copy(
-            responseViewMode = ResponseViewMode.PRETTY
-        )
+        mutableState.value = state.value.copy(responseViewMode = ResponseViewMode.PRETTY)
     }
 
     fun showRaw() {
-        mutableState.value = state.value.copy(
-            responseViewMode = ResponseViewMode.RAW
-        )
+        mutableState.value = state.value.copy(responseViewMode = ResponseViewMode.RAW)
     }
 
     fun addRow(type: TableType) {
@@ -62,17 +61,6 @@ class RequestScreenModel(
             TableType.COOKIES -> Unit
             TableType.BODY -> Unit
         }
-
-
-//        val updatedParams = state.value.requestParams.map {
-//            if (it.index == param.index) it.copy(
-//                key = param.key,
-//                value = param.value,
-//                isChecked = param.isChecked
-//            ) else it
-//        }.toMutableList()
-//        mutableState.value = state.value
-//            .copy(requestParams = updatedParams)
     }
 
     fun deleteRow(type: TableType, index: Int) {
@@ -115,37 +103,23 @@ class RequestScreenModel(
     }
 
     private fun modifyRequestParam(param: RequestParam) {
+        val updatedParams = state.value.requestParams.modify(param, param.index)
         mutableState.value = state.value.copy(
-            requestParams = state.value.requestParams.modify(param, param.index)
+            url = buildUrlWithParams(state.value.url, updatedParams),
+            requestParams = updatedParams
         )
-
-
-//        val updatedParams = state.value.requestParams.map {
-//            if (it.index == param.index) it.copy(
-//                key = param.key,
-//                value = param.value,
-//                isChecked = param.isChecked
-//            ) else it
-//        }.toMutableList()
-//        mutableState.value = state.value.copy(requestParams = updatedParams)
     }
 
     private fun modifyRequestHeader(param: RequestParam) {
         mutableState.value = state.value.copy(
             headerParams = state.value.headerParams.modify(param, param.index)
         )
-//        val updatedParams = state.value.headerParams.map {
-//            if (it.index == param.index) it.copy(
-//                key = param.key,
-//                value = param.value,
-//                isChecked = param.isChecked
-//            ) else it
-//        }.toMutableList()
-//        mutableState.value = state.value.copy(headerParams = updatedParams)
     }
 
     private fun deleteRequestParam(index: Int) {
+        val updatedParams = state.value.requestParams.remove(index)
         mutableState.value = state.value.copy(
+            url = buildUrlWithParams(state.value.url, updatedParams),
             requestParams = state.value.requestParams.remove(index)
         )
     }
@@ -154,6 +128,21 @@ class RequestScreenModel(
         mutableState.value = state.value.copy(
             headerParams = state.value.headerParams.remove(index)
         )
+    }
+
+    private fun getRequestParams(url: String): List<RequestParam> {
+        return url.substringAfter("?", "")
+            .split("&")
+            .filter { it.contains("=") }
+            .mapIndexed { index, text ->
+                val (key, value) = text.split("=")
+                RequestParam(isChecked = true, index = index, key = key, value = value)
+            }
+    }
+
+    private fun buildUrlWithParams(baseUrl: String, params: List<RequestParam>): String {
+        val queryParams = params.joinToString("&") { "${it.key}=${it.value}" }
+        return "${baseUrl.split("?").first()}?$queryParams"
     }
 
 }

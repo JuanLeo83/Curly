@@ -9,13 +9,13 @@ fun List<RequestParam>.add(value: RequestParam): List<RequestParam> {
 fun List<RequestParam>.modify(value: RequestParam, index: Int = -1): List<RequestParam> {
     return if (index in 0..lastIndex) {
         toMutableList().apply { set(index, value) }.sortRequestParams()
-    } else throw IndexOutOfBoundsException("Index out of bounds")
+    } else throw IndexOutOfBoundsException("Index out of bounds: index = $index -> lastIndex = $lastIndex")
 }
 
 fun List<RequestParam>.remove(index: Int): List<RequestParam> {
     return if (index in 0..lastIndex) {
         toMutableList().apply { removeAt(index) }.sortRequestParams()
-    } else throw IndexOutOfBoundsException("Index out of bounds")
+    } else throw IndexOutOfBoundsException("Index out of bounds: index = $index -> lastIndex = $lastIndex")
 }
 
 

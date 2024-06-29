@@ -14,13 +14,6 @@ data class RequestScreenState(
     val responseData: ResponseData? = null
 ) {
     fun areAllParamsEnabled() = requestParams.all { it.isChecked }
-
-    fun sortRequestHeaders() {
-        headerParams.sortedBy { it.index }.forEachIndexed { index, requestHeader ->
-            if (index == headerParams.lastIndex) return@forEachIndexed
-            headerParams.toMutableList()[index] = requestHeader.copy(index = index)
-        }
-    }
 }
 
 data class RequestParam(
