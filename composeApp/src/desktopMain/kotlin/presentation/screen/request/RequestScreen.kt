@@ -24,13 +24,20 @@ class RequestScreen : Screen {
         val screenModel = koinScreenModel<RequestScreenModel>()
         val state by screenModel.state.collectAsState()
 
+        print(state.requestParams)
+
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             Column {
                 RequestFragmentComponent(
                     method = state.method,
                     url = state.url,
+                    requestParams = state.requestParams,
+                    headerParams = state.headerParams,
                     setRequestMethod = { screenModel.setRequestMethod(it) },
                     setUrl = { screenModel.setUrl(it) },
+                    addRow = { screenModel.addRow(it) },
+                    onValueChange = { type, param -> screenModel.onValueChange(type, param) },
+                    deleteRow = { type, index -> screenModel.deleteRow(type, index) },
                     sendRequest = { screenModel.sendRequest() }
                 )
 

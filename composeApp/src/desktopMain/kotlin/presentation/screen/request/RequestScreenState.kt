@@ -5,11 +5,29 @@ import domain.model.RequestMethod
 
 data class RequestScreenState(
     val isLoading: Boolean = false,
+    val errorMessage: String = "",
     val method: RequestMethod = RequestMethod.GET,
     val url: String = "",
-    val errorMessage: String = "",
+    val requestParams: List<RequestParam> = listOf(),
+    val headerParams: List<RequestParam> = listOf(),
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null
+) {
+    fun areAllParamsEnabled() = requestParams.all { it.isChecked }
+
+    fun sortRequestHeaders() {
+        headerParams.sortedBy { it.index }.forEachIndexed { index, requestHeader ->
+            if (index == headerParams.lastIndex) return@forEachIndexed
+            headerParams.toMutableList()[index] = requestHeader.copy(index = index)
+        }
+    }
+}
+
+data class RequestParam(
+    val isChecked: Boolean = false,
+    val index: Int = Int.MAX_VALUE,
+    val key: String = "",
+    val value: String = ""
 )
 
 data class ResponseData(
@@ -24,4 +42,19 @@ data class ResponseData(
 enum class ResponseViewMode {
     PRETTY,
     RAW
+}
+
+enum class TableType {
+    PARAMS,
+    HEADERS,
+    COOKIES,
+    BODY
+}
+
+sealed class TabData(
+    val text: String,
+    val tableType: TableType
+) {
+    data object Params : TabData("Params", TableType.PARAMS)
+    data object Headers : TabData("Headers", TableType.HEADERS)
 }

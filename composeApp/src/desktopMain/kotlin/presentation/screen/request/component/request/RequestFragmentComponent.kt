@@ -1,76 +1,45 @@
 package presentation.screen.request.component.request
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import domain.model.RequestMethod
+import presentation.screen.request.RequestParam
+import presentation.screen.request.TableType
 
 @Composable
 fun RequestFragmentComponent(
     method: RequestMethod,
     url: String,
+    requestParams: List<RequestParam>,
+    headerParams: List<RequestParam>,
     setRequestMethod: (RequestMethod) -> Unit,
     setUrl: (String) -> Unit,
+    addRow: (TableType) -> Unit,
+    onValueChange: (TableType, param: RequestParam) -> Unit,
+    deleteRow: (TableType, index: Int) -> Unit,
     sendRequest: () -> Unit
 ) {
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-
     Column {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            RequestMethodDropdownComponent(
-                modifier = Modifier.weight(0.2f),
-                optionSelected = method
-            ) { setRequestMethod(it) }
+        RequestUrlComponent(
+            method = method,
+            url = url,
+            setRequestMethod = setRequestMethod,
+            setUrl = setUrl,
+            sendRequest = sendRequest
+        )
 
-            Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value = url,
-                onValueChange = { setUrl(it) },
-                singleLine = true,
-                maxLines = 1,
-                modifier = Modifier.weight(0.6f)
-                    .focusRequester(focusRequester)
-                    .onPreviewKeyEvent { event ->
-                        if (event.type == KeyEventType.KeyUp && event.key == Key.Enter) {
-                            sendRequest()
-                            focusManager.clearFocus(force = true)
-                            true
-                        } else false
-                    }
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Button(
-                onClick = { sendRequest() },
-                modifier = Modifier.requiredWidth(120.dp)
-            ) { Text("Send") }
-        }
+        RequestParamsComponent(
+            requestParams = requestParams,
+            headerParams = headerParams,
+            addRow = addRow,
+            onValueChange = onValueChange,
+            deleteRow = deleteRow
+        )
     }
 }

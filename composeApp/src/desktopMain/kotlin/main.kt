@@ -1,5 +1,10 @@
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import data.repository.RequestRepositoryImpl
 import data.source.remote.RemoteMapper
 import data.source.remote.RequestRemoteSource
@@ -15,11 +20,17 @@ import java.awt.Dimension
 fun main() = application {
     initKoin()
 
+    val state = rememberWindowState(
+        position = WindowPosition(Alignment.Center),
+        size = DpSize(1280.dp, 768.dp)
+    )
+
     Window(
+        state = state,
         onCloseRequest = ::exitApplication,
         title = "Curly",
     ) {
-        window.minimumSize = Dimension(600, 400)
+        window.minimumSize = Dimension(800, 600)
 
         App()
     }
