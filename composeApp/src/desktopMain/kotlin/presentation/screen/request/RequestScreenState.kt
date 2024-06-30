@@ -44,10 +44,15 @@ enum class TableType {
     BODY
 }
 
-sealed class TabData(
+sealed class TabRequestData(
     val text: String,
     val tableType: TableType
 ) {
-    data object Params : TabData("Params", TableType.PARAMS)
-    data object Headers : TabData("Headers", TableType.HEADERS)
+    data object Params : TabRequestData("Params", TableType.PARAMS)
+    data object Headers : TabRequestData("Headers", TableType.HEADERS)
+}
+
+sealed class TabResponse(val text: String) {
+    data object Body : TabResponse("Body")
+    data object Headers : TabResponse("Headers")
 }

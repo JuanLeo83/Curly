@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import presentation.common.component.tab.TabContentComponent
 import presentation.common.component.tab.TabRowComponent
 import presentation.screen.request.RequestParam
-import presentation.screen.request.TabData
+import presentation.screen.request.TabRequestData
 import presentation.screen.request.TableType
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -21,7 +21,7 @@ fun RequestParamsComponent(
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
     deleteRow: (TableType, index: Int) -> Unit = { _, _ -> }
 ) {
-    val tabs = listOf(TabData.Params, TabData.Headers)
+    val tabs = listOf(TabRequestData.Params, TabRequestData.Headers)
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { tabs.size })
 
@@ -37,7 +37,7 @@ fun RequestParamsComponent(
 
         TabContentComponent(pagerState) { index ->
             when (tabs[index]) {
-                TabData.Params -> ParamTableComponent(
+                TabRequestData.Params -> ParamTableComponent(
                     tabs[index].tableType,
                     requestParams,
                     addRow,
@@ -45,7 +45,7 @@ fun RequestParamsComponent(
                     deleteRow
                 )
 
-                TabData.Headers -> ParamTableComponent(
+                TabRequestData.Headers -> ParamTableComponent(
                     tabs[index].tableType,
                     headerParams,
                     addRow,

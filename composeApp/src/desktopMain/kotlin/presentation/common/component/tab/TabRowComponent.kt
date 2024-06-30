@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +39,7 @@ fun TabComponent(
     onClick: (Int) -> Unit
 ) {
     Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .widthIn(min = 64.dp)
             .background(color = if (selected) Color.Gray else Color.Transparent)
