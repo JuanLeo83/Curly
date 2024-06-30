@@ -4,6 +4,7 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.parser.Parser
 import domain.model.BodyType
+import domain.model.RequestHeader
 import domain.model.RequestParams
 import domain.model.RequestResult
 import kotlinx.serialization.encodeToString
@@ -16,7 +17,8 @@ class RequestScreenMapper {
     internal fun mapToRequestParams(state: RequestScreenState): RequestParams {
         return RequestParams(
             method = state.method,
-            url = completeUrlIfNeeded(state.url)
+            url = completeUrlIfNeeded(state.url),
+            headers = mapHeadersToRequest(state.headerParams)
         )
     }
 
@@ -33,6 +35,14 @@ class RequestScreenMapper {
 
     private fun completeUrlIfNeeded(url: String): String =
         if (url.startsWith(HTTP)) url else "${DEFAULT_PROTOCOL}$url"
+
+    private fun mapHeadersToRequest(headerParams: List<RequestParam>): List<RequestHeader> {
+        return headerParams.mapNotNull { param ->
+            if (param.isChecked) {
+                RequestHeader(param.key, param.value)
+            } else null
+        }
+    }
 
     private fun Double.formatSize(): String {
         val kb = SIZE

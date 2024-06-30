@@ -7,6 +7,6 @@ import domain.repository.RequestRepository
 
 class RequestRepositoryImpl(private val source: RequestRemoteSource) : RequestRepository {
     override suspend fun doRequest(params: RequestParams): Result<RequestResult> {
-        return source.doRequest(params.method, params.url)
+        return source.doRequest(params)
     }
 }

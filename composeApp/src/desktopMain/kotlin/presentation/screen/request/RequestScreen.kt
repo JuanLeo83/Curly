@@ -24,8 +24,6 @@ class RequestScreen : Screen {
         val screenModel = koinScreenModel<RequestScreenModel>()
         val state by screenModel.state.collectAsState()
 
-        print(state.requestParams)
-
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             Column {
                 RequestFragmentComponent(
