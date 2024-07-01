@@ -3,11 +3,13 @@ package data.source.remote
 import domain.model.BodyType
 import domain.model.RequestHeader
 import domain.model.RequestMethod
-import domain.model.RequestResult
+import domain.model.ResponseHeader
+import domain.model.ResponseModel
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 
@@ -25,13 +27,14 @@ class RemoteMapper {
         }
     }
 
-    internal suspend fun toRequestResult(response: HttpResponse): RequestResult {
-        return RequestResult(
+    internal suspend fun toRequestResult(response: HttpResponse): ResponseModel {
+        return ResponseModel(
             statusCode = response.status.value,
             responseTime = response.responseTime.timestamp - response.requestTime.timestamp,
             size = getSize(response),
             type = getBodyType(response),
-            body = response.bodyAsText()
+            body = response.bodyAsText(),
+            headers = toResponseHeadersModel(response.headers)
         )
     }
 
@@ -71,6 +74,12 @@ class RemoteMapper {
 
             contentType?.contains(TEXT) == true -> BodyType.TEXT
             else -> BodyType.TEXT
+        }
+    }
+
+    private fun toResponseHeadersModel(headers: Headers): List<ResponseHeader> {
+        return headers.entries().map { (key, value) ->
+            ResponseHeader(key, value)
         }
     }
 

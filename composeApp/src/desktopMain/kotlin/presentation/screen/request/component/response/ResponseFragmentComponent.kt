@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +24,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import presentation.common.component.tab.TabContentComponent
 import presentation.common.component.tab.TabRowComponent
@@ -65,7 +71,8 @@ fun ResponseFragmentComponent(
         Spacer(modifier = Modifier.height(4.dp))
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .border(
                     width = 1.dp,
                     color = Color.Gray,
@@ -86,10 +93,50 @@ fun ResponseFragmentComponent(
                     )
 
                     TabResponse.Headers -> {
-                        Text(text = "Headers")
+                        Table(response.headers)
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun Table(data: Map<String, String>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Divider(color = Color.Gray, thickness = 0.5.dp)
+        data.forEach { (key, value) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text(
+                    text = key,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Divider(
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .width(1.dp)
+                        .fillMaxHeight()
+                )
+                Text(
+                    text = value,
+                    modifier = Modifier.weight(1f).padding(start = 8.dp),
+                    fontSize = 16.sp
+                )
+            }
+            Divider(color = Color.Gray, thickness = 0.5.dp)
         }
     }
 }

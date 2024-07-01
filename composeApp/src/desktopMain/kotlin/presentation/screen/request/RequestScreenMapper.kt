@@ -6,7 +6,8 @@ import com.fleeksoft.ksoup.parser.Parser
 import domain.model.BodyType
 import domain.model.RequestHeader
 import domain.model.RequestParams
-import domain.model.RequestResult
+import domain.model.ResponseHeader
+import domain.model.ResponseModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -22,14 +23,15 @@ class RequestScreenMapper {
         )
     }
 
-    internal fun mapToResponseData(result: RequestResult): ResponseData {
+    internal fun mapToResponseData(result: ResponseModel): ResponseData {
         return ResponseData(
             statusCode = result.statusCode.toString(),
             responseTime = "${result.responseTime} $MILLIS",
             size = result.size.formatSize(),
             type = result.type,
             rawBody = result.body,
-            body = formatBody(result)
+            body = formatBody(result),
+            headers = mapHeaders(result.headers)
         )
     }
 
@@ -57,7 +59,7 @@ class RequestScreenMapper {
         }
     }
 
-    private fun formatBody(result: RequestResult): String =
+    private fun formatBody(result: ResponseModel): String =
         when (result.type) {
             BodyType.JSON -> formatJson(result.body)
             BodyType.XML -> formatXml(result.body)
@@ -80,6 +82,22 @@ class RequestScreenMapper {
         return Ksoup.parse(body)
             .outputSettings(Document.OutputSettings(indentAmount = 4))
             .toString()
+    }
+
+    private fun mapHeaders(headers: List<ResponseHeader>): Map<String, String> {
+        val mappedHeaders = mutableMapOf<String, String>()
+        headers.forEach {
+            mappedHeaders[it.key] = joinHeaders(it.value)
+        }
+        return mappedHeaders
+    }
+
+    private fun joinHeaders(headers: List<String>): String {
+        var joinedHeaders: String = ""
+        headers.forEach {
+            joinedHeaders += "$it, "
+        }
+        return joinedHeaders.substring(0, joinedHeaders.length - 2)
     }
 
     private companion object {

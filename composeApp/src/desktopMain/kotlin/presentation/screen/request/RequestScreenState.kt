@@ -29,7 +29,8 @@ data class ResponseData(
     val size: String,
     val type: BodyType,
     val rawBody: String,
-    val body: String
+    val body: String,
+    val headers: Map<String, String>
 )
 
 enum class ResponseViewMode {

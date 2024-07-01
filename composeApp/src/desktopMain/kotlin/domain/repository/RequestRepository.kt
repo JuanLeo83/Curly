@@ -1,8 +1,8 @@
 package domain.repository
 
 import domain.model.RequestParams
-import domain.model.RequestResult
+import domain.model.ResponseModel
 
 interface RequestRepository {
-    suspend fun doRequest(params: RequestParams): Result<RequestResult>
+    suspend fun doRequest(params: RequestParams): Result<ResponseModel>
 }

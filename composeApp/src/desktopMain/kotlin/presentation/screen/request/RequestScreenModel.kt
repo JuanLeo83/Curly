@@ -3,7 +3,7 @@ package presentation.screen.request
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import domain.model.RequestMethod
-import domain.model.RequestResult
+import domain.model.ResponseModel
 import domain.usecase.DoRequestUseCase
 import extension.list.add
 import extension.list.modify
@@ -72,7 +72,7 @@ class RequestScreenModel(
         }
     }
 
-    private fun requestSuccessHandler(result: RequestResult) {
+    private fun requestSuccessHandler(result: ResponseModel) {
         mutableState.value = state.value.copy(
             isLoading = false,
             responseData = mapper.mapToResponseData(result),
