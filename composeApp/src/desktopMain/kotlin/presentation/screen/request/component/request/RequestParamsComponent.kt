@@ -3,6 +3,7 @@ package presentation.screen.request.component.request
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ fun RequestParamsComponent(
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
     deleteRow: (TableType, index: Int) -> Unit = { _, _ -> }
 ) {
-    val tabs = listOf(TabRequestData.Params, TabRequestData.Headers)
+    val tabs = listOf(TabRequestData.Params, TabRequestData.Headers, TabRequestData.Authorization, TabRequestData.Body)
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { tabs.size })
 
@@ -52,6 +53,10 @@ fun RequestParamsComponent(
                     onValueChange,
                     deleteRow
                 )
+
+                TabRequestData.Authorization -> Text("Authorization here!")
+
+                TabRequestData.Body -> Text("Body here!")
             }
         }
     }

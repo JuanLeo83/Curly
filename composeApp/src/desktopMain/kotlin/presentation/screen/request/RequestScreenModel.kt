@@ -51,6 +51,7 @@ class RequestScreenModel(
             TableType.HEADERS -> addRequestHeader()
             TableType.COOKIES -> Unit
             TableType.BODY -> Unit
+            TableType.AUTHORIZATION -> Unit
         }
     }
 
@@ -60,6 +61,7 @@ class RequestScreenModel(
             TableType.HEADERS -> modifyRequestHeader(param)
             TableType.COOKIES -> Unit
             TableType.BODY -> Unit
+            TableType.AUTHORIZATION -> Unit
         }
     }
 
@@ -69,6 +71,7 @@ class RequestScreenModel(
             TableType.HEADERS -> deleteRequestHeader(index)
             TableType.COOKIES -> Unit
             TableType.BODY -> Unit
+            TableType.AUTHORIZATION -> Unit
         }
     }
 
@@ -90,15 +93,17 @@ class RequestScreenModel(
 
     private fun addRequestParam() {
         mutableState.value = state.value
-            .copy(requestParams = state.value.requestParams
-                .add(RequestParam(index = state.value.requestParams.size))
+            .copy(
+                requestParams = state.value.requestParams
+                    .add(RequestParam(index = state.value.requestParams.size))
             )
     }
 
     private fun addRequestHeader() {
         mutableState.value = state.value
-            .copy(headerParams = state.value.headerParams
-                .add(RequestParam(index = state.value.headerParams.size))
+            .copy(
+                headerParams = state.value.headerParams
+                    .add(RequestParam(index = state.value.headerParams.size))
             )
     }
 
@@ -141,8 +146,12 @@ class RequestScreenModel(
     }
 
     private fun buildUrlWithParams(baseUrl: String, params: List<RequestParam>): String {
+        if (baseUrl.isEmpty()) return baseUrl
+
         val queryParams = params.joinToString("&") { "${it.key}=${it.value}" }
-        return "${baseUrl.split("?").first()}?$queryParams"
+        return if (queryParams.isEmpty())
+            baseUrl.split("?").first()
+        else "${baseUrl.split("?").first()}?$queryParams"
     }
 
 }

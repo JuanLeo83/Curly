@@ -12,12 +12,10 @@ data class RequestScreenState(
     val headerParams: List<RequestParam> = listOf(),
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null
-) {
-    fun areAllParamsEnabled() = requestParams.all { it.isChecked }
-}
+)
 
 data class RequestParam(
-    val isChecked: Boolean = false,
+    val isChecked: Boolean = true,
     val index: Int = Int.MAX_VALUE,
     val key: String = "",
     val value: String = ""
@@ -42,7 +40,8 @@ enum class TableType {
     PARAMS,
     HEADERS,
     COOKIES,
-    BODY
+    BODY,
+    AUTHORIZATION
 }
 
 sealed class TabRequestData(
@@ -51,6 +50,8 @@ sealed class TabRequestData(
 ) {
     data object Params : TabRequestData("Params", TableType.PARAMS)
     data object Headers : TabRequestData("Headers", TableType.HEADERS)
+    data object Body : TabRequestData("Body", TableType.BODY)
+    data object Authorization : TabRequestData("Authorization", TableType.AUTHORIZATION)
 }
 
 sealed class TabResponse(val text: String) {
