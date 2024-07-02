@@ -1,6 +1,5 @@
-package presentation.screen.request.component.response
+package presentation.screen.request.component.response.json
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,6 +15,7 @@ import presentation.common.Symbols.QUOTE
 import presentation.common.Symbols.RIGHT_BRACE
 import presentation.common.Symbols.RIGHT_BRACKET
 import presentation.common.Symbols.SPACE
+import presentation.common.component.textWithLineNumbers.TextWithLineNumbers
 
 
 @Composable
@@ -33,11 +33,11 @@ fun JsonText(
                 append(jsonString.substring(lastIndex, match.range.first))
                 val value = match.value
                 val color = getColor(value)
-                withStyle(style = SpanStyle(color = color, fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(color = color, fontWeight = FontWeight.Light)) {
                     if (value.trim().endsWith(COLON)) {
                         append(value.dropLast(1))
                         withStyle(
-                            style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Bold)
+                            style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Light)
                         ) {
                             append(SPACE)
                         }
@@ -51,10 +51,7 @@ fun JsonText(
         }
     }
 
-    Text(
-        text = jsonAnnotatedString,
-        modifier = modifier
-    )
+    TextWithLineNumbers(jsonAnnotatedString, modifier = modifier)
 }
 
 private fun getColor(value: String) = when {

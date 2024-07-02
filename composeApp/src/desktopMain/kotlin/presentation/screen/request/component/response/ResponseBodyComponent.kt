@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import domain.model.BodyType
 import presentation.screen.request.ResponseData
 import presentation.screen.request.ResponseViewMode
+import presentation.screen.request.component.response.json.JsonText
 import presentation.screen.request.component.response.markuptext.MarkupTextComponent
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -54,13 +55,9 @@ fun ResponseBodyComponent(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = { showPretty() }) {
-                    Text(text = "Pretty")
-                }
+                Button(onClick = { showPretty() }) { Text(text = "Pretty") }
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { showRaw() }) {
-                    Text(text = "Raw")
-                }
+                Button(onClick = { showRaw() }) { Text(text = "Raw") }
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }

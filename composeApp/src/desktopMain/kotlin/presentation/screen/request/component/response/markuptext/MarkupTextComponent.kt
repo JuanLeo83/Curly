@@ -1,6 +1,5 @@
 package presentation.screen.request.component.response.markuptext
 
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -12,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import presentation.common.Symbols.NEW_LINE
 import presentation.common.Symbols.SPACE
+import presentation.common.component.textWithLineNumbers.TextWithLineNumbers
 
 @Composable
 fun MarkupTextComponent(
@@ -29,7 +29,7 @@ fun MarkupTextComponent(
                 } else {
                     append(MarkupTextUtils.getTabulation(row))
                     for (element in elements) {
-                        withStyle(style = SpanStyle(color = getColor(element), fontWeight = FontWeight.Bold)) {
+                        withStyle(style = SpanStyle(color = getColor(element), fontWeight = FontWeight.Light)) {
                             append(element.value)
                         }
                     }
@@ -39,10 +39,7 @@ fun MarkupTextComponent(
         }
     }
 
-    Text(
-        text = markupAnnotatedString,
-        modifier = modifier
-    )
+    TextWithLineNumbers(markupAnnotatedString, modifier = modifier)
 }
 
 private fun AnnotatedString.Builder.getColor(element: MarkupElement): Color {
