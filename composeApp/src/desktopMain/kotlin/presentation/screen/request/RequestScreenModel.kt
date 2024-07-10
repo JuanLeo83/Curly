@@ -8,6 +8,7 @@ import domain.usecase.DoRequestUseCase
 import extension.list.add
 import extension.list.modify
 import extension.list.remove
+import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
 
 class RequestScreenModel(
@@ -20,6 +21,8 @@ class RequestScreenModel(
             url = url,
             requestParams = getRequestParams(url)
         )
+
+        println(mutableState.value.requestParams)
     }
 
     fun setRequestMethod(method: RequestMethod) {
@@ -136,19 +139,23 @@ class RequestScreenModel(
     }
 
     private fun getRequestParams(url: String): List<RequestParam> {
-        return url.substringAfter("?", "")
-            .split("&")
-            .filter { it.contains("=") }
-            .mapIndexed { index, text ->
-                val (key, value) = text.split("=")
-                RequestParam(isChecked = true, index = index, key = key, value = value)
-            }
+        return (
+                url.substringAfter("?", "")
+                    .split("&")
+                    .filter { it.contains("=") }
+                    .mapIndexed { index, text ->
+                        val (key, value) = text.split("=")
+                        RequestParam(isChecked = true, index = index, key = key, value = value)
+                    } + state.value.requestParams.filter { !it.isChecked }
+                ).sortRequestParams()
     }
 
     private fun buildUrlWithParams(baseUrl: String, params: List<RequestParam>): String {
         if (baseUrl.isEmpty()) return baseUrl
 
-        val queryParams = params.joinToString("&") { "${it.key}=${it.value}" }
+        val queryParams = params
+            .filter { it.isChecked }
+            .joinToString("&") { "${it.key}=${it.value}" }
         return if (queryParams.isEmpty())
             baseUrl.split("?").first()
         else "${baseUrl.split("?").first()}?$queryParams"
