@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,12 +44,18 @@ fun ResponseBodyComponent(
     ) {
         if (viewMode == ResponseViewMode.PRETTY) {
             when (response.type) {
-                BodyType.TEXT -> Text(text = response.body, modifier = modifier)
+                BodyType.TEXT -> {
+                    SelectionContainer {
+                        Text(text = response.body, modifier = modifier)
+                    }
+                }
                 BodyType.JSON -> JsonText(jsonString = response.body, modifier = modifier)
                 BodyType.HTML,
                 BodyType.XML -> MarkupTextComponent(xmlString = response.body, modifier = modifier)
             }
-        } else Text(text = response.rawBody, modifier = modifier)
+        } else SelectionContainer {
+            Text(text = response.rawBody, modifier = modifier)
+        }
 
         if (hover) {
             Row(

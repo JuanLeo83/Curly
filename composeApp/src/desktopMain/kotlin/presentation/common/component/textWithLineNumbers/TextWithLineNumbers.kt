@@ -1,9 +1,11 @@
 package presentation.common.component.textWithLineNumbers
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,9 +22,13 @@ fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = M
 
         Divider(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color.LightGray))
 
-        Text(
-            text = annotatedString,
-            modifier = modifier.then(Modifier.weight(0.95f))
-        )
+        Column(modifier = Modifier.weight(0.95f)) {
+            SelectionContainer {
+                Text(
+                    text = annotatedString,
+                    modifier = modifier
+                )
+            }
+        }
     }
 }

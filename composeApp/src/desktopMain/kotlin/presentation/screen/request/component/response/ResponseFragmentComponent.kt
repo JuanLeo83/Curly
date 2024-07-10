@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -103,40 +104,42 @@ fun ResponseFragmentComponent(
 
 @Composable
 fun Table(data: Map<String, String>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        Divider(color = Color.Gray, thickness = 0.5.dp)
-        data.forEach { (key, value) ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text(
-                    text = key,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-                Divider(
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .width(1.dp)
-                        .fillMaxHeight()
-                )
-                Text(
-                    text = value,
-                    modifier = Modifier.weight(1f).padding(start = 8.dp),
-                    fontSize = 16.sp
-                )
-            }
+    SelectionContainer {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
             Divider(color = Color.Gray, thickness = 0.5.dp)
+            data.forEach { (key, value) ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    Text(
+                        text = key,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                    Divider(
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                    )
+                    Text(
+                        text = value,
+                        modifier = Modifier.weight(1f).padding(start = 8.dp),
+                        fontSize = 16.sp
+                    )
+                }
+                Divider(color = Color.Gray, thickness = 0.5.dp)
+            }
         }
     }
 }
