@@ -12,6 +12,7 @@ import presentation.screen.request.TableType
 
 @Composable
 fun RequestFragmentComponent(
+    modifier: Modifier = Modifier,
     method: RequestMethod,
     url: String,
     requestParams: List<RequestParam>,
@@ -23,7 +24,7 @@ fun RequestFragmentComponent(
     deleteRow: (TableType, index: Int) -> Unit,
     sendRequest: () -> Unit
 ) {
-    Column {
+    Column(modifier = modifier) {
         RequestUrlComponent(
             method = method,
             url = url,
