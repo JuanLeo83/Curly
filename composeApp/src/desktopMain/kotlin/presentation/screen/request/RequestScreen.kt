@@ -64,11 +64,7 @@ class RequestScreen : Screen {
                     sendRequest = { screenModel.sendRequest() }
                 )
 
-                Spacer(modifier = Modifier.height(if (state.isLoading) 14.dp else 16.dp))
-
-                if (state.isLoading) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(2.dp))
-                }
+                Spacer(modifier = Modifier.height(14.dp))
 
                 Box(modifier = Modifier
                     .fillMaxWidth()
@@ -100,6 +96,10 @@ class RequestScreen : Screen {
                         .fillMaxWidth()
                         .background(if (hover || isDragging) Color.Blue else Color.LightGray)
                     )
+
+                    if (state.isLoading) {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(1.dp))
+                    }
                 }
 
                 state.responseData?.let { response ->

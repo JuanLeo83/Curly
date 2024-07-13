@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -111,7 +109,7 @@ fun Table(data: Map<String, String>) {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Divider(color = Color.Gray, thickness = 0.5.dp)
+            Divider(color = Color.Gray, thickness = 1.dp)
             data.forEach { (key, value) ->
                 Row(
                     modifier = Modifier
@@ -124,21 +122,15 @@ fun Table(data: Map<String, String>) {
                             .weight(1f)
                             .padding(end = 8.dp),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-                    Divider(
-                        color = Color.Gray,
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
+                        fontSize = 12.sp
                     )
                     Text(
                         text = value,
                         modifier = Modifier.weight(1f).padding(start = 8.dp),
-                        fontSize = 16.sp
+                        fontSize = 12.sp
                     )
                 }
-                Divider(color = Color.Gray, thickness = 0.5.dp)
+                Divider(color = Color.Gray, thickness = 1.dp)
             }
         }
     }
