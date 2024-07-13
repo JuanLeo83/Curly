@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import presentation.common.component.lineNumbers.LineNumbersComponent
 
 @Composable
@@ -26,6 +27,7 @@ fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = M
             SelectionContainer {
                 Text(
                     text = annotatedString,
+                    fontSize = 12.sp,
                     modifier = modifier
                 )
             }

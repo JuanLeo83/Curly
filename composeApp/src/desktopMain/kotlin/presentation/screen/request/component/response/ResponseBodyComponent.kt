@@ -15,11 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import domain.model.BodyType
 import presentation.screen.request.ResponseData
 import presentation.screen.request.ResponseViewMode
@@ -46,7 +48,7 @@ fun ResponseBodyComponent(
             when (response.type) {
                 BodyType.TEXT -> {
                     SelectionContainer {
-                        Text(text = response.body, modifier = modifier)
+                        Text(text = response.body, modifier = modifier, fontSize = 12.sp)
                     }
                 }
                 BodyType.JSON -> JsonText(jsonString = response.body, modifier = modifier)
@@ -54,17 +56,18 @@ fun ResponseBodyComponent(
                 BodyType.XML -> MarkupTextComponent(xmlString = response.body, modifier = modifier)
             }
         } else SelectionContainer {
-            Text(text = response.rawBody, modifier = modifier)
+            Text(text = response.rawBody, modifier = modifier, fontSize = 12.sp)
         }
 
         if (hover) {
             Row(
                 horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = { showPretty() }) { Text(text = "Pretty") }
+                Button(onClick = { showPretty() }) { Text(text = "Pretty", fontSize = 12.sp) }
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { showRaw() }) { Text(text = "Raw") }
+                Button(onClick = { showRaw() }) { Text(text = "Raw", fontSize = 12.sp) }
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }
