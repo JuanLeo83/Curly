@@ -2,17 +2,17 @@ package presentation.screen.request.component.request
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import domain.model.RequestMethod
 
 @Composable
@@ -42,6 +43,7 @@ fun RequestMethodDropdownComponent(
     val rotation: Float by animateFloatAsState(
         if (expanded) rotationAngle else defaultRotationAngle
     )
+    val interactionSource = remember { MutableInteractionSource() }
 
     fun onClickItem(method: RequestMethod) {
         onOptionSelected(method)
@@ -54,15 +56,15 @@ fun RequestMethodDropdownComponent(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .width(150.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = MaterialTheme.shapes.small
-                ).clickable { expanded = true }
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { expanded = true }
                 .padding(8.dp)
         ) {
             Text(
                 text = optionSelected.value,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = selectColor(optionSelected)
             )
@@ -100,13 +102,12 @@ private fun RequestMethodMenuItem(
     }
 
     DropdownMenuItem(
-        modifier = Modifier.background(color = backgroundColor),
-        onClick = {
-            onOptionSelected(requestMethod)
-        }
+        modifier = Modifier.background(color = backgroundColor).height(32.dp),
+        onClick = { onOptionSelected(requestMethod) }
     ) {
         Text(
             text = requestMethod.value,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = selectColor(requestMethod)
         )

@@ -90,7 +90,6 @@ class RequestScreen : Screen {
                                 height = newHeight
                             }
 
-                            println(it.y)
                             isDragging = isDragging(height, it.y, hover)
                         }
                     }
