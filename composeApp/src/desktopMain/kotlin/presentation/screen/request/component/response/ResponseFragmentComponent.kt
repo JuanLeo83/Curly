@@ -63,7 +63,7 @@ fun ResponseFragmentComponent(
             }
 
             ResponseStatsComponent(
-                statusCode = response.statusCode,
+                statusCode = response.status,
                 responseTime = response.responseTime,
                 size = response.size
             )

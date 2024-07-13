@@ -30,6 +30,7 @@ class RemoteMapper {
     internal suspend fun toRequestResult(response: HttpResponse): ResponseModel {
         return ResponseModel(
             statusCode = response.status.value,
+            statusDescription = response.status.description,
             responseTime = response.responseTime.timestamp - response.requestTime.timestamp,
             size = getSize(response),
             type = getBodyType(response),

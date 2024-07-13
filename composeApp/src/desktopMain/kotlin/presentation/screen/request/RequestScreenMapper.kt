@@ -25,7 +25,7 @@ class RequestScreenMapper {
 
     internal fun mapToResponseData(result: ResponseModel): ResponseData {
         return ResponseData(
-            statusCode = result.statusCode.toString(),
+            status = "${result.statusCode} ${result.statusDescription}",
             responseTime = "${result.responseTime} $MILLIS",
             size = result.size.formatSize(),
             type = result.type,

@@ -22,7 +22,7 @@ data class RequestParam(
 )
 
 data class ResponseData(
-    val statusCode: String,
+    val status: String,
     val responseTime: String,
     val size: String,
     val type: BodyType,
