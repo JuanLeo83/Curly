@@ -60,7 +60,7 @@ fun RequestMethodDropdownComponent(
                     interactionSource = interactionSource,
                     indication = null
                 ) { expanded = true }
-                .padding(8.dp)
+                .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
         ) {
             Text(
                 text = optionSelected.value,

@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,6 +39,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TableType
 
@@ -69,10 +75,18 @@ fun ParamTableComponent(
         item {
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 16.dp)
             ) {
-                IconButton(onClick = { addRow(tableType) },) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add icon")
+                Button(
+                    onClick = { addRow(tableType) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
+                    modifier = Modifier.height(28.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add icon",
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
             }
         }
@@ -94,6 +108,8 @@ fun TableRowComponent(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
+            .height(32.dp)
+            .border(1.dp, Color.LightGray)
             .onPointerEvent(PointerEventType.Enter) { isHover = true }
             .onPointerEvent(PointerEventType.Exit) { isHover = false }
     ) {
@@ -107,6 +123,8 @@ fun TableRowComponent(
             text = param.key,
             onValueChange = { k -> onValueChange(param.copy(key = k)) }
         )
+        Divider(modifier = Modifier.fillMaxHeight().width(2.dp).background(color = Color.LightGray))
+        Spacer(modifier = Modifier.width(8.dp))
         TableCellComponent(
             modifier = Modifier.weight(valueColumnWeight),
             text = param.value,
@@ -132,8 +150,7 @@ fun TableCellComponent(
             maxLines = 1,
             singleLine = true,
             modifier = Modifier
-                .border(1.dp, Color.LightGray)
-                .padding(8.dp)
+//                .border(1.dp, Color.LightGray)
                 .fillMaxWidth()
         )
         if (isHover) {
@@ -171,9 +188,10 @@ fun RowScope.TableTitleCellComponent(
         text = text,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
+        fontSize = 12.sp,
         modifier = Modifier
             .border(1.dp, Color.LightGray)
             .weight(weight)
-            .padding(8.dp)
+            .padding(4.dp)
     )
 }

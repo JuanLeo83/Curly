@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun TabRowComponent(tabs: List<String>, selectedTabIndex: Int, onTabSelected: (Int) -> Unit) {
@@ -42,12 +43,13 @@ fun TabComponent(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .widthIn(min = 64.dp)
-            .background(color = if (selected) Color.Gray else Color.Transparent)
+            .background(color = if (selected) Color.LightGray else Color.Transparent)
             .clickable { onClick(index) }
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(8.dp),
+            fontSize = 12.sp,
+            modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
         )
