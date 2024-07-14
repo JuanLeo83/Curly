@@ -1,10 +1,12 @@
 package presentation.common.component.textWithLineNumbers
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -18,6 +20,7 @@ import presentation.common.component.lineNumbers.LineNumbersComponent
 
 @Composable
 fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = Modifier) {
+    val scrollState = rememberScrollState()
     Row {
         LineNumbersComponent(annotatedString.toString(), modifier = modifier.weight(0.05f))
 
@@ -28,7 +31,7 @@ fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = M
                 Text(
                     text = annotatedString,
                     fontSize = 12.sp,
-                    modifier = modifier
+                    modifier = modifier.horizontalScroll(scrollState)
                 )
             }
         }

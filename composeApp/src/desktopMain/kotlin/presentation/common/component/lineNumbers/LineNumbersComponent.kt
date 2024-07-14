@@ -3,6 +3,7 @@ package presentation.common.component.lineNumbers
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -10,6 +11,7 @@ fun LineNumbersComponent(text: String, modifier: Modifier = Modifier) {
     Text(
         text = getLineNumbers(text),
         fontSize = 12.sp,
+        overflow = TextOverflow.Clip,
         modifier = modifier
     )
 }
