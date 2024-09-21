@@ -6,6 +6,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import domain.model.BodyType
 import kotlinx.coroutines.launch
 import presentation.common.component.tab.TabContentComponent
 import presentation.common.component.tab.TabRowComponent
@@ -18,9 +19,11 @@ import presentation.screen.request.TableType
 fun RequestParamsComponent(
     requestParams: List<RequestParam>,
     headerParams: List<RequestParam>,
+    requestBodyTypeSelected: BodyType,
     addRow: (TableType) -> Unit = {},
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
-    deleteRow: (TableType, index: Int) -> Unit = { _, _ -> }
+    deleteRow: (TableType, index: Int) -> Unit = { _, _ -> },
+    setRequestBodyType: (BodyType) -> Unit
 ) {
     val tabs = listOf(TabRequestData.Params, TabRequestData.Headers, TabRequestData.Authorization, TabRequestData.Body)
     val scope = rememberCoroutineScope()
@@ -56,7 +59,10 @@ fun RequestParamsComponent(
 
                 TabRequestData.Authorization -> Text("Authorization here!")
 
-                TabRequestData.Body -> Text("Body here!")
+                TabRequestData.Body -> RequestBodyComponent(
+                    optionSelected = requestBodyTypeSelected,
+                    setRequestBodyType = setRequestBodyType
+                )
             }
         }
     }

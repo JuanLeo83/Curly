@@ -65,6 +65,7 @@ class RequestScreenMapper {
             BodyType.XML -> formatXml(result.body)
             BodyType.HTML -> formatHtml(result.body)
             BodyType.TEXT -> result.body
+            else -> ""
         }
 
     private fun formatJson(body: String): String {

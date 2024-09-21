@@ -2,6 +2,7 @@ package presentation.screen.request.component.request
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -28,13 +30,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import domain.model.RequestMethod
+import domain.model.BodyType
 
 @Composable
-fun RequestMethodDropdownComponent(
+fun BodyTypeDropdownComponent(
     modifier: Modifier = Modifier,
-    optionSelected: RequestMethod = RequestMethod.GET,
-    onOptionSelected: (RequestMethod) -> Unit = {}
+    optionSelected: BodyType = BodyType.NONE,
+    onOptionSelected: (BodyType) -> Unit
 ) {
     val defaultRotationAngle = 0f
     val rotationAngle = -180f
@@ -45,7 +47,7 @@ fun RequestMethodDropdownComponent(
     )
     val interactionSource = remember { MutableInteractionSource() }
 
-    fun onClickItem(method: RequestMethod) {
+    fun onClickItem(method: BodyType) {
         onOptionSelected(method)
         expanded = false
     }
@@ -60,13 +62,18 @@ fun RequestMethodDropdownComponent(
                     interactionSource = interactionSource,
                     indication = null
                 ) { expanded = true }
+                .border(
+                    width = 1.dp,
+                    color = Color.Gray,
+                    shape = MaterialTheme.shapes.small
+                )
                 .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
+
         ) {
             Text(
                 text = optionSelected.value,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = selectColor(optionSelected)
+                fontWeight = FontWeight.Bold
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
@@ -78,28 +85,26 @@ fun RequestMethodDropdownComponent(
         DropdownMenu(
             modifier = modifier,
             expanded = expanded,
-            onDismissRequest = { expanded = false }) {
-            RequestMethod.entries.forEach { requestMethod ->
-                RequestMethodMenuItem(requestMethod, optionSelected, ::onClickItem)
+            onDismissRequest = { expanded = false }
+        ) {
+            BodyType.entries.forEach { bodyType ->
+                BodyTypeMenuItem(
+                    bodyType = bodyType,
+                    optionSelected = optionSelected,
+                    onOptionSelected = ::onClickItem
+                )
             }
-//            RequestMethodMenuItem(RequestMethod.GET, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.POST, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.PUT, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.PATCH, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.DELETE, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.HEAD, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.OPTIONS, optionSelected, ::onClickItem)
         }
     }
 }
 
 @Composable
-private fun RequestMethodMenuItem(
-    requestMethod: RequestMethod,
-    optionSelected: RequestMethod,
-    onOptionSelected: (RequestMethod) -> Unit
+fun BodyTypeMenuItem(
+    bodyType: BodyType,
+    optionSelected: BodyType,
+    onOptionSelected: (BodyType) -> Unit
 ) {
-    val backgroundColor = if (optionSelected == requestMethod) {
+    val backgroundColor = if (optionSelected == bodyType) {
         Color.LightGray
     } else {
         Color.Transparent
@@ -107,23 +112,12 @@ private fun RequestMethodMenuItem(
 
     DropdownMenuItem(
         modifier = Modifier.background(color = backgroundColor).height(32.dp),
-        onClick = { onOptionSelected(requestMethod) }
+        onClick = { onOptionSelected(bodyType) }
     ) {
         Text(
-            text = requestMethod.value,
+            text = bodyType.value,
             fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = selectColor(requestMethod)
+            fontWeight = FontWeight.Bold
         )
     }
-}
-
-private fun selectColor(option: RequestMethod): Color = when (option) {
-    RequestMethod.GET -> Color.Green
-    RequestMethod.POST -> Color.Yellow
-    RequestMethod.PUT -> Color.Blue
-    RequestMethod.PATCH -> Color.Red
-    RequestMethod.DELETE -> Color.Magenta
-    RequestMethod.HEAD -> Color.Cyan
-    RequestMethod.OPTIONS -> Color.Gray
 }

@@ -10,6 +10,7 @@ data class RequestScreenState(
     val url: String = "",
     val requestParams: List<RequestParam> = listOf(),
     val headerParams: List<RequestParam> = listOf(),
+    val requestBodyType: BodyType = BodyType.NONE,
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null
 )

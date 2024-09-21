@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import domain.model.BodyType
 import domain.model.RequestMethod
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TableType
@@ -17,11 +18,13 @@ fun RequestFragmentComponent(
     url: String,
     requestParams: List<RequestParam>,
     headerParams: List<RequestParam>,
+    requestBodyTypeSelected: BodyType,
     setRequestMethod: (RequestMethod) -> Unit,
     setUrl: (String) -> Unit,
     addRow: (TableType) -> Unit,
     onValueChange: (TableType, param: RequestParam) -> Unit,
     deleteRow: (TableType, index: Int) -> Unit,
+    setRequestBodyType: (BodyType) -> Unit,
     sendRequest: () -> Unit
 ) {
     Column(modifier = modifier) {
@@ -40,7 +43,9 @@ fun RequestFragmentComponent(
             headerParams = headerParams,
             addRow = addRow,
             onValueChange = onValueChange,
-            deleteRow = deleteRow
+            deleteRow = deleteRow,
+            requestBodyTypeSelected = requestBodyTypeSelected,
+            setRequestBodyType = setRequestBodyType
         )
     }
 }
