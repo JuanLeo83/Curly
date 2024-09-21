@@ -1,4 +1,4 @@
-package presentation.screen.request.component.request
+package presentation.screen.request.component.request.param
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

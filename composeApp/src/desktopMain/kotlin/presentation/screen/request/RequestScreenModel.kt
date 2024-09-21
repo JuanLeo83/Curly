@@ -83,6 +83,10 @@ class RequestScreenModel(
         mutableState.value = state.value.copy(requestBodyType = bodyType)
     }
 
+    fun setRequestBody(body: String) {
+        mutableState.value = state.value.copy(requestBodyValue = body)
+    }
+
     private fun requestSuccessHandler(result: ResponseModel) {
         mutableState.value = state.value.copy(
             isLoading = false,

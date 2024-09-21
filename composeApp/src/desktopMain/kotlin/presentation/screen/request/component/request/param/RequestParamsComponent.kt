@@ -1,4 +1,4 @@
-package presentation.screen.request.component.request
+package presentation.screen.request.component.request.param
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import presentation.common.component.tab.TabRowComponent
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TabRequestData
 import presentation.screen.request.TableType
+import presentation.screen.request.component.request.body.RequestBodyComponent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -20,10 +21,12 @@ fun RequestParamsComponent(
     requestParams: List<RequestParam>,
     headerParams: List<RequestParam>,
     requestBodyTypeSelected: BodyType,
+    requestBodyValue: String,
     addRow: (TableType) -> Unit = {},
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
     deleteRow: (TableType, index: Int) -> Unit = { _, _ -> },
-    setRequestBodyType: (BodyType) -> Unit
+    setRequestBodyType: (BodyType) -> Unit,
+    setRequestBody: (String) -> Unit
 ) {
     val tabs = listOf(TabRequestData.Params, TabRequestData.Headers, TabRequestData.Authorization, TabRequestData.Body)
     val scope = rememberCoroutineScope()
@@ -61,7 +64,9 @@ fun RequestParamsComponent(
 
                 TabRequestData.Body -> RequestBodyComponent(
                     optionSelected = requestBodyTypeSelected,
-                    setRequestBodyType = setRequestBodyType
+                    bodyValue = requestBodyValue,
+                    setRequestBodyType = setRequestBodyType,
+                    setBody = setRequestBody
                 )
             }
         }
