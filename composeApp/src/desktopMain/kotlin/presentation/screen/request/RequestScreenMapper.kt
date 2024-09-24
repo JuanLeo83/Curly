@@ -19,7 +19,9 @@ class RequestScreenMapper {
         return RequestParams(
             method = state.method,
             url = completeUrlIfNeeded(state.url),
-            headers = mapHeadersToRequest(state.headerParams)
+            headers = mapHeadersToRequest(state.headerParams),
+            bodyType = state.requestBodyType,
+            body = state.requestBodyValue
         )
     }
 
