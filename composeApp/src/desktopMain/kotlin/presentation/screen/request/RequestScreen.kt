@@ -58,6 +58,7 @@ class RequestScreen : Screen {
                     headerParams = state.headerParams,
                     requestBodyTypeSelected = state.requestBodyType,
                     requestBodyValue = state.requestBodyValue,
+                    requestAuthorizationTypeSelected = state.requestAuthorizationType,
                     setRequestMethod = { screenModel.setRequestMethod(it) },
                     setUrl = { screenModel.setUrl(it) },
                     addRow = { screenModel.addRow(it) },
@@ -65,6 +66,7 @@ class RequestScreen : Screen {
                     deleteRow = { type, index -> screenModel.deleteRow(type, index) },
                     setRequestBodyType = { screenModel.setRequestBodyType(it) },
                     setRequestBody = { screenModel.setRequestBody(it) },
+                    setAuthorizationType = { screenModel.setAuthorizationType(it) },
                     sendRequest = { screenModel.sendRequest() }
                 )
 

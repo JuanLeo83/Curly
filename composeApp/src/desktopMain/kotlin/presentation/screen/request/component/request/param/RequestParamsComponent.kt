@@ -3,9 +3,9 @@ package presentation.screen.request.component.request.param
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import domain.model.AuthorizationType
 import domain.model.BodyType
 import kotlinx.coroutines.launch
 import presentation.common.component.tab.TabContentComponent
@@ -13,6 +13,7 @@ import presentation.common.component.tab.TabRowComponent
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TabRequestData
 import presentation.screen.request.TableType
+import presentation.screen.request.component.request.authorization.RequestAuthorizationComponent
 import presentation.screen.request.component.request.body.RequestBodyComponent
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -22,10 +23,12 @@ fun RequestParamsComponent(
     headerParams: List<RequestParam>,
     requestBodyTypeSelected: BodyType,
     requestBodyValue: String,
+    requestAuthorizationTypeSelected: AuthorizationType,
     addRow: (TableType) -> Unit = {},
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
     deleteRow: (TableType, index: Int) -> Unit = { _, _ -> },
     setRequestBodyType: (BodyType) -> Unit,
+    setAuthorizationType: (AuthorizationType) -> Unit,
     setRequestBody: (String) -> Unit
 ) {
     val tabs = listOf(TabRequestData.Params, TabRequestData.Headers, TabRequestData.Authorization, TabRequestData.Body)
@@ -60,7 +63,10 @@ fun RequestParamsComponent(
                     deleteRow
                 )
 
-                TabRequestData.Authorization -> Text("Authorization here!")
+                TabRequestData.Authorization -> RequestAuthorizationComponent(
+                    optionSelected = requestAuthorizationTypeSelected,
+                    setAuthorizationType = setAuthorizationType,
+                )
 
                 TabRequestData.Body -> RequestBodyComponent(
                     optionSelected = requestBodyTypeSelected,

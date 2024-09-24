@@ -1,5 +1,6 @@
 package presentation.screen.request
 
+import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
 
@@ -12,6 +13,7 @@ data class RequestScreenState(
     val headerParams: List<RequestParam> = listOf(),
     val requestBodyType: BodyType = BodyType.NONE,
     val requestBodyValue: String = "",
+    val requestAuthorizationType: AuthorizationType = AuthorizationType.NONE,
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null
 )

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
 import presentation.screen.request.RequestParam
@@ -22,6 +23,7 @@ fun RequestFragmentComponent(
     headerParams: List<RequestParam>,
     requestBodyTypeSelected: BodyType,
     requestBodyValue: String,
+    requestAuthorizationTypeSelected: AuthorizationType,
     setRequestMethod: (RequestMethod) -> Unit,
     setUrl: (String) -> Unit,
     addRow: (TableType) -> Unit,
@@ -29,6 +31,7 @@ fun RequestFragmentComponent(
     deleteRow: (TableType, index: Int) -> Unit,
     setRequestBodyType: (BodyType) -> Unit,
     setRequestBody: (String) -> Unit,
+    setAuthorizationType: (AuthorizationType) -> Unit,
     sendRequest: () -> Unit
 ) {
     Column(modifier = modifier) {
@@ -50,8 +53,10 @@ fun RequestFragmentComponent(
             deleteRow = deleteRow,
             requestBodyTypeSelected = requestBodyTypeSelected,
             requestBodyValue = requestBodyValue,
+            requestAuthorizationTypeSelected = requestAuthorizationTypeSelected,
             setRequestBodyType = setRequestBodyType,
-            setRequestBody = setRequestBody
+            setRequestBody = setRequestBody,
+            setAuthorizationType = setAuthorizationType
         )
     }
 }
