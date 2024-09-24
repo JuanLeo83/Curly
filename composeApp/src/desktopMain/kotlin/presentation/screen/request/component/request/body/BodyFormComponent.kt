@@ -23,10 +23,7 @@ fun BodyFormComponent(
     value: String,
     setBody: (String) -> Unit
 ) {
-
     FormSelector(modifier, optionSelected, value, setBody)
-
-
 }
 
 @Composable
@@ -36,7 +33,6 @@ private fun FormSelector(
     value: String,
     setBody: (String) -> Unit
 ) {
-
     when (optionSelected) {
         BodyType.NONE -> Unit
         BodyType.TEXT -> {

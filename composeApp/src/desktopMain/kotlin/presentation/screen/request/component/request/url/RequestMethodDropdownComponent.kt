@@ -82,13 +82,6 @@ fun RequestMethodDropdownComponent(
             RequestMethod.entries.forEach { requestMethod ->
                 RequestMethodMenuItem(requestMethod, optionSelected, ::onClickItem)
             }
-//            RequestMethodMenuItem(RequestMethod.GET, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.POST, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.PUT, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.PATCH, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.DELETE, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.HEAD, optionSelected, ::onClickItem)
-//            RequestMethodMenuItem(RequestMethod.OPTIONS, optionSelected, ::onClickItem)
         }
     }
 }
