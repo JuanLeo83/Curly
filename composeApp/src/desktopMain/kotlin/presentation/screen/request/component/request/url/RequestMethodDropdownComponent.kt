@@ -1,4 +1,4 @@
-package presentation.screen.request.component.request
+package presentation.screen.request.component.request.url
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -75,16 +75,13 @@ fun RequestMethodDropdownComponent(
             )
         }
 
-        DropdownMenu(modifier = modifier,
+        DropdownMenu(
+            modifier = modifier,
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
-            RequestMethodMenuItem(RequestMethod.GET, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.POST, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.PUT, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.PATCH, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.DELETE, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.HEAD, optionSelected, ::onClickItem)
-            RequestMethodMenuItem(RequestMethod.OPTIONS, optionSelected, ::onClickItem)
+            RequestMethod.entries.forEach { requestMethod ->
+                RequestMethodMenuItem(requestMethod, optionSelected, ::onClickItem)
+            }
         }
     }
 }

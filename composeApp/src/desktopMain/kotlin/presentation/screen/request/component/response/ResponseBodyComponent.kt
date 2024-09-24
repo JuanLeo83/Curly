@@ -54,6 +54,7 @@ fun ResponseBodyComponent(
                 BodyType.JSON -> JsonText(jsonString = response.body, modifier = modifier)
                 BodyType.HTML,
                 BodyType.XML -> MarkupTextComponent(xmlString = response.body, modifier = modifier)
+                else -> Spacer(modifier = Modifier.width(0.dp))
             }
         } else SelectionContainer {
             Text(text = response.rawBody, modifier = modifier, fontSize = 12.sp)

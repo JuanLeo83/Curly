@@ -2,6 +2,7 @@ package presentation.screen.request
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import domain.model.BodyType
 import domain.model.RequestMethod
 import domain.model.ResponseModel
 import domain.usecase.DoRequestUseCase
@@ -76,6 +77,14 @@ class RequestScreenModel(
             TableType.BODY -> Unit
             TableType.AUTHORIZATION -> Unit
         }
+    }
+
+    fun setRequestBodyType(bodyType: BodyType) {
+        mutableState.value = state.value.copy(requestBodyType = bodyType)
+    }
+
+    fun setRequestBody(body: String) {
+        mutableState.value = state.value.copy(requestBodyValue = body)
     }
 
     private fun requestSuccessHandler(result: ResponseModel) {

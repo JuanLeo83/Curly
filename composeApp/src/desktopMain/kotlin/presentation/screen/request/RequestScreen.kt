@@ -56,11 +56,15 @@ class RequestScreen : Screen {
                     url = state.url,
                     requestParams = state.requestParams,
                     headerParams = state.headerParams,
+                    requestBodyTypeSelected = state.requestBodyType,
+                    requestBodyValue = state.requestBodyValue,
                     setRequestMethod = { screenModel.setRequestMethod(it) },
                     setUrl = { screenModel.setUrl(it) },
                     addRow = { screenModel.addRow(it) },
                     onValueChange = { type, param -> screenModel.onValueChange(type, param) },
                     deleteRow = { type, index -> screenModel.deleteRow(type, index) },
+                    setRequestBodyType = { screenModel.setRequestBodyType(it) },
+                    setRequestBody = { screenModel.setRequestBody(it) },
                     sendRequest = { screenModel.sendRequest() }
                 )
 

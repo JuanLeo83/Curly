@@ -7,11 +7,14 @@ import domain.model.ResponseHeader
 import domain.model.ResponseModel
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
 
 class RemoteMapper {
 
@@ -57,6 +60,13 @@ class RemoteMapper {
         }
     }
 
+    internal fun addBody(requestBuilder: HttpRequestBuilder, body: String, bodyType: BodyType) {
+        if (body.isEmpty() || bodyType == BodyType.NONE) return
+
+        requestBuilder.setBody(body)
+        requestBuilder.contentType(getBodyType(bodyType))
+    }
+
     private suspend fun getSize(response: HttpResponse): Double {
         val headersSize = response.headers.toString().toByteArray().size.toDouble()
         val bodySize = response.headers[CONTENT_LENGTH]?.toDouble()
@@ -81,6 +91,16 @@ class RemoteMapper {
     private fun toResponseHeadersModel(headers: Headers): List<ResponseHeader> {
         return headers.entries().map { (key, value) ->
             ResponseHeader(key, value)
+        }
+    }
+
+    private fun getBodyType(bodyType: BodyType): ContentType {
+        return when (bodyType) {
+            BodyType.JSON -> ContentType.Application.Json
+            BodyType.XML -> ContentType.Application.Xml
+            BodyType.HTML -> ContentType.Text.Html
+            BodyType.TEXT -> ContentType.Text.Plain
+            BodyType.NONE -> ContentType.Any
         }
     }
 
