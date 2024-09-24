@@ -51,8 +51,8 @@ private fun FormSelector(
         }
 
         BodyType.JSON -> BodyJsonComponent(modifier, value, setBody)
-        BodyType.XML -> Unit
-        BodyType.HTML -> Unit
+        BodyType.XML -> BodyMarkupComponent(modifier, value, setBody)
+        BodyType.HTML -> BodyMarkupComponent(modifier, value, setBody)
     }
 }
 

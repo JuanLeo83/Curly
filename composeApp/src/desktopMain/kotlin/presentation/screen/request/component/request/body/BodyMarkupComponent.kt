@@ -31,60 +31,59 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import presentation.common.Symbols.COLON
-import presentation.common.Symbols.LEFT_BRACE
-import presentation.common.Symbols.LEFT_BRACKET
-import presentation.common.Symbols.QUOTE
-import presentation.common.Symbols.RIGHT_BRACE
-import presentation.common.Symbols.RIGHT_BRACKET
+import presentation.common.Symbols.NEW_LINE
 import presentation.common.Symbols.SPACE
 import presentation.common.component.lineNumbers.LineNumbersComponent
+import presentation.screen.request.component.response.markuptext.MarkupElement
+import presentation.screen.request.component.response.markuptext.MarkupTextUtils
+import presentation.screen.request.component.response.markuptext.XmlElementType
 
 @Composable
-fun BodyJsonComponent(
+fun BodyMarkupComponent(
     modifier: Modifier = Modifier,
-    jsonValue: String,
-    setJsonValue: (String) -> Unit
+    xmlValue: String,
+    setXmlValue: (String) -> Unit
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(jsonValue)) }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(xmlValue)) }
 
-    val jsonAnnotatedString = remember(jsonValue) {
+    val markupAnnotatedString = remember(xmlValue) {
         buildAnnotatedString {
-            val regex = "(\"[^\"]*\")\\s*:\\s*|\"[^\"]*\"|\\b\\d+\\b|[{}\\[\\]]".toRegex()
-            val matches = regex.findAll(jsonValue)
-            var lastIndex = 0
-
-            for (match in matches) {
-                append(jsonValue.substring(lastIndex, match.range.first))
-                val value = match.value
-                val color = getColor(value)
-                withStyle(style = SpanStyle(color = color, fontWeight = FontWeight.Light)) {
-                    if (value.trim().endsWith(COLON)) {
-                        append(value.dropLast(1))
+            val rows = xmlValue.split(NEW_LINE)
+            for (row in rows) {
+                val elements = MarkupTextUtils.identifyElements(row)
+                if (elements.isEmpty()) {
+                    append(row)
+                    append(NEW_LINE)
+                } else {
+                    append(MarkupTextUtils.getTabulation(row))
+                    for (element in elements) {
                         withStyle(
-                            style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Light)
+                            style = SpanStyle(
+                                color = getColor(element),
+                                fontWeight = FontWeight.Light
+                            )
                         ) {
-                            append(SPACE)
+                            append(element.value)
                         }
-                    } else {
-                        append(value)
                     }
+                    append(NEW_LINE)
                 }
-                lastIndex = match.range.last + 1
             }
-            append(jsonValue.substring(lastIndex))
         }
     }
 
-    JsonFormWithLineNumbers(modifier, jsonAnnotatedString, textFieldValue) {
+    XmlFormWithLineNumbers(
+        modifier = modifier,
+        annotatedString = markupAnnotatedString,
+        textFieldValue = textFieldValue
+    ) {
         textFieldValue = it
-        setJsonValue(it.text)
+        setXmlValue(it.text)
     }
-
 }
 
 @Composable
-fun JsonFormWithLineNumbers(
+fun XmlFormWithLineNumbers(
     modifier: Modifier = Modifier,
     annotatedString: AnnotatedString,
     textFieldValue: TextFieldValue,
@@ -128,11 +127,20 @@ fun JsonFormWithLineNumbers(
     }
 }
 
-private fun getColor(value: String) = when {
-    value.trim().endsWith(":") -> Color.Cyan // Keys
-    value.startsWith(QUOTE) && value.endsWith(QUOTE) -> Color.Blue // String value
-    value.matches("\\b\\d+\\b".toRegex()) -> Color.Red // Number value
-    value == LEFT_BRACE || value == RIGHT_BRACE -> Color.Green // {}
-    value == LEFT_BRACKET || value == RIGHT_BRACKET -> Color.Magenta // []
-    else -> Color.Black
+private fun AnnotatedString.Builder.getColor(element: MarkupElement): Color {
+    return when (element.type) {
+        XmlElementType.OPEN_TAG_SYMBOL -> Color.Blue
+        XmlElementType.TAG_NAME -> Color.Red
+        XmlElementType.ATTRIBUTE_NAME -> {
+            append(SPACE)
+            Color.Green
+        }
+
+        XmlElementType.EQUAL_SYMBOL -> Color.Black
+        XmlElementType.ATTRIBUTE_VALUE -> Color.Yellow
+        XmlElementType.CLOSE_TAG_SYMBOL -> Color.Blue
+        XmlElementType.OPEN_END_TAG_SYMBOL -> Color.Blue
+        XmlElementType.END_TAG_NAME -> Color.Red
+        XmlElementType.TAG_CONTENT -> Color.Black
+    }
 }
