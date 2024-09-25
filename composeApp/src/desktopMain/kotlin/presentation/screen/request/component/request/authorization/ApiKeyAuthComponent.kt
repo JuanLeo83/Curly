@@ -32,34 +32,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import presentation.screen.request.component.request.authorization.model.ApiKeyAddTo
+import presentation.screen.request.component.request.authorization.model.ApiKeyAuthVo
 
 @Composable
 fun ApiKeyAuthComponent(
     modifier: Modifier = Modifier,
-    optionSelected: ApiKeyAddTo = ApiKeyAddTo.HEADERS,
-    onOptionSelected: (ApiKeyAddTo) -> Unit
+    vo: ApiKeyAuthVo
 ) {
     Row {
         ApiKeyAddToComponent(
             modifier = Modifier.weight(0.5f),
-            optionSelected = optionSelected,
-            onOptionSelected = onOptionSelected
+            vo = vo
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.weight(0.5f)) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = vo.key,
+                onValueChange = vo.onKeyChange,
                 label = { Text("Key") }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = vo.value,
+                onValueChange = vo.onValueChange,
                 label = { Text("Value") }
             )
 
@@ -71,8 +71,7 @@ fun ApiKeyAuthComponent(
 @Composable
 fun ApiKeyAddToComponent(
     modifier: Modifier = Modifier,
-    optionSelected: ApiKeyAddTo,
-    onOptionSelected: (ApiKeyAddTo) -> Unit
+    vo: ApiKeyAuthVo
 ) {
     val defaultRotationAngle = 0f
     val rotationAngle = -180f
@@ -84,7 +83,7 @@ fun ApiKeyAddToComponent(
     val interactionSource = remember { MutableInteractionSource() }
 
     fun onClickItem(type: ApiKeyAddTo) {
-        onOptionSelected(type)
+        vo.onOptionSelected(type)
         expanded = false
     }
 
@@ -107,7 +106,7 @@ fun ApiKeyAddToComponent(
 
         ) {
             Text(
-                text = optionSelected.value,
+                text = vo.optionSelected.value,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -126,7 +125,7 @@ fun ApiKeyAddToComponent(
             ApiKeyAddTo.entries.forEach { addTo ->
                 ApiKeyAddToMenuItem(
                     addTo = addTo,
-                    optionSelected = optionSelected,
+                    optionSelected = vo.optionSelected,
                     onOptionSelected = ::onClickItem
                 )
             }
@@ -156,9 +155,4 @@ private fun ApiKeyAddToMenuItem(
             fontWeight = FontWeight.Bold
         )
     }
-}
-
-enum class ApiKeyAddTo(val value: String) {
-    HEADERS("Headers"),
-    QUERY_PARAMETERS("Query Params")
 }

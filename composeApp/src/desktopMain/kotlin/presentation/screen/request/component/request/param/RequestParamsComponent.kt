@@ -13,7 +13,6 @@ import presentation.common.component.tab.TabRowComponent
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TabRequestData
 import presentation.screen.request.TableType
-import presentation.screen.request.component.request.authorization.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.RequestAuthorizationComponent
 import presentation.screen.request.component.request.authorization.model.AuthVo
 import presentation.screen.request.component.request.body.RequestBodyComponent
@@ -26,13 +25,11 @@ fun RequestParamsComponent(
     requestBodyTypeSelected: BodyType,
     requestBodyValue: String,
     requestAuthorizationTypeSelected: AuthorizationType,
-    apiKeyAddToSelected: ApiKeyAddTo,
     addRow: (TableType) -> Unit = {},
     onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
     deleteRow: (TableType, index: Int) -> Unit = { _, _ -> },
     setRequestBodyType: (BodyType) -> Unit,
     setAuthorizationType: (AuthorizationType) -> Unit,
-    onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
     setRequestBody: (String) -> Unit,
     authVo: AuthVo
 ) {
@@ -71,8 +68,6 @@ fun RequestParamsComponent(
                 TabRequestData.Authorization -> RequestAuthorizationComponent(
                     optionSelected = requestAuthorizationTypeSelected,
                     setAuthorizationType = setAuthorizationType,
-                    apiKeyAddToSelected = apiKeyAddToSelected,
-                    onApiKeyAddToSelected = onApiKeyAddToSelected,
                     authVo = authVo
                 )
 

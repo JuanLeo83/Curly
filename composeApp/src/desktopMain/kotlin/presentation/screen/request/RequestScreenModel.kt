@@ -12,7 +12,7 @@ import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
-import presentation.screen.request.component.request.authorization.ApiKeyAddTo
+import presentation.screen.request.component.request.authorization.model.ApiKeyAddTo
 
 class RequestScreenModel(
     private val doRequestUseCase: DoRequestUseCase,
@@ -93,10 +93,6 @@ class RequestScreenModel(
         mutableState.value = state.value.copy(requestAuthorizationType = authorizationType)
     }
 
-    fun onApiKeyAddToSelected(apiKeyAddTo: ApiKeyAddTo) {
-        mutableState.value = state.value.copy(apiKeyAddTo = apiKeyAddTo)
-    }
-
     fun onBasicAuthUserNameChange(userName: String) {
         mutableState.value = state.value.copy(
             authVo = state.value.authVo.copy(
@@ -117,6 +113,30 @@ class RequestScreenModel(
         mutableState.value = state.value.copy(
             authVo = state.value.authVo.copy(
                 bearer = state.value.authVo.bearer.copy(token = token)
+            )
+        )
+    }
+
+    fun onApiKeyAddToSelected(optionSelected: ApiKeyAddTo) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                apiKey = state.value.authVo.apiKey.copy(optionSelected = optionSelected)
+            )
+        )
+    }
+
+    fun onApiKeyChange(apiKey: String) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                apiKey = state.value.authVo.apiKey.copy(key = apiKey)
+            )
+        )
+    }
+
+    fun onApiKeyValueChange(apiKeyValue: String) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                apiKey = state.value.authVo.apiKey.copy(value = apiKeyValue)
             )
         )
     }

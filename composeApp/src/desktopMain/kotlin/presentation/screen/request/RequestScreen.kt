@@ -59,7 +59,6 @@ class RequestScreen : Screen {
                     requestBodyTypeSelected = state.requestBodyType,
                     requestBodyValue = state.requestBodyValue,
                     requestAuthorizationTypeSelected = state.requestAuthorizationType,
-                    apiKeyAddToSelected = state.apiKeyAddTo,
                     setRequestMethod = { screenModel.setRequestMethod(it) },
                     setUrl = { screenModel.setUrl(it) },
                     addRow = { screenModel.addRow(it) },
@@ -68,7 +67,6 @@ class RequestScreen : Screen {
                     setRequestBodyType = { screenModel.setRequestBodyType(it) },
                     setRequestBody = { screenModel.setRequestBody(it) },
                     setAuthorizationType = { screenModel.setAuthorizationType(it) },
-                    onApiKeyAddToSelected = { screenModel.onApiKeyAddToSelected(it) },
                     sendRequest = { screenModel.sendRequest() },
                     authVo = state.authVo.copy(
                         basic = state.authVo.basic.copy(
@@ -77,6 +75,11 @@ class RequestScreen : Screen {
                         ),
                         bearer = state.authVo.bearer.copy(
                             onTokenChange = { screenModel.onBearerTokenChange(it) }
+                        ),
+                        apiKey = state.authVo.apiKey.copy(
+                            onOptionSelected = { screenModel.onApiKeyAddToSelected(it) },
+                            onKeyChange = { screenModel.onApiKeyChange(it) },
+                            onValueChange = { screenModel.onApiKeyValueChange(it) }
                         )
                     )
                 )

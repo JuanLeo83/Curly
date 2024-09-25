@@ -3,7 +3,6 @@ package presentation.screen.request
 import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
-import presentation.screen.request.component.request.authorization.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.model.AuthVo
 
 data class RequestScreenState(
@@ -16,7 +15,6 @@ data class RequestScreenState(
     val requestBodyType: BodyType = BodyType.NONE,
     val requestBodyValue: String = "",
     val requestAuthorizationType: AuthorizationType = AuthorizationType.NONE,
-    val apiKeyAddTo: ApiKeyAddTo = ApiKeyAddTo.HEADERS,
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null,
     val authVo: AuthVo = AuthVo()

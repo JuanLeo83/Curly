@@ -14,8 +14,6 @@ import presentation.screen.request.component.request.authorization.model.AuthVo
 fun RequestAuthorizationComponent(
     modifier: Modifier = Modifier,
     optionSelected: AuthorizationType,
-    apiKeyAddToSelected: ApiKeyAddTo,
-    onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
     setAuthorizationType: (AuthorizationType) -> Unit,
     authVo: AuthVo
 ) {
@@ -28,8 +26,6 @@ fun RequestAuthorizationComponent(
 
         AuthenticationComponentSelector(
             optionSelected = optionSelected,
-            apiKeyAddToSelected = apiKeyAddToSelected,
-            onApiKeyAddToSelected = onApiKeyAddToSelected,
             authVo = authVo
         )
     }
@@ -38,18 +34,14 @@ fun RequestAuthorizationComponent(
 @Composable
 private fun AuthenticationComponentSelector(
     optionSelected: AuthorizationType,
-    apiKeyAddToSelected: ApiKeyAddTo,
-    onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
     authVo: AuthVo
 ) {
-   when (optionSelected) {
-       AuthorizationType.BASIC -> BasicAuthComponent(vo = authVo.basic)
-       AuthorizationType.BEARER -> BearerAuthComponent(vo = authVo.bearer)
-       AuthorizationType.API_KEY -> ApiKeyAuthComponent(
-           optionSelected = apiKeyAddToSelected,
-              onOptionSelected = onApiKeyAddToSelected
-       )
-       AuthorizationType.OAUTH2 -> Text("Coming soon")
-       AuthorizationType.NONE -> {}
-   }
+    when (optionSelected) {
+        AuthorizationType.BASIC -> BasicAuthComponent(vo = authVo.basic)
+        AuthorizationType.BEARER -> BearerAuthComponent(vo = authVo.bearer)
+        AuthorizationType.API_KEY -> ApiKeyAuthComponent(vo = authVo.apiKey)
+
+        AuthorizationType.OAUTH2 -> Text("Coming soon")
+        AuthorizationType.NONE -> {}
+    }
 }
