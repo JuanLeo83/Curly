@@ -12,6 +12,7 @@ import domain.model.RequestMethod
 import presentation.screen.request.RequestParam
 import presentation.screen.request.TableType
 import presentation.screen.request.component.request.authorization.ApiKeyAddTo
+import presentation.screen.request.component.request.authorization.model.AuthVo
 import presentation.screen.request.component.request.param.RequestParamsComponent
 import presentation.screen.request.component.request.url.RequestUrlComponent
 
@@ -35,7 +36,8 @@ fun RequestFragmentComponent(
     setRequestBody: (String) -> Unit,
     setAuthorizationType: (AuthorizationType) -> Unit,
     onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
-    sendRequest: () -> Unit
+    sendRequest: () -> Unit,
+    authVo: AuthVo
 ) {
     Column(modifier = modifier) {
         RequestUrlComponent(
@@ -61,7 +63,8 @@ fun RequestFragmentComponent(
             setRequestBodyType = setRequestBodyType,
             setRequestBody = setRequestBody,
             setAuthorizationType = setAuthorizationType,
-            onApiKeyAddToSelected = onApiKeyAddToSelected
+            onApiKeyAddToSelected = onApiKeyAddToSelected,
+            authVo = authVo
         )
     }
 }

@@ -69,7 +69,13 @@ class RequestScreen : Screen {
                     setRequestBody = { screenModel.setRequestBody(it) },
                     setAuthorizationType = { screenModel.setAuthorizationType(it) },
                     onApiKeyAddToSelected = { screenModel.onApiKeyAddToSelected(it) },
-                    sendRequest = { screenModel.sendRequest() }
+                    sendRequest = { screenModel.sendRequest() },
+                    authVo = state.authVo.copy(
+                        basic = state.authVo.basic.copy(
+                            onUserNameChange = { screenModel.onBasicAuthUserNameChange(it) },
+                            onPasswordChange = { screenModel.onBasicAuthPasswordChange(it) }
+                        )
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(14.dp))
@@ -99,10 +105,11 @@ class RequestScreen : Screen {
                     }
                     .padding(vertical = 4.dp)
                 ) {
-                    Divider(modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .background(if (hover || isDragging) Color.Blue else Color.LightGray)
+                    Divider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                            .background(if (hover || isDragging) Color.Blue else Color.LightGray)
                     )
 
                     if (state.isLoading) {
@@ -124,8 +131,8 @@ class RequestScreen : Screen {
 
     private fun isDragging(height: Dp, offset: Float, hover: Boolean): Boolean {
         return (height != MIN_HEIGHT && height != MAX_HEIGHT) ||
-            (height == MIN_HEIGHT && offset > 0 && hover) ||
-            (height == MAX_HEIGHT && offset < 0 && hover)
+                (height == MIN_HEIGHT && offset > 0 && hover) ||
+                (height == MAX_HEIGHT && offset < 0 && hover)
 
     }
 

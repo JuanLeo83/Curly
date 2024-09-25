@@ -15,6 +15,7 @@ import presentation.screen.request.TabRequestData
 import presentation.screen.request.TableType
 import presentation.screen.request.component.request.authorization.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.RequestAuthorizationComponent
+import presentation.screen.request.component.request.authorization.model.AuthVo
 import presentation.screen.request.component.request.body.RequestBodyComponent
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -32,7 +33,8 @@ fun RequestParamsComponent(
     setRequestBodyType: (BodyType) -> Unit,
     setAuthorizationType: (AuthorizationType) -> Unit,
     onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
-    setRequestBody: (String) -> Unit
+    setRequestBody: (String) -> Unit,
+    authVo: AuthVo
 ) {
     val tabs = listOf(TabRequestData.Params, TabRequestData.Headers, TabRequestData.Authorization, TabRequestData.Body)
     val scope = rememberCoroutineScope()
@@ -70,7 +72,8 @@ fun RequestParamsComponent(
                     optionSelected = requestAuthorizationTypeSelected,
                     setAuthorizationType = setAuthorizationType,
                     apiKeyAddToSelected = apiKeyAddToSelected,
-                    onApiKeyAddToSelected = onApiKeyAddToSelected
+                    onApiKeyAddToSelected = onApiKeyAddToSelected,
+                    authVo = authVo
                 )
 
                 TabRequestData.Body -> RequestBodyComponent(

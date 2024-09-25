@@ -9,21 +9,25 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import presentation.screen.request.component.request.authorization.model.BasicAuthVo
 
 @Composable
-fun BasicAuthComponent(modifier: Modifier = Modifier) {
+fun BasicAuthComponent(
+    modifier: Modifier = Modifier,
+    vo: BasicAuthVo
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = vo.userName,
+            onValueChange = vo.onUserNameChange,
             label = { Text("Username") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = "",
-            onValueChange = {},
+            value = vo.password,
+            onValueChange = vo.onPasswordChange,
             label = { Text("Password") }
         )
     }

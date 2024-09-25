@@ -97,6 +97,22 @@ class RequestScreenModel(
         mutableState.value = state.value.copy(apiKeyAddTo = apiKeyAddTo)
     }
 
+    fun onBasicAuthUserNameChange(userName: String) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                basic = state.value.authVo.basic.copy(userName = userName)
+            )
+        )
+    }
+
+    fun onBasicAuthPasswordChange(password: String) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                basic = state.value.authVo.basic.copy(password = password)
+            )
+        )
+    }
+
     private fun requestSuccessHandler(result: ResponseModel) {
         mutableState.value = state.value.copy(
             isLoading = false,

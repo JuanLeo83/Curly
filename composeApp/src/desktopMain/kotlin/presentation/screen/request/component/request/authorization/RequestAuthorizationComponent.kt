@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.model.AuthorizationType
+import presentation.screen.request.component.request.authorization.model.AuthVo
 
 @Composable
 fun RequestAuthorizationComponent(
@@ -15,7 +16,8 @@ fun RequestAuthorizationComponent(
     optionSelected: AuthorizationType,
     apiKeyAddToSelected: ApiKeyAddTo,
     onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
-    setAuthorizationType: (AuthorizationType) -> Unit
+    setAuthorizationType: (AuthorizationType) -> Unit,
+    authVo: AuthVo
 ) {
     Row {
         AuthorizationTypeDropdownComponent(
@@ -27,7 +29,8 @@ fun RequestAuthorizationComponent(
         AuthenticationComponentSelector(
             optionSelected = optionSelected,
             apiKeyAddToSelected = apiKeyAddToSelected,
-            onApiKeyAddToSelected = onApiKeyAddToSelected
+            onApiKeyAddToSelected = onApiKeyAddToSelected,
+            authVo = authVo
         )
     }
 }
@@ -37,9 +40,10 @@ private fun AuthenticationComponentSelector(
     optionSelected: AuthorizationType,
     apiKeyAddToSelected: ApiKeyAddTo,
     onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
+    authVo: AuthVo
 ) {
    when (optionSelected) {
-       AuthorizationType.BASIC -> BasicAuthComponent()
+       AuthorizationType.BASIC -> BasicAuthComponent(vo = authVo.basic)
        AuthorizationType.BEARER -> BearerAuthComponent()
        AuthorizationType.API_KEY -> ApiKeyAuthComponent(
            optionSelected = apiKeyAddToSelected,
