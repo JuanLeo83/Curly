@@ -44,7 +44,7 @@ private fun AuthenticationComponentSelector(
 ) {
    when (optionSelected) {
        AuthorizationType.BASIC -> BasicAuthComponent(vo = authVo.basic)
-       AuthorizationType.BEARER -> BearerAuthComponent()
+       AuthorizationType.BEARER -> BearerAuthComponent(vo = authVo.bearer)
        AuthorizationType.API_KEY -> ApiKeyAuthComponent(
            optionSelected = apiKeyAddToSelected,
               onOptionSelected = onApiKeyAddToSelected

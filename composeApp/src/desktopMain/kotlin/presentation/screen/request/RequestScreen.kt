@@ -74,6 +74,9 @@ class RequestScreen : Screen {
                         basic = state.authVo.basic.copy(
                             onUserNameChange = { screenModel.onBasicAuthUserNameChange(it) },
                             onPasswordChange = { screenModel.onBasicAuthPasswordChange(it) }
+                        ),
+                        bearer = state.authVo.bearer.copy(
+                            onTokenChange = { screenModel.onBearerTokenChange(it) }
                         )
                     )
                 )

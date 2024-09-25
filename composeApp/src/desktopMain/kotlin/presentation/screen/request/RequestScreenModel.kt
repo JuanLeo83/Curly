@@ -113,6 +113,14 @@ class RequestScreenModel(
         )
     }
 
+    fun onBearerTokenChange(token: String) {
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                bearer = state.value.authVo.bearer.copy(token = token)
+            )
+        )
+    }
+
     private fun requestSuccessHandler(result: ResponseModel) {
         mutableState.value = state.value.copy(
             isLoading = false,
