@@ -16,25 +16,29 @@ class RequestScreenMapper {
     private val json = Json { prettyPrint = true }
 
     internal fun mapToRequestParams(state: RequestScreenState): RequestParams {
-        return RequestParams(
-            method = state.urlVo.method,
-            url = completeUrlIfNeeded(state.urlVo.url),
-            headers = mapHeadersToRequest(state.headersVo.params),
-            bodyType = state.bodyVo.optionSelected,
-            body = state.bodyVo.value
-        )
+        return with(state) {
+            RequestParams(
+                method = urlVo.method,
+                url = completeUrlIfNeeded(urlVo.url),
+                headers = mapHeadersToRequest(headersVo.params),
+                bodyType = bodyVo.optionSelected,
+                body = bodyVo.value
+            )
+        }
     }
 
     internal fun mapToResponseData(result: ResponseModel): ResponseData {
-        return ResponseData(
-            status = "${result.statusCode} ${result.statusDescription}",
-            responseTime = "${result.responseTime} $MILLIS",
-            size = result.size.formatSize(),
-            type = result.type,
-            rawBody = result.body,
-            body = formatBody(result),
-            headers = mapHeaders(result.headers)
-        )
+        return with(result) {
+            ResponseData(
+                status = "$statusCode $statusDescription",
+                responseTime = "$responseTime $MILLIS",
+                size = size.formatSize(),
+                type = type,
+                rawBody = body,
+                body = formatBody(this),
+                headers = mapHeaders(headers)
+            )
+        }
     }
 
     private fun completeUrlIfNeeded(url: String): String =

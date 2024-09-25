@@ -7,7 +7,6 @@ import domain.model.BodyType
 import domain.model.RequestMethod
 import domain.model.ResponseModel
 import domain.usecase.DoRequestUseCase
-import extension.list.add
 import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
@@ -27,9 +26,7 @@ class RequestScreenModel(
     }
 
     fun setRequestMethod(method: RequestMethod) {
-        mutableState.value = state.value.copy(
-            urlVo = state.value.urlVo.copy(method = method)
-        )
+        mutableState.value = state.value.setMethod(method)
     }
 
     fun sendRequest() = screenModelScope.launch {
@@ -85,70 +82,39 @@ class RequestScreenModel(
     }
 
     fun setRequestBodyType(optionSelected: BodyType) {
-        mutableState.value = state.value.copy(
-            bodyVo = state.value.bodyVo.copy(optionSelected = optionSelected)
-        )
+        mutableState.value = state.value.setBodyType(optionSelected)
     }
 
     fun setRequestBody(value: String) {
-        mutableState.value = state.value.copy(
-            bodyVo = state.value.bodyVo.copy(value = value)
-        )
+        mutableState.value = state.value.setBody(value)
     }
 
     fun setAuthorizationType(authorizationType: AuthorizationType) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                optionSelected = authorizationType)
-        )
+        mutableState.value = state.value.setAuthorizationType(authorizationType)
     }
 
     fun onBasicAuthUserNameChange(userName: String) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                basic = state.value.authVo.basic.copy(userName = userName)
-            )
-        )
+        mutableState.value = state.value.setBasicUserName(userName)
     }
 
     fun onBasicAuthPasswordChange(password: String) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                basic = state.value.authVo.basic.copy(password = password)
-            )
-        )
+        mutableState.value = state.value.setBasicPassword(password)
     }
 
     fun onBearerTokenChange(token: String) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                bearer = state.value.authVo.bearer.copy(token = token)
-            )
-        )
+        mutableState.value = state.value.setBearerToken(token)
     }
 
     fun onApiKeyAddToSelected(optionSelected: ApiKeyAddTo) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                apiKey = state.value.authVo.apiKey.copy(optionSelected = optionSelected)
-            )
-        )
+        mutableState.value = state.value.setApiKeyAddTo(optionSelected)
     }
 
     fun onApiKeyChange(apiKey: String) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                apiKey = state.value.authVo.apiKey.copy(key = apiKey)
-            )
-        )
+        mutableState.value = state.value.setApiKey(apiKey)
     }
 
     fun onApiKeyValueChange(apiKeyValue: String) {
-        mutableState.value = state.value.copy(
-            authVo = state.value.authVo.copy(
-                apiKey = state.value.authVo.apiKey.copy(value = apiKeyValue)
-            )
-        )
+        mutableState.value = state.value.setApiKeyValue(apiKeyValue)
     }
 
     private fun requestSuccessHandler(result: ResponseModel) {
@@ -168,23 +134,11 @@ class RequestScreenModel(
     }
 
     private fun addRequestParam() {
-        mutableState.value = state.value.copy(
-            paramsVo = state.value.paramsVo.copy(
-                params = state.value.paramsVo.params.add(
-                    RequestParam(index = state.value.paramsVo.params.size)
-                )
-            )
-        )
+        mutableState.value = state.value.addParamSocket()
     }
 
     private fun addRequestHeader() {
-        mutableState.value = state.value.copy(
-            headersVo = state.value.headersVo.copy(
-                params = state.value.headersVo.params.add(
-                    RequestParam(index = state.value.headersVo.params.size)
-                )
-            )
-        )
+        mutableState.value = state.value.addHeaderSocket()
     }
 
     private fun modifyRequestParam(param: RequestParam) {
@@ -198,11 +152,7 @@ class RequestScreenModel(
     }
 
     private fun modifyRequestHeader(param: RequestParam) {
-        mutableState.value = state.value.copy(
-            headersVo = state.value.headersVo.copy(
-                params = state.value.headersVo.params.modify(param, param.index)
-            )
-        )
+        mutableState.value = state.value.modifyHeaderSocket(param)
     }
 
     private fun deleteRequestParam(index: Int) {
@@ -211,18 +161,12 @@ class RequestScreenModel(
             urlVo = state.value.urlVo.copy(
                 url = buildUrlWithParams(state.value.urlVo.url, updatedParams)
             ),
-            paramsVo = state.value.paramsVo.copy(
-                params = updatedParams
-            )
+            paramsVo = state.value.paramsVo.copy(params = updatedParams)
         )
     }
 
     private fun deleteRequestHeader(index: Int) {
-        mutableState.value = state.value.copy(
-            headersVo = state.value.headersVo.copy(
-                params = state.value.headersVo.params.remove(index)
-            )
-        )
+        mutableState.value = state.value.deleteHeaderSocket(index)
     }
 
     private fun getRequestParams(url: String): List<RequestParam> {

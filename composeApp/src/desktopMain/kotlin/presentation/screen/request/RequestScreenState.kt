@@ -1,6 +1,9 @@
 package presentation.screen.request
 
+import domain.model.AuthorizationType
 import domain.model.BodyType
+import domain.model.RequestMethod
+import presentation.screen.request.component.request.authorization.vo.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.vo.AuthVo
 import presentation.screen.request.component.request.body.vo.RequestBodyVo
 import presentation.screen.request.component.request.param.vo.ParamTableVo
@@ -16,7 +19,39 @@ data class RequestScreenState(
     val headersVo: ParamTableVo = ParamTableVo(tableType = TableType.HEADERS),
     val authVo: AuthVo = AuthVo(),
     val bodyVo: RequestBodyVo = RequestBodyVo()
-)
+) {
+    fun setUrl(url: String) = copy(urlVo = urlVo.copy(url = url))
+
+    fun setMethod(method: RequestMethod) = copy(urlVo = urlVo.copy(method = method))
+
+    fun setBodyType(bodyType: BodyType) = copy(bodyVo = bodyVo.copy(optionSelected = bodyType))
+
+    fun setBody(body: String) = copy(bodyVo = bodyVo.copy(value = body))
+
+    fun setAuthorizationType(type: AuthorizationType) =
+        copy(authVo = authVo.copy(optionSelected = type))
+
+    fun setBasicUserName(userName: String) = copy(authVo = authVo.setBasicUserName(userName))
+
+    fun setBasicPassword(password: String) = copy(authVo = authVo.setBasicPassword(password))
+
+    fun setBearerToken(token: String) = copy(authVo = authVo.setBearerToken(token))
+
+    fun setApiKeyAddTo(optionSelected: ApiKeyAddTo) =
+        copy(authVo = authVo.setApiKeyAddTo(optionSelected))
+
+    fun setApiKey(key: String) = copy(authVo = authVo.setApiKey(key))
+
+    fun setApiKeyValue(value: String) = copy(authVo = authVo.setApiKeyValue(value))
+
+    fun addParamSocket() = copy(paramsVo = paramsVo.addParamSocket())
+
+    fun addHeaderSocket() = copy(headersVo = headersVo.addParamSocket())
+
+    fun modifyHeaderSocket(param: RequestParam) = copy(headersVo = headersVo.modifyParamSocket(param))
+
+    fun deleteHeaderSocket(index: Int) = copy(headersVo = headersVo.deleteParamSocket(index))
+}
 
 data class RequestParam(
     val isChecked: Boolean = true,
