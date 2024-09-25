@@ -8,24 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.model.AuthorizationType
-import presentation.screen.request.component.request.authorization.model.AuthVo
+import presentation.screen.request.component.request.authorization.vo.AuthVo
 
 @Composable
-fun RequestAuthorizationComponent(
-    modifier: Modifier = Modifier,
-    optionSelected: AuthorizationType,
-    setAuthorizationType: (AuthorizationType) -> Unit,
-    authVo: AuthVo
-) {
+fun RequestAuthorizationComponent(authVo: AuthVo) {
     Row {
         AuthorizationTypeDropdownComponent(
-            optionSelected = optionSelected
-        ) { setAuthorizationType(it) }
+            optionSelected = authVo.optionSelected
+        ) { authVo.onOptionSelected(it) }
 
         Spacer(modifier = Modifier.width(8.dp))
 
         AuthenticationComponentSelector(
-            optionSelected = optionSelected,
+            optionSelected = authVo.optionSelected,
             authVo = authVo
         )
     }

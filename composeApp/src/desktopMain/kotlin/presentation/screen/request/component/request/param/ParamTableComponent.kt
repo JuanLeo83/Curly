@@ -41,16 +41,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import presentation.screen.request.RequestParam
-import presentation.screen.request.TableType
+import presentation.screen.request.component.request.param.vo.ParamTableVo
 
 @Composable
-fun ParamTableComponent(
-    tableType: TableType,
-    tableData: List<RequestParam>,
-    addRow: (TableType) -> Unit = {},
-    onValueChange: (TableType, RequestParam) -> Unit = { _, _ -> },
-    deleteRow: (TableType, index: Int) -> Unit = { _, _ -> }
-) {
+fun ParamTableComponent(vo: ParamTableVo) {
     val column1Weight = .5f
     val column2Weight = .5f
 
@@ -62,13 +56,13 @@ fun ParamTableComponent(
             )
         }
 
-        items(tableData) { data ->
+        items(vo.params) { data ->
             TableRowComponent(
                 param = data,
                 keyColumnWeight = column1Weight,
                 valueColumnWeight = column2Weight,
-                onValueChange = { param -> onValueChange(tableType, param) },
-                deleteRow = { deleteRow(tableType, data.index) }
+                onValueChange = { param -> vo.onValueChange(vo.tableType, param) },
+                deleteRow = { vo.deleteRow(vo.tableType, data.index) }
             )
         }
 
@@ -78,7 +72,7 @@ fun ParamTableComponent(
                 modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 16.dp)
             ) {
                 Button(
-                    onClick = { addRow(tableType) },
+                    onClick = { vo.addRow(vo.tableType) },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                     modifier = Modifier.height(28.dp)
                 ) {
@@ -149,9 +143,7 @@ fun TableCellComponent(
             onValueChange = onValueChange,
             maxLines = 1,
             singleLine = true,
-            modifier = Modifier
-//                .border(1.dp, Color.LightGray)
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
         if (isHover) {
             Row {

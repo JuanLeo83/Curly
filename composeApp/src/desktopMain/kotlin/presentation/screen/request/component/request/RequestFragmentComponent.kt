@@ -6,60 +6,31 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import domain.model.AuthorizationType
-import domain.model.BodyType
-import domain.model.RequestMethod
-import presentation.screen.request.RequestParam
-import presentation.screen.request.TableType
-import presentation.screen.request.component.request.authorization.model.AuthVo
-import presentation.screen.request.component.request.param.RequestParamsComponent
+import presentation.screen.request.component.request.authorization.vo.AuthVo
+import presentation.screen.request.component.request.body.vo.RequestBodyVo
+import presentation.screen.request.component.request.param.vo.ParamTableVo
 import presentation.screen.request.component.request.url.RequestUrlComponent
+import presentation.screen.request.component.request.url.vo.UrlVo
 
 @Composable
 fun RequestFragmentComponent(
     modifier: Modifier = Modifier,
-    method: RequestMethod,
-    url: String,
-    requestParams: List<RequestParam>,
-    headerParams: List<RequestParam>,
-    requestBodyTypeSelected: BodyType,
-    requestBodyValue: String,
-    requestAuthorizationTypeSelected: AuthorizationType,
-    setRequestMethod: (RequestMethod) -> Unit,
-    setUrl: (String) -> Unit,
-    addRow: (TableType) -> Unit,
-    onValueChange: (TableType, param: RequestParam) -> Unit,
-    deleteRow: (TableType, index: Int) -> Unit,
-    setRequestBodyType: (BodyType) -> Unit,
-    setRequestBody: (String) -> Unit,
-    setAuthorizationType: (AuthorizationType) -> Unit,
-    sendRequest: () -> Unit,
-    authVo: AuthVo
+    urlVo: UrlVo,
+    paramsVo: ParamTableVo,
+    headersVo: ParamTableVo,
+    authVo: AuthVo,
+    bodyVo: RequestBodyVo
 ) {
     Column(modifier = modifier) {
-        RequestUrlComponent(
-            method = method,
-            url = url,
-            setRequestMethod = setRequestMethod,
-            setUrl = setUrl,
-            sendRequest = sendRequest
-        )
+        RequestUrlComponent(urlVo)
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        RequestParamsComponent(
-            requestParams = requestParams,
-            headerParams = headerParams,
-            addRow = addRow,
-            onValueChange = onValueChange,
-            deleteRow = deleteRow,
-            requestBodyTypeSelected = requestBodyTypeSelected,
-            requestBodyValue = requestBodyValue,
-            requestAuthorizationTypeSelected = requestAuthorizationTypeSelected,
-            setRequestBodyType = setRequestBodyType,
-            setRequestBody = setRequestBody,
-            setAuthorizationType = setAuthorizationType,
-            authVo = authVo
+        RequestTabsComponent(
+            paramsVo = paramsVo,
+            headersVo = headersVo,
+            authVo = authVo,
+            bodyVo = bodyVo
         )
     }
 }

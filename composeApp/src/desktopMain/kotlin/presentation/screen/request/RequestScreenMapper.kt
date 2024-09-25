@@ -17,11 +17,11 @@ class RequestScreenMapper {
 
     internal fun mapToRequestParams(state: RequestScreenState): RequestParams {
         return RequestParams(
-            method = state.method,
-            url = completeUrlIfNeeded(state.url),
-            headers = mapHeadersToRequest(state.headerParams),
-            bodyType = state.requestBodyType,
-            body = state.requestBodyValue
+            method = state.urlVo.method,
+            url = completeUrlIfNeeded(state.urlVo.url),
+            headers = mapHeadersToRequest(state.headersVo.params),
+            bodyType = state.bodyVo.optionSelected,
+            body = state.bodyVo.value
         )
     }
 

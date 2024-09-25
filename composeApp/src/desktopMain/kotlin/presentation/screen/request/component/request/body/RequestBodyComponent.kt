@@ -7,28 +7,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import domain.model.BodyType
+import presentation.screen.request.component.request.body.vo.RequestBodyVo
 
 @Composable
 fun RequestBodyComponent(
     modifier: Modifier = Modifier,
-    optionSelected: BodyType,
-    bodyValue: String,
-    setRequestBodyType: (BodyType) -> Unit,
-    setBody: (String) -> Unit
+    vo: RequestBodyVo
 ) {
     Row {
         BodyTypeDropdownComponent(
-            optionSelected = optionSelected,
-        ) { setRequestBodyType(it) }
+            optionSelected = vo.optionSelected,
+        ) { vo.onOptionSelected(it) }
 
         Spacer(modifier = Modifier.width(8.dp))
 
         BodyFormComponent(
             modifier = Modifier.fillMaxWidth(),
-            optionSelected = optionSelected,
-            value = bodyValue,
-            setBody = setBody
+            optionSelected = vo.optionSelected,
+            value = vo.value,
+            setBody = vo.setBody
         )
     }
 }

@@ -35,16 +35,10 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import domain.model.RequestMethod
+import presentation.screen.request.component.request.url.vo.UrlVo
 
 @Composable
-fun RequestUrlComponent(
-    method: RequestMethod,
-    url: String,
-    setRequestMethod: (RequestMethod) -> Unit,
-    setUrl: (String) -> Unit,
-    sendRequest: () -> Unit
-) {
+fun RequestUrlComponent(vo: UrlVo) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
@@ -62,8 +56,8 @@ fun RequestUrlComponent(
     ) {
         RequestMethodDropdownComponent(
             modifier = Modifier.weight(0.2f),
-            optionSelected = method
-        ) { setRequestMethod(it) }
+            optionSelected = vo.method
+        ) { vo.setRequestMethod(it) }
 
         Divider(
             modifier = Modifier
@@ -76,15 +70,15 @@ fun RequestUrlComponent(
         Spacer(modifier = Modifier.width(8.dp))
 
         BasicTextField(
-            value = url,
-            onValueChange = { setUrl(it) },
+            value = vo.url,
+            onValueChange = { vo.setUrl(it) },
             singleLine = true,
             maxLines = 1,
             modifier = Modifier.weight(0.6f)
                 .focusRequester(focusRequester)
                 .onPreviewKeyEvent { event ->
                     if (event.type == KeyEventType.KeyUp && event.key == Key.Enter) {
-                        sendRequest()
+                        vo.sendRequest()
                         focusManager.clearFocus(force = true)
                         true
                     } else false
@@ -92,7 +86,7 @@ fun RequestUrlComponent(
             decorationBox = { innerTextField ->
                 Box(modifier = Modifier.padding(8.dp), contentAlignment = Alignment.CenterStart) {
                     innerTextField()
-                    if (url.isEmpty()) {
+                    if (vo.url.isEmpty()) {
                         Text(
                             "Enter URL...",
                             fontSize = 14.sp,
@@ -106,7 +100,7 @@ fun RequestUrlComponent(
         Spacer(modifier = Modifier.width(8.dp))
 
         Button(
-            onClick = { sendRequest() },
+            onClick = { vo.sendRequest() },
             modifier = Modifier.requiredWidth(120.dp).fillMaxHeight()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {

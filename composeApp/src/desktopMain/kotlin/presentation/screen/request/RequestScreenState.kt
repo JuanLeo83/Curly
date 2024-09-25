@@ -1,23 +1,21 @@
 package presentation.screen.request
 
-import domain.model.AuthorizationType
 import domain.model.BodyType
-import domain.model.RequestMethod
-import presentation.screen.request.component.request.authorization.model.AuthVo
+import presentation.screen.request.component.request.authorization.vo.AuthVo
+import presentation.screen.request.component.request.body.vo.RequestBodyVo
+import presentation.screen.request.component.request.param.vo.ParamTableVo
+import presentation.screen.request.component.request.url.vo.UrlVo
 
 data class RequestScreenState(
     val isLoading: Boolean = false,
     val errorMessage: String = "",
-    val method: RequestMethod = RequestMethod.GET,
-    val url: String = "",
-    val requestParams: List<RequestParam> = listOf(),
-    val headerParams: List<RequestParam> = listOf(),
-    val requestBodyType: BodyType = BodyType.NONE,
-    val requestBodyValue: String = "",
-    val requestAuthorizationType: AuthorizationType = AuthorizationType.NONE,
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,
     val responseData: ResponseData? = null,
-    val authVo: AuthVo = AuthVo()
+    val urlVo: UrlVo = UrlVo(),
+    val paramsVo: ParamTableVo = ParamTableVo(tableType = TableType.PARAMS),
+    val headersVo: ParamTableVo = ParamTableVo(tableType = TableType.HEADERS),
+    val authVo: AuthVo = AuthVo(),
+    val bodyVo: RequestBodyVo = RequestBodyVo()
 )
 
 data class RequestParam(

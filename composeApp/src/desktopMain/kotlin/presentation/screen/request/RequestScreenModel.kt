@@ -12,7 +12,7 @@ import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
-import presentation.screen.request.component.request.authorization.model.ApiKeyAddTo
+import presentation.screen.request.component.request.authorization.vo.ApiKeyAddTo
 
 class RequestScreenModel(
     private val doRequestUseCase: DoRequestUseCase,
@@ -21,22 +21,25 @@ class RequestScreenModel(
 
     fun setUrl(url: String) {
         mutableState.value = state.value.copy(
-            url = url,
-            requestParams = getRequestParams(url)
+            urlVo = state.value.urlVo.copy(url = url),
+            paramsVo = state.value.paramsVo.copy(params = getRequestParams(url))
         )
-
-        println(mutableState.value.requestParams)
     }
 
     fun setRequestMethod(method: RequestMethod) {
-        mutableState.value = state.value.copy(method = method)
+        mutableState.value = state.value.copy(
+            urlVo = state.value.urlVo.copy(method = method)
+        )
     }
 
     fun sendRequest() = screenModelScope.launch {
-        if (state.value.url.isEmpty()) return@launch
+        if (state.value.urlVo.url.isEmpty()) return@launch
 
         val params = mapper.mapToRequestParams(state.value)
-        mutableState.value = state.value.copy(url = params.url, isLoading = true)
+        mutableState.value = state.value.copy(
+            urlVo = state.value.urlVo.copy(url = params.url),
+            isLoading = true
+        )
         doRequestUseCase(params).fold(
             onSuccess = ::requestSuccessHandler,
             onFailure = ::requestFailureHandler
@@ -55,8 +58,8 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> addRequestParam()
             TableType.HEADERS -> addRequestHeader()
-            TableType.COOKIES -> Unit
-            TableType.BODY -> Unit
+            TableType.COOKIES,
+            TableType.BODY,
             TableType.AUTHORIZATION -> Unit
         }
     }
@@ -65,8 +68,8 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> modifyRequestParam(param)
             TableType.HEADERS -> modifyRequestHeader(param)
-            TableType.COOKIES -> Unit
-            TableType.BODY -> Unit
+            TableType.COOKIES,
+            TableType.BODY,
             TableType.AUTHORIZATION -> Unit
         }
     }
@@ -75,22 +78,29 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> deleteRequestParam(index)
             TableType.HEADERS -> deleteRequestHeader(index)
-            TableType.COOKIES -> Unit
-            TableType.BODY -> Unit
+            TableType.COOKIES,
+            TableType.BODY,
             TableType.AUTHORIZATION -> Unit
         }
     }
 
-    fun setRequestBodyType(bodyType: BodyType) {
-        mutableState.value = state.value.copy(requestBodyType = bodyType)
+    fun setRequestBodyType(optionSelected: BodyType) {
+        mutableState.value = state.value.copy(
+            bodyVo = state.value.bodyVo.copy(optionSelected = optionSelected)
+        )
     }
 
-    fun setRequestBody(body: String) {
-        mutableState.value = state.value.copy(requestBodyValue = body)
+    fun setRequestBody(value: String) {
+        mutableState.value = state.value.copy(
+            bodyVo = state.value.bodyVo.copy(value = value)
+        )
     }
 
     fun setAuthorizationType(authorizationType: AuthorizationType) {
-        mutableState.value = state.value.copy(requestAuthorizationType = authorizationType)
+        mutableState.value = state.value.copy(
+            authVo = state.value.authVo.copy(
+                optionSelected = authorizationType)
+        )
     }
 
     fun onBasicAuthUserNameChange(userName: String) {
@@ -158,46 +168,60 @@ class RequestScreenModel(
     }
 
     private fun addRequestParam() {
-        mutableState.value = state.value
-            .copy(
-                requestParams = state.value.requestParams
-                    .add(RequestParam(index = state.value.requestParams.size))
+        mutableState.value = state.value.copy(
+            paramsVo = state.value.paramsVo.copy(
+                params = state.value.paramsVo.params.add(
+                    RequestParam(index = state.value.paramsVo.params.size)
+                )
             )
+        )
     }
 
     private fun addRequestHeader() {
-        mutableState.value = state.value
-            .copy(
-                headerParams = state.value.headerParams
-                    .add(RequestParam(index = state.value.headerParams.size))
+        mutableState.value = state.value.copy(
+            headersVo = state.value.headersVo.copy(
+                params = state.value.headersVo.params.add(
+                    RequestParam(index = state.value.headersVo.params.size)
+                )
             )
+        )
     }
 
     private fun modifyRequestParam(param: RequestParam) {
-        val updatedParams = state.value.requestParams.modify(param, param.index)
+        val updatedParams = state.value.paramsVo.params.modify(param, param.index)
         mutableState.value = state.value.copy(
-            url = buildUrlWithParams(state.value.url, updatedParams),
-            requestParams = updatedParams
+            urlVo = state.value.urlVo.copy(
+                url = buildUrlWithParams(state.value.urlVo.url, updatedParams)
+            ),
+            paramsVo = state.value.paramsVo.copy(params = updatedParams)
         )
     }
 
     private fun modifyRequestHeader(param: RequestParam) {
         mutableState.value = state.value.copy(
-            headerParams = state.value.headerParams.modify(param, param.index)
+            headersVo = state.value.headersVo.copy(
+                params = state.value.headersVo.params.modify(param, param.index)
+            )
         )
     }
 
     private fun deleteRequestParam(index: Int) {
-        val updatedParams = state.value.requestParams.remove(index)
+        val updatedParams = state.value.paramsVo.params.remove(index)
         mutableState.value = state.value.copy(
-            url = buildUrlWithParams(state.value.url, updatedParams),
-            requestParams = state.value.requestParams.remove(index)
+            urlVo = state.value.urlVo.copy(
+                url = buildUrlWithParams(state.value.urlVo.url, updatedParams)
+            ),
+            paramsVo = state.value.paramsVo.copy(
+                params = updatedParams
+            )
         )
     }
 
     private fun deleteRequestHeader(index: Int) {
         mutableState.value = state.value.copy(
-            headerParams = state.value.headerParams.remove(index)
+            headersVo = state.value.headersVo.copy(
+                params = state.value.headersVo.params.remove(index)
+            )
         )
     }
 
@@ -209,7 +233,7 @@ class RequestScreenModel(
                     .mapIndexed { index, text ->
                         val (key, value) = text.split("=")
                         RequestParam(isChecked = true, index = index, key = key, value = value)
-                    } + state.value.requestParams.filter { !it.isChecked }
+                    } + state.value.paramsVo.params.filter { !it.isChecked }
                 ).sortRequestParams()
     }
 

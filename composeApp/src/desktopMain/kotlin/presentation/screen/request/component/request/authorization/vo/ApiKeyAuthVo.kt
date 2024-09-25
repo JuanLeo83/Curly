@@ -1,4 +1,4 @@
-package presentation.screen.request.component.request.authorization.model
+package presentation.screen.request.component.request.authorization.vo
 
 data class ApiKeyAuthVo(
     val optionSelected: ApiKeyAddTo = ApiKeyAddTo.HEADERS,

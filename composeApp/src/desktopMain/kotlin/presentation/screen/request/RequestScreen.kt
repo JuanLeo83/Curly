@@ -52,23 +52,23 @@ class RequestScreen : Screen {
             Column {
                 RequestFragmentComponent(
                     modifier = Modifier.height(height),
-                    method = state.method,
-                    url = state.url,
-                    requestParams = state.requestParams,
-                    headerParams = state.headerParams,
-                    requestBodyTypeSelected = state.requestBodyType,
-                    requestBodyValue = state.requestBodyValue,
-                    requestAuthorizationTypeSelected = state.requestAuthorizationType,
-                    setRequestMethod = { screenModel.setRequestMethod(it) },
-                    setUrl = { screenModel.setUrl(it) },
-                    addRow = { screenModel.addRow(it) },
-                    onValueChange = { type, param -> screenModel.onValueChange(type, param) },
-                    deleteRow = { type, index -> screenModel.deleteRow(type, index) },
-                    setRequestBodyType = { screenModel.setRequestBodyType(it) },
-                    setRequestBody = { screenModel.setRequestBody(it) },
-                    setAuthorizationType = { screenModel.setAuthorizationType(it) },
-                    sendRequest = { screenModel.sendRequest() },
+                    urlVo = state.urlVo.copy(
+                        setRequestMethod = { screenModel.setRequestMethod(it) },
+                        setUrl = { screenModel.setUrl(it) },
+                        sendRequest = { screenModel.sendRequest() }
+                    ),
+                    paramsVo = state.paramsVo.copy(
+                        addRow = { screenModel.addRow(TableType.PARAMS) },
+                        onValueChange = { type, param -> screenModel.onValueChange(type, param) },
+                        deleteRow = { type, index -> screenModel.deleteRow(type, index) }
+                    ),
+                    headersVo = state.headersVo.copy(
+                        addRow = { screenModel.addRow(TableType.HEADERS) },
+                        onValueChange = { type, param -> screenModel.onValueChange(type, param) },
+                        deleteRow = { type, index -> screenModel.deleteRow(type, index) }
+                    ),
                     authVo = state.authVo.copy(
+                        onOptionSelected = { screenModel.setAuthorizationType(it) },
                         basic = state.authVo.basic.copy(
                             onUserNameChange = { screenModel.onBasicAuthUserNameChange(it) },
                             onPasswordChange = { screenModel.onBasicAuthPasswordChange(it) }
@@ -81,6 +81,10 @@ class RequestScreen : Screen {
                             onKeyChange = { screenModel.onApiKeyChange(it) },
                             onValueChange = { screenModel.onApiKeyValueChange(it) }
                         )
+                    ),
+                    bodyVo = state.bodyVo.copy(
+                        onOptionSelected = { screenModel.setRequestBodyType(it) },
+                        setBody = { screenModel.setRequestBody(it) }
                     )
                 )
 

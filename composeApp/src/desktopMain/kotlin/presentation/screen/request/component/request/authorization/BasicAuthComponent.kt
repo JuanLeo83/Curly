@@ -9,7 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import presentation.screen.request.component.request.authorization.model.BasicAuthVo
+import presentation.screen.request.component.request.authorization.vo.BasicAuthVo
 
 @Composable
 fun BasicAuthComponent(

@@ -6,7 +6,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import presentation.screen.request.component.request.authorization.model.BearerAuthVo
+import presentation.screen.request.component.request.authorization.vo.BearerAuthVo
 
 @Composable
 fun BearerAuthComponent(
