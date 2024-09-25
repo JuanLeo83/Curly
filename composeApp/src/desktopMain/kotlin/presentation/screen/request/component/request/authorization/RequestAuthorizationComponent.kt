@@ -3,6 +3,7 @@ package presentation.screen.request.component.request.authorization
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,6 +13,8 @@ import domain.model.AuthorizationType
 fun RequestAuthorizationComponent(
     modifier: Modifier = Modifier,
     optionSelected: AuthorizationType,
+    apiKeyAddToSelected: ApiKeyAddTo,
+    onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
     setAuthorizationType: (AuthorizationType) -> Unit
 ) {
     Row {
@@ -20,5 +23,29 @@ fun RequestAuthorizationComponent(
         ) { setAuthorizationType(it) }
 
         Spacer(modifier = Modifier.width(8.dp))
+
+        AuthenticationComponentSelector(
+            optionSelected = optionSelected,
+            apiKeyAddToSelected = apiKeyAddToSelected,
+            onApiKeyAddToSelected = onApiKeyAddToSelected
+        )
     }
+}
+
+@Composable
+private fun AuthenticationComponentSelector(
+    optionSelected: AuthorizationType,
+    apiKeyAddToSelected: ApiKeyAddTo,
+    onApiKeyAddToSelected: (ApiKeyAddTo) -> Unit,
+) {
+   when (optionSelected) {
+       AuthorizationType.BASIC -> BasicAuthComponent()
+       AuthorizationType.BEARER -> BearerAuthComponent()
+       AuthorizationType.API_KEY -> ApiKeyAuthComponent(
+           optionSelected = apiKeyAddToSelected,
+              onOptionSelected = onApiKeyAddToSelected
+       )
+       AuthorizationType.OAUTH2 -> Text("Coming soon")
+       AuthorizationType.NONE -> {}
+   }
 }

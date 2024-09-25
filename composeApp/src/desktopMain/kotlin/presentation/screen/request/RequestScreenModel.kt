@@ -12,6 +12,7 @@ import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
+import presentation.screen.request.component.request.authorization.ApiKeyAddTo
 
 class RequestScreenModel(
     private val doRequestUseCase: DoRequestUseCase,
@@ -90,6 +91,10 @@ class RequestScreenModel(
 
     fun setAuthorizationType(authorizationType: AuthorizationType) {
         mutableState.value = state.value.copy(requestAuthorizationType = authorizationType)
+    }
+
+    fun onApiKeyAddToSelected(apiKeyAddTo: ApiKeyAddTo) {
+        mutableState.value = state.value.copy(apiKeyAddTo = apiKeyAddTo)
     }
 
     private fun requestSuccessHandler(result: ResponseModel) {
