@@ -1,5 +1,9 @@
 package data.source.remote
 
+import domain.model.ApiKeyAddTo
+import domain.model.Authorization
+import domain.model.AuthorizationType
+import domain.model.BasicAuthorization
 import domain.model.BodyType
 import domain.model.RequestHeader
 import domain.model.RequestMethod
@@ -15,6 +19,7 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
+import java.util.Base64
 
 class RemoteMapper {
 
@@ -52,11 +57,38 @@ class RemoteMapper {
         }
 
         if (requestBuilder.headers[HttpHeaders.ContentEncoding].isNullOrEmpty()) {
-            requestBuilder.headers.append(HttpHeaders.ContentEncoding, HEADER_CONTENT_ENCODING_DEFAULT)
+            requestBuilder.headers.append(
+                HttpHeaders.ContentEncoding,
+                HEADER_CONTENT_ENCODING_DEFAULT
+            )
         }
 
         if (requestBuilder.headers[HttpHeaders.ContentType].isNullOrEmpty()) {
             requestBuilder.headers.append(HttpHeaders.ContentType, HEADER_CONTENT_TYPE_DEFAULT)
+        }
+    }
+
+    internal fun addAuthorization(
+        requestBuilder: HttpRequestBuilder,
+        authorization: Authorization
+    ) {
+        when (authorization.type) {
+            AuthorizationType.NONE -> Unit
+            AuthorizationType.BASIC -> authorization.basic?.let {
+                requestBuilder.headers.append(HttpHeaders.Authorization, it.toDTO())
+            }
+
+            AuthorizationType.BEARER -> authorization.bearer?.let {
+                requestBuilder.headers.append(HttpHeaders.Authorization, "$BEARER ${it.token}")
+            }
+            AuthorizationType.API_KEY -> authorization.apiKey?.let {
+                if (it.addTo == ApiKeyAddTo.HEADERS) {
+                    requestBuilder.headers.append(it.key, it.value)
+                } else {
+                    requestBuilder.url { _ -> parameters.append(it.key, it.value) }
+                }
+            }
+            AuthorizationType.OAUTH2 -> Unit
         }
     }
 
@@ -104,6 +136,10 @@ class RemoteMapper {
         }
     }
 
+    private fun BasicAuthorization.toDTO(): String {
+        return "$BASIC ${Base64.getEncoder().encodeToString("$userName:$password".toByteArray())}"
+    }
+
     private companion object {
         const val CONTENT_LENGTH = "Content-Length"
         const val JSON = "application/json"
@@ -115,6 +151,9 @@ class RemoteMapper {
         const val HEADER_ACCEPT_DEFAULT = "*/*"
         const val HEADER_CONTENT_ENCODING_DEFAULT = "gzip, deflate, br"
         const val HEADER_CONTENT_TYPE_DEFAULT = JSON
+
+        private const val BASIC = "Basic"
+        private const val BEARER = "Bearer"
     }
 
 }

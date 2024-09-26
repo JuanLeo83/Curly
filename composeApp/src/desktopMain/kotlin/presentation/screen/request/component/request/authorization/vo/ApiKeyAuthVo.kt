@@ -1,5 +1,7 @@
 package presentation.screen.request.component.request.authorization.vo
 
+import domain.model.ApiKeyAddTo
+
 data class ApiKeyAuthVo(
     val optionSelected: ApiKeyAddTo = ApiKeyAddTo.HEADERS,
     val onOptionSelected: (ApiKeyAddTo) -> Unit = {},
@@ -8,8 +10,3 @@ data class ApiKeyAuthVo(
     val value: String = "",
     val onValueChange: (String) -> Unit = {}
 )
-
-enum class ApiKeyAddTo(val value: String) {
-    HEADERS("Headers"),
-    QUERY_PARAMETERS("Query Params")
-}

@@ -3,6 +3,14 @@ package presentation.screen.request
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.parser.Parser
+import domain.model.ApiKeyAuthorization
+import domain.model.Authorization
+import domain.model.AuthorizationType
+import domain.model.AuthorizationType.API_KEY
+import domain.model.AuthorizationType.BASIC
+import domain.model.AuthorizationType.BEARER
+import domain.model.BasicAuthorization
+import domain.model.BearerAuthorization
 import domain.model.BodyType
 import domain.model.RequestHeader
 import domain.model.RequestParams
@@ -10,6 +18,10 @@ import domain.model.ResponseHeader
 import domain.model.ResponseModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import presentation.screen.request.component.request.authorization.vo.ApiKeyAuthVo
+import presentation.screen.request.component.request.authorization.vo.AuthVo
+import presentation.screen.request.component.request.authorization.vo.BasicAuthVo
+import presentation.screen.request.component.request.authorization.vo.BearerAuthVo
 
 class RequestScreenMapper {
 
@@ -21,6 +33,7 @@ class RequestScreenMapper {
                 method = urlVo.method,
                 url = completeUrlIfNeeded(urlVo.url),
                 headers = mapHeadersToRequest(headersVo.params),
+                authorization = mapAuthorization(authVo),
                 bodyType = bodyVo.optionSelected,
                 body = bodyVo.value
             )
@@ -51,6 +64,29 @@ class RequestScreenMapper {
             } else null
         }
     }
+
+    private fun mapAuthorization(authVo: AuthVo): Authorization {
+        return with(authVo) {
+            Authorization(
+                type = optionSelected,
+                basic = basic.toModel(optionSelected),
+                bearer = bearer.toModel(optionSelected),
+                apiKey = apiKey.toModel(optionSelected)
+            )
+        }
+    }
+
+    private fun BasicAuthVo.toModel(optionSelected: AuthorizationType) =
+        if (optionSelected == BASIC) BasicAuthorization(userName, password)
+        else null
+
+    private fun BearerAuthVo.toModel(optionSelected: AuthorizationType) =
+        if (optionSelected == BEARER) BearerAuthorization(token)
+        else null
+
+    private fun ApiKeyAuthVo.toModel(optionSelected: AuthorizationType) =
+        if (optionSelected == API_KEY) ApiKeyAuthorization(this.optionSelected, key, value)
+        else null
 
     private fun Double.formatSize(): String {
         val kb = SIZE

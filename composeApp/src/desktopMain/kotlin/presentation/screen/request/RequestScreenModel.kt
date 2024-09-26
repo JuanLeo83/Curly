@@ -2,6 +2,7 @@ package presentation.screen.request
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import domain.model.ApiKeyAddTo
 import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
@@ -11,7 +12,6 @@ import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
-import presentation.screen.request.component.request.authorization.vo.ApiKeyAddTo
 
 class RequestScreenModel(
     private val doRequestUseCase: DoRequestUseCase,

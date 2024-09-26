@@ -1,5 +1,6 @@
 package presentation.screen.request.component.request.authorization.vo
 
+import domain.model.ApiKeyAddTo
 import domain.model.AuthorizationType
 
 data class AuthVo(

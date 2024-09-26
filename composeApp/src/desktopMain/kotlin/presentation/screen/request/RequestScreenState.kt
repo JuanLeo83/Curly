@@ -1,9 +1,9 @@
 package presentation.screen.request
 
+import domain.model.ApiKeyAddTo
 import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
-import presentation.screen.request.component.request.authorization.vo.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.vo.AuthVo
 import presentation.screen.request.component.request.body.vo.RequestBodyVo
 import presentation.screen.request.component.request.param.vo.ParamTableVo

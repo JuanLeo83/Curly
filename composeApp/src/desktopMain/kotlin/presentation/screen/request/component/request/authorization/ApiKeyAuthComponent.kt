@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import presentation.screen.request.component.request.authorization.vo.ApiKeyAddTo
+import domain.model.ApiKeyAddTo
 import presentation.screen.request.component.request.authorization.vo.ApiKeyAuthVo
 
 @Composable

@@ -16,6 +16,7 @@ class RequestRemoteSourceImpl(private val mapper: RemoteMapper) : RequestRemoteS
         val response: HttpResponse = ApiClient.client.request(requestParams.url) {
             method = mapper.getHttpMethod(requestParams.method)
             mapper.addHeaders(this, requestParams.headers)
+            mapper.addAuthorization(this, requestParams.authorization)
             mapper.addBody(this, requestParams.body, requestParams.bodyType)
         }
 
