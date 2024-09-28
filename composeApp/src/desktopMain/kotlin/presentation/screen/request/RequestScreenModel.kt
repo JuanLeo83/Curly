@@ -7,6 +7,7 @@ import domain.model.AuthorizationType
 import domain.model.BodyType
 import domain.model.RequestMethod
 import domain.model.ResponseModel
+import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.DoRequestUseCase
 import extension.list.modify
 import extension.list.remove
@@ -14,9 +15,19 @@ import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
 
 class RequestScreenModel(
+    private val createConfigDirectoryUseCase: CreateConfigDirectoryUseCase,
     private val doRequestUseCase: DoRequestUseCase,
     private val mapper: RequestScreenMapper
 ) : StateScreenModel<RequestScreenState>(RequestScreenState()) {
+
+    init {
+        screenModelScope.launch {
+            createConfigDirectoryUseCase().fold(
+                onSuccess = {},
+                onFailure = { println("Error creating config directory: $it") }
+            )
+        }
+    }
 
     fun setUrl(url: String) {
         mutableState.value = state.value.copy(
@@ -55,9 +66,7 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> addRequestParam()
             TableType.HEADERS -> addRequestHeader()
-            TableType.COOKIES,
-            TableType.BODY,
-            TableType.AUTHORIZATION -> Unit
+            else -> Unit
         }
     }
 
@@ -65,9 +74,7 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> modifyRequestParam(param)
             TableType.HEADERS -> modifyRequestHeader(param)
-            TableType.COOKIES,
-            TableType.BODY,
-            TableType.AUTHORIZATION -> Unit
+            else -> Unit
         }
     }
 
@@ -75,9 +82,7 @@ class RequestScreenModel(
         when (type) {
             TableType.PARAMS -> deleteRequestParam(index)
             TableType.HEADERS -> deleteRequestHeader(index)
-            TableType.COOKIES,
-            TableType.BODY,
-            TableType.AUTHORIZATION -> Unit
+            else -> Unit
         }
     }
 

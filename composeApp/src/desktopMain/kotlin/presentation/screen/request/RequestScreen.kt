@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,8 +34,11 @@ import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import presentation.screen.request.component.request.RequestFragmentComponent
 import presentation.screen.request.component.response.ResponseFragmentComponent
+import presentation.screen.settings.SettingsScreen
 
 class RequestScreen : Screen {
 
@@ -48,8 +53,11 @@ class RequestScreen : Screen {
         var isDragging by remember { mutableStateOf(false) }
         var height by remember { mutableStateOf(DEFAULT_HEIGHT) }
 
+        val navigator = LocalNavigator.currentOrThrow
+
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             Column {
+                Button(onClick = { navigator.push(SettingsScreen()) }) { Text("Settings") }
                 RequestFragmentComponent(
                     modifier = Modifier.height(height),
                     urlVo = state.urlVo.copy(
