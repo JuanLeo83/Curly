@@ -36,6 +36,7 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
         val themes = Files.list(themeDir)
             .filter { Files.isRegularFile(it) }
             .map { it.fileName.toString() }
+            .sorted()
             .toList()
         return Result.success(themes)
     }

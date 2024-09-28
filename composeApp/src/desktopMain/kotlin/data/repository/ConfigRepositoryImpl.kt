@@ -14,7 +14,7 @@ class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigReposi
     }
 
     override fun getAllThemes(): Result<List<String>> {
-        return Result.success(emptyList())
+        return source.loadAllThemes()
     }
 
     override fun importTheme(path: String): Result<Unit> {

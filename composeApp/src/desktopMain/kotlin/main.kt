@@ -20,6 +20,7 @@ import domain.repository.ConfigRepository
 import domain.repository.RequestRepository
 import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.DoRequestUseCase
+import domain.usecase.GetThemesUseCase
 import domain.usecase.GetUserHomeUseCase
 import domain.usecase.ImportThemeUseCase
 import org.koin.core.context.startKoin
@@ -80,10 +81,11 @@ private val domainModule = module {
     factory { DoRequestUseCase(get()) }
     factory { GetUserHomeUseCase(get()) }
     factory { ImportThemeUseCase(get()) }
+    factory { GetThemesUseCase(get()) }
 }
 
 private val presentationModule = module {
     factory { RequestScreenModel(get(), get(), get()) }
     factory { RequestScreenMapper() }
-    factory { SettingsScreenModel(get(), get()) }
+    factory { SettingsScreenModel(get(), get(), get()) }
 }
