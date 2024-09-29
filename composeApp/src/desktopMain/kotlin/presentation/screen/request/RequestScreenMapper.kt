@@ -3,6 +3,7 @@ package presentation.screen.request
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.parser.Parser
+import domain.model.ApiKeyAddTo
 import domain.model.ApiKeyAuthorization
 import domain.model.Authorization
 import domain.model.AuthorizationType
@@ -52,6 +53,18 @@ class RequestScreenMapper {
                 headers = mapHeaders(headers)
             )
         }
+    }
+
+    internal fun mapBodyTypeByName(value: String): BodyType {
+        return BodyType.entries.firstOrNull { it.value == value } ?: BodyType.NONE
+    }
+
+    internal fun mapAuthorizationTypeByName(value: String): AuthorizationType {
+        return AuthorizationType.entries.firstOrNull { it.value == value } ?: AuthorizationType.NONE
+    }
+
+    internal fun mapAddToByName(value: String): ApiKeyAddTo {
+        return ApiKeyAddTo.entries.firstOrNull { it.value == value } ?: ApiKeyAddTo.HEADERS
     }
 
     private fun completeUrlIfNeeded(url: String): String =

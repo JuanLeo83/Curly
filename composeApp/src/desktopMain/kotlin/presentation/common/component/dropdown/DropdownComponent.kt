@@ -1,4 +1,4 @@
-package presentation.screen.request.component.request.authorization
+package presentation.common.component.dropdown
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -30,13 +29,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import domain.model.AuthorizationType
 
 @Composable
-fun AuthorizationTypeDropdownComponent(
+fun DropdownComponent(
     modifier: Modifier = Modifier,
-    optionSelected: AuthorizationType = AuthorizationType.NONE,
-    onOptionSelected: (AuthorizationType) -> Unit
+    options: List<String>,
+    optionSelected: String,
+    onOptionSelected: (String) -> Unit = {}
 ) {
     val defaultRotationAngle = 0f
     val rotationAngle = -180f
@@ -47,17 +46,16 @@ fun AuthorizationTypeDropdownComponent(
     )
     val interactionSource = remember { MutableInteractionSource() }
 
-    fun onClickItem(type: AuthorizationType) {
-        onOptionSelected(type)
+    fun onClickItem(item: String) {
+        onOptionSelected(item)
         expanded = false
     }
 
-    Column {
+    Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .width(150.dp)
+            modifier = modifier
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null
@@ -67,12 +65,12 @@ fun AuthorizationTypeDropdownComponent(
                     color = Color.Gray,
                     shape = MaterialTheme.shapes.small
                 )
-                .padding(start = 16.dp, top = 8.dp, end = 8.dp, bottom = 8.dp)
-
+                .padding(start = 12.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)
         ) {
             Text(
-                text = optionSelected.value,
-                fontSize = 14.sp,
+                modifier = Modifier.padding(bottom = 4.dp),
+                text = optionSelected,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Bold
             )
             Icon(
@@ -85,26 +83,21 @@ fun AuthorizationTypeDropdownComponent(
         DropdownMenu(
             modifier = modifier,
             expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            AuthorizationType.entries.forEach { authType ->
-                AuthorizationTypeMenuItem(
-                    authType = authType,
-                    optionSelected = optionSelected,
-                    onOptionSelected = ::onClickItem
-                )
+            onDismissRequest = { expanded = false }) {
+            options.forEach { item ->
+                MenuItemComponent(item, optionSelected, ::onClickItem)
             }
         }
     }
 }
 
 @Composable
-fun AuthorizationTypeMenuItem(
-    authType: AuthorizationType,
-    optionSelected: AuthorizationType,
-    onOptionSelected: (AuthorizationType) -> Unit
+private fun MenuItemComponent(
+    item: String,
+    optionSelected: String,
+    onOptionSelected: (String) -> Unit
 ) {
-    val backgroundColor = if (optionSelected == authType) {
+    val backgroundColor = if (optionSelected == item) {
         Color.LightGray
     } else {
         Color.Transparent
@@ -112,10 +105,10 @@ fun AuthorizationTypeMenuItem(
 
     DropdownMenuItem(
         modifier = Modifier.background(color = backgroundColor).height(32.dp),
-        onClick = { onOptionSelected(authType) }
+        onClick = { onOptionSelected(item) }
     ) {
         Text(
-            text = authType.value,
+            text = item,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold
         )

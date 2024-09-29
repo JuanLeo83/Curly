@@ -2,9 +2,6 @@ package presentation.screen.request
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import domain.model.ApiKeyAddTo
-import domain.model.AuthorizationType
-import domain.model.BodyType
 import domain.model.RequestMethod
 import domain.model.ResponseModel
 import domain.usecase.CreateConfigDirectoryUseCase
@@ -86,16 +83,18 @@ class RequestScreenModel(
         }
     }
 
-    fun setRequestBodyType(optionSelected: BodyType) {
-        mutableState.value = state.value.setBodyType(optionSelected)
+    fun setRequestBodyType(optionSelected: String) {
+        val bodyType = mapper.mapBodyTypeByName(optionSelected)
+        mutableState.value = state.value.setBodyType(bodyType)
     }
 
     fun setRequestBody(value: String) {
         mutableState.value = state.value.setBody(value)
     }
 
-    fun setAuthorizationType(authorizationType: AuthorizationType) {
-        mutableState.value = state.value.setAuthorizationType(authorizationType)
+    fun setAuthorizationType(authorizationType: String) {
+        val authType = mapper.mapAuthorizationTypeByName(authorizationType)
+        mutableState.value = state.value.setAuthorizationType(authType)
     }
 
     fun onBasicAuthUserNameChange(userName: String) {
@@ -110,8 +109,9 @@ class RequestScreenModel(
         mutableState.value = state.value.setBearerToken(token)
     }
 
-    fun onApiKeyAddToSelected(optionSelected: ApiKeyAddTo) {
-        mutableState.value = state.value.setApiKeyAddTo(optionSelected)
+    fun onApiKeyAddToSelected(optionSelected: String) {
+        val addTo = mapper.mapAddToByName(optionSelected)
+        mutableState.value = state.value.setApiKeyAddTo(addTo)
     }
 
     fun onApiKeyChange(apiKey: String) {

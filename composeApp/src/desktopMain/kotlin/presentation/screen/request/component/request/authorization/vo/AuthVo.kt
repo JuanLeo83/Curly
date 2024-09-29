@@ -4,8 +4,9 @@ import domain.model.ApiKeyAddTo
 import domain.model.AuthorizationType
 
 data class AuthVo(
+    val options: List<String> = AuthorizationType.entries.map { it.value },
     val optionSelected: AuthorizationType = AuthorizationType.NONE,
-    val onOptionSelected: (AuthorizationType) -> Unit = {},
+    val onOptionSelected: (String) -> Unit = {},
     val basic: BasicAuthVo = BasicAuthVo(),
     val bearer: BearerAuthVo = BearerAuthVo(),
     val apiKey: ApiKeyAuthVo = ApiKeyAuthVo()

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import presentation.common.component.dropdown.DropdownComponent
 import presentation.screen.request.component.request.body.vo.RequestBodyVo
 
 @Composable
@@ -15,9 +16,12 @@ fun RequestBodyComponent(
     vo: RequestBodyVo
 ) {
     Row {
-        BodyTypeDropdownComponent(
-            optionSelected = vo.optionSelected,
-        ) { vo.onOptionSelected(it) }
+        DropdownComponent(
+            modifier = Modifier.width(150.dp),
+            options = vo.options,
+            optionSelected = vo.optionSelected.value,
+            onOptionSelected = { vo.onOptionSelected(it) }
+        )
 
         Spacer(modifier = Modifier.width(8.dp))
 
