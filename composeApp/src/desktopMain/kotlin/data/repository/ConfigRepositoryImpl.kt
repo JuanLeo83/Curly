@@ -5,7 +5,7 @@ import domain.repository.ConfigRepository
 
 class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigRepository {
 
-    override fun createConfigDirectory(): Result<Unit> {
+    override suspend fun createConfigDirectory(): Result<Unit> {
         return source.createConfigDirectory()
     }
 

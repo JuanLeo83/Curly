@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -71,7 +72,9 @@ fun DropdownComponent(
                 modifier = Modifier.padding(bottom = 4.dp),
                 text = optionSelected,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
@@ -85,7 +88,7 @@ fun DropdownComponent(
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
             options.forEach { item ->
-                MenuItemComponent(item, optionSelected, ::onClickItem)
+                MenuItemComponent(modifier, item, optionSelected, ::onClickItem)
             }
         }
     }
@@ -93,6 +96,7 @@ fun DropdownComponent(
 
 @Composable
 private fun MenuItemComponent(
+    modifier: Modifier = Modifier,
     item: String,
     optionSelected: String,
     onOptionSelected: (String) -> Unit
@@ -108,9 +112,12 @@ private fun MenuItemComponent(
         onClick = { onOptionSelected(item) }
     ) {
         Text(
+            modifier = modifier,
             text = item,
             fontSize = 12.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
         )
     }
 }

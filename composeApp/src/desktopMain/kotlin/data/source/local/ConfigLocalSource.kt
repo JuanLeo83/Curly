@@ -1,5 +1,14 @@
 package data.source.local
 
+import curly.composeapp.generated.resources.Res
+import domain.error.ConfigFolderException
+import domain.error.CreateConfigException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -8,22 +17,25 @@ import java.util.Locale
 import kotlin.io.path.pathString
 
 interface ConfigLocalSource {
-    fun createConfigDirectory(): Result<Unit>
+    suspend fun createConfigDirectory(): Result<Unit>
     fun getUserHome(): Result<String>
     fun loadAllThemes(): Result<List<String>>
     fun importTheme(path: String): Result<Unit>
 }
 
+@OptIn(ExperimentalResourceApi::class)
 class ConfigLocalSourceImpl : ConfigLocalSource {
 
-    override fun createConfigDirectory(): Result<Unit> {
+    override suspend fun createConfigDirectory(): Result<Unit> {
         val configDir = getConfigDirectory()
         return if (Files.notExists(configDir)) {
-            Files.createDirectories(configDir)
-            println("Configuration directory created at: $configDir")
-            Result.success(Unit)
+            withContext(Dispatchers.IO) {
+                Files.createDirectories(configDir)
+                println("Configuration directory created at: $configDir")
+                setConfigFile(configDir)
+            }
         } else {
-            Result.failure(Exception("Configuration directory already exists at: $configDir"))
+            Result.failure(ConfigFolderException(configDir.pathString))
         }
     }
 
@@ -70,6 +82,24 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
         }
     }
 
+    private suspend fun setConfigFile(configDirectory: Path): Result<Unit> {
+        val configContent = Res.readBytes(CONFIG_PATH).decodeToString()
+        val destiny = configDirectory.pathString + PATH_SEPARATOR + CONFIG_FILE
+        val configFile = File(destiny)
+        return try {
+            withContext(Dispatchers.IO) {
+                FileWriter(configFile).use { writer ->
+                    writer.write(configContent)
+                }
+            }
+            println("File written successfully at: $destiny")
+            Result.success(Unit)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Result.failure(CreateConfigException())
+        }
+    }
+
     private fun getThemeDirectory(): Path {
         val configDir = getConfigDirectory()
         val themeDir = Paths.get(configDir.toString(), THEMES_FOLDER)
@@ -106,5 +136,7 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
         private const val UNIX_CONFIG = ".config"
         private const val THEMES_FOLDER = "themes"
         private const val PATH_SEPARATOR = "/"
+        private const val CONFIG_FILE = "config.json"
+        private const val CONFIG_PATH = "files/$CONFIG_FILE"
     }
 }

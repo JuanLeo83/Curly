@@ -27,14 +27,21 @@ class SettingsScreenModel(
         if (platformFile == null) return
 
         importThemeUseCase(platformFile.file.path).fold(
-            onSuccess = {},
+            onSuccess = { loadThemes() },
             onFailure = { println("Error importing theme: $it") }
         )
     }
 
+    fun applyTheme(themeName: String) {
+        println("Applying theme: $themeName")
+    }
+
     private fun onGetUserHomeSuccess(userHome: String) {
         mutableState.value = state.value.copy(userHomeDirectory = userHome)
+        loadThemes()
+    }
 
+    private fun loadThemes() {
         screenModelScope.launch {
             getThemesUseCase().fold(
                 onSuccess = {
