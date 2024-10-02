@@ -13,6 +13,8 @@ import data.repository.ConfigRepositoryImpl
 import data.repository.RequestRepositoryImpl
 import data.source.local.ConfigLocalSource
 import data.source.local.ConfigLocalSourceImpl
+import data.source.local.ThemeSource
+import data.source.local.mapper.ConfigLocalMapper
 import data.source.remote.RemoteMapper
 import data.source.remote.RequestRemoteSource
 import data.source.remote.RequestRemoteSourceImpl
@@ -20,9 +22,11 @@ import domain.repository.ConfigRepository
 import domain.repository.RequestRepository
 import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.DoRequestUseCase
+import domain.usecase.GetConfigUseCase
 import domain.usecase.GetThemesUseCase
 import domain.usecase.GetUserHomeUseCase
 import domain.usecase.ImportThemeUseCase
+import domain.usecase.LoadCurrentThemeUseCase
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import presentation.screen.request.RequestScreenMapper
@@ -72,16 +76,21 @@ private val dataModule = module {
     factory { RemoteMapper() }
     single<RequestRemoteSource> { RequestRemoteSourceImpl(get()) }
     factory<RequestRepository> { RequestRepositoryImpl(get()) }
-    single<ConfigLocalSource> { ConfigLocalSourceImpl() }
+
+    single { ConfigLocalMapper() }
+    single { ThemeSource(get()) }
+    single<ConfigLocalSource> { ConfigLocalSourceImpl(get(), get()) }
     factory<ConfigRepository> { ConfigRepositoryImpl(get()) }
 }
 
 private val domainModule = module {
     factory { CreateConfigDirectoryUseCase(get()) }
     factory { DoRequestUseCase(get()) }
+    factory { GetConfigUseCase(get()) }
+    factory { GetThemesUseCase(get()) }
     factory { GetUserHomeUseCase(get()) }
     factory { ImportThemeUseCase(get()) }
-    factory { GetThemesUseCase(get()) }
+    factory { LoadCurrentThemeUseCase(get()) }
 }
 
 private val presentationModule = module {

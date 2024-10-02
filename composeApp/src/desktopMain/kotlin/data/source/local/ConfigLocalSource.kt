@@ -1,10 +1,15 @@
 package data.source.local
 
 import curly.composeapp.generated.resources.Res
-import domain.error.ConfigFolderException
+import data.source.local.entity.ConfigEntity
+import data.source.local.mapper.ConfigLocalMapper
+import domain.error.ConfigFileAlreadyExistsException
 import domain.error.CreateConfigException
+import domain.model.AppTheme
+import domain.model.ThemesModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import java.io.File
 import java.io.FileWriter
@@ -12,19 +17,22 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.nio.file.StandardCopyOption
 import java.util.Locale
 import kotlin.io.path.pathString
 
 interface ConfigLocalSource {
     suspend fun createConfigDirectory(): Result<Unit>
     fun getUserHome(): Result<String>
-    fun loadAllThemes(): Result<List<String>>
+    fun loadAllThemes(): Result<ThemesModel>
     fun importTheme(path: String): Result<Unit>
+    fun loadCurrentTheme(): Result<AppTheme>
 }
 
 @OptIn(ExperimentalResourceApi::class)
-class ConfigLocalSourceImpl : ConfigLocalSource {
+class ConfigLocalSourceImpl(
+    private val themeSource: ThemeSource,
+    private val mapper: ConfigLocalMapper
+) : ConfigLocalSource {
 
     override suspend fun createConfigDirectory(): Result<Unit> {
         val configDir = getConfigDirectory()
@@ -34,35 +42,23 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
                 println("Configuration directory created at: $configDir")
                 setConfigFile(configDir)
             }
-        } else {
-            Result.failure(ConfigFolderException(configDir.pathString))
-        }
+        } else createConfigFileIfNotExists(configDir)
     }
 
-    override fun getUserHome(): Result<String> {
-        return Result.success(System.getProperty(USER_HOME))
+    override fun getUserHome(): Result<String> =
+        Result.success(System.getProperty(USER_HOME))
+
+    override fun loadAllThemes(): Result<ThemesModel> {
+        val currentTheme = Json.decodeFromString<ConfigEntity>(readConfigFile()).theme
+        val allThemes = themeSource.loadAllThemes(getConfigDirectory())
+        return Result.success(mapper.mapToThemesModel(currentTheme, allThemes))
     }
 
-    override fun loadAllThemes(): Result<List<String>> {
-        val themeDir = getThemeDirectory()
-        val themes = Files.list(themeDir)
-            .filter { Files.isRegularFile(it) }
-            .map { it.fileName.toString() }
-            .sorted()
-            .toList()
-        return Result.success(themes)
-    }
+    override fun importTheme(path: String): Result<Unit> =
+        themeSource.importTheme(getConfigDirectory(), path)
 
-    override fun importTheme(path: String): Result<Unit> {
-        val folder = path.substring(0, path.lastIndexOf(PATH_SEPARATOR))
-        val fileName = path.substring(path.lastIndexOf(PATH_SEPARATOR) + 1)
-        println(folder)
-        println(fileName)
-        val source = Paths.get(folder, fileName)
-        val destiny = getThemeDirectory().pathString + PATH_SEPARATOR + fileName
-        copyFile(source.pathString, destiny)
-        return Result.success(Unit)
-    }
+    override fun loadCurrentTheme(): Result<AppTheme> =
+        themeSource.loadCurrentTheme(getConfigDirectory(), readConfigFile())
 
     private fun getConfigDirectory(): Path {
         val os = System.getProperty(PROPERTY_OS_NAME).lowercase(Locale.getDefault())
@@ -100,24 +96,16 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
         }
     }
 
-    private fun getThemeDirectory(): Path {
-        val configDir = getConfigDirectory()
-        val themeDir = Paths.get(configDir.toString(), THEMES_FOLDER)
-        return if (Files.notExists(themeDir)) {
-            Files.createDirectories(themeDir)
-            println("Theme directory created at: $themeDir")
-            themeDir
-        } else {
-            themeDir
-        }
+    private fun readConfigFile(): String {
+        val configFile = Paths.get(getConfigDirectory().toString(), CONFIG_FILE)
+        return Files.readString(configFile)
     }
 
-    private fun copyFile(sourcePath: String, destinationPath: String) {
-        val source: Path = Paths.get(sourcePath)
-        val destination: Path = Paths.get(destinationPath)
-
-        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)
-        println("File copied from $sourcePath to $destinationPath")
+    private suspend fun createConfigFileIfNotExists(configDir: Path): Result<Unit> {
+        val configFile = Paths.get(configDir.toString(), CONFIG_FILE)
+        return if (Files.notExists(configFile)) {
+            setConfigFile(configDir)
+        } else Result.failure(ConfigFileAlreadyExistsException())
     }
 
     companion object {
@@ -134,7 +122,6 @@ class ConfigLocalSourceImpl : ConfigLocalSource {
         private const val MAC_LIBRARY = "Library"
         private const val MAC_APPLICATION_SUPPORT = "Application Support"
         private const val UNIX_CONFIG = ".config"
-        private const val THEMES_FOLDER = "themes"
         private const val PATH_SEPARATOR = "/"
         private const val CONFIG_FILE = "config.json"
         private const val CONFIG_PATH = "files/$CONFIG_FILE"

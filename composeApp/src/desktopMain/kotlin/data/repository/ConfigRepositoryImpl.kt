@@ -1,6 +1,7 @@
 package data.repository
 
 import data.source.local.ConfigLocalSource
+import domain.model.ThemesModel
 import domain.repository.ConfigRepository
 
 class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigRepository {
@@ -13,7 +14,7 @@ class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigReposi
         return source.getUserHome()
     }
 
-    override fun getAllThemes(): Result<List<String>> {
+    override fun getAllThemes(): Result<ThemesModel> {
         return source.loadAllThemes()
     }
 
@@ -21,7 +22,13 @@ class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigReposi
         return source.importTheme(path)
     }
 
-    override fun loadTheme(name: String) {
-        // Load theme from config file
+    override fun setTheme(name: String): Result<Unit> {
+        // TODO: Implement
+        return Result.success(Unit)
     }
+
+    override fun loadCurrentTheme(): Result<Unit> {
+        return Result.success(Unit)
+    }
+
 }

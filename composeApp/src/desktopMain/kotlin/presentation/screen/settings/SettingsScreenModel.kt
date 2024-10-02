@@ -45,7 +45,10 @@ class SettingsScreenModel(
         screenModelScope.launch {
             getThemesUseCase().fold(
                 onSuccess = {
-                    mutableState.value = state.value.copy(themesList = it)
+                    mutableState.value = state.value.copy(
+                        currentTheme = it.currentTheme,
+                        themesList = it.allThemes
+                    )
                     println(it)
                 },
                 onFailure = { println("Error getting themes: $it") }
