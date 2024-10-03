@@ -20,6 +20,7 @@ import data.source.remote.RequestRemoteSource
 import data.source.remote.RequestRemoteSourceImpl
 import domain.repository.ConfigRepository
 import domain.repository.RequestRepository
+import domain.usecase.ApplyThemeUseCase
 import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.DoRequestUseCase
 import domain.usecase.GetConfigUseCase
@@ -84,6 +85,7 @@ private val dataModule = module {
 }
 
 private val domainModule = module {
+    factory { ApplyThemeUseCase(get()) }
     factory { CreateConfigDirectoryUseCase(get()) }
     factory { DoRequestUseCase(get()) }
     factory { GetConfigUseCase(get()) }

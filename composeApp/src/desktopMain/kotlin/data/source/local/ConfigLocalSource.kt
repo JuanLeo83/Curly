@@ -25,6 +25,7 @@ interface ConfigLocalSource {
     fun getUserHome(): Result<String>
     fun loadAllThemes(): Result<ThemesModel>
     fun importTheme(path: String): Result<Unit>
+    fun setTheme(name: String): Result<AppTheme>
     fun loadCurrentTheme(): Result<AppTheme>
 }
 
@@ -49,13 +50,19 @@ class ConfigLocalSourceImpl(
         Result.success(System.getProperty(USER_HOME))
 
     override fun loadAllThemes(): Result<ThemesModel> {
-        val currentTheme = Json.decodeFromString<ConfigEntity>(readConfigFile()).theme
+        val currentTheme = readConfigFile().theme
         val allThemes = themeSource.loadAllThemes(getConfigDirectory())
         return Result.success(mapper.mapToThemesModel(currentTheme, allThemes))
     }
 
     override fun importTheme(path: String): Result<Unit> =
         themeSource.importTheme(getConfigDirectory(), path)
+
+    override fun setTheme(name: String): Result<AppTheme> {
+        val config = readConfigFile().copy(theme = name)
+        // TODO: write config file
+        return themeSource.loadCurrentTheme(getConfigDirectory(), config)
+    }
 
     override fun loadCurrentTheme(): Result<AppTheme> =
         themeSource.loadCurrentTheme(getConfigDirectory(), readConfigFile())
@@ -96,9 +103,10 @@ class ConfigLocalSourceImpl(
         }
     }
 
-    private fun readConfigFile(): String {
+    private fun readConfigFile(): ConfigEntity {
         val configFile = Paths.get(getConfigDirectory().toString(), CONFIG_FILE)
-        return Files.readString(configFile)
+        val textContent = Files.readString(configFile)
+        return Json.decodeFromString<ConfigEntity>(textContent)
     }
 
     private suspend fun createConfigFileIfNotExists(configDir: Path): Result<Unit> {

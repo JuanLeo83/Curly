@@ -15,8 +15,7 @@ import kotlin.io.path.pathString
 
 class ThemeSource(private val mapper: ConfigLocalMapper) {
 
-    fun loadCurrentTheme(configDir: Path, configFileContent: String): Result<AppTheme> {
-        val configData = Json.decodeFromString<ConfigEntity>(configFileContent)
+    fun loadCurrentTheme(configDir: Path, configData: ConfigEntity): Result<AppTheme> {
         val themeFileName = configData.theme + JSON_EXTENSION
         val themeFile = Paths.get(getThemeDirectory(configDir).pathString, themeFileName)
         val themeData = Files.readString(themeFile)
