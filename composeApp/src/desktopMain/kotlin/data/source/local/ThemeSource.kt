@@ -1,6 +1,5 @@
 package data.source.local
 
-import data.source.local.entity.ConfigEntity
 import data.source.local.entity.ThemeEntity
 import data.source.local.mapper.ConfigLocalMapper
 import domain.model.AppTheme
@@ -15,8 +14,8 @@ import kotlin.io.path.pathString
 
 class ThemeSource(private val mapper: ConfigLocalMapper) {
 
-    fun loadCurrentTheme(configDir: Path, configData: ConfigEntity): Result<AppTheme> {
-        val themeFileName = configData.theme + JSON_EXTENSION
+    fun loadCurrentTheme(configDir: Path, theme: String): Result<AppTheme> {
+        val themeFileName = theme + JSON_EXTENSION
         val themeFile = Paths.get(getThemeDirectory(configDir).pathString, themeFileName)
         val themeData = Files.readString(themeFile)
         val currentTheme = Json.decodeFromString<ThemeEntity>(themeData)

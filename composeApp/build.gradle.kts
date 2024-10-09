@@ -28,6 +28,8 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.xml)
             implementation(libs.log.napier)
             implementation(libs.ksoup)
+            implementation(libs.kstore)
+            implementation(libs.kstore.file)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

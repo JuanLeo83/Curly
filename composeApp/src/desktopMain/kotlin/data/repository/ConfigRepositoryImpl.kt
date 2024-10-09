@@ -11,11 +11,11 @@ class ConfigRepositoryImpl(private val source: ConfigLocalSource) : ConfigReposi
 
     override fun getUserHome(): Result<String> = source.getUserHome()
 
-    override fun getAllThemes(): Result<ThemesModel> = source.loadAllThemes()
+    override suspend fun getAllThemes(): Result<ThemesModel> = source.loadAllThemes()
 
     override fun importTheme(path: String): Result<Unit> = source.importTheme(path)
 
-    override fun setTheme(name: String): Result<AppTheme> = source.setTheme(name)
+    override suspend fun setTheme(name: String): Result<AppTheme> = source.setTheme(name)
 
     override fun loadCurrentTheme(): Result<AppTheme> {
         TODO("Pending implementation")

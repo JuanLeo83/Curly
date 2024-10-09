@@ -2,6 +2,7 @@ package presentation.screen.settings
 
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import domain.usecase.ApplyThemeUseCase
 import domain.usecase.GetThemesUseCase
 import domain.usecase.GetUserHomeUseCase
 import domain.usecase.ImportThemeUseCase
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 class SettingsScreenModel(
     private val getUserHomeUseCase: GetUserHomeUseCase,
     private val importThemeUseCase: ImportThemeUseCase,
-    private val getThemesUseCase: GetThemesUseCase
+    private val getThemesUseCase: GetThemesUseCase,
+    private val applyThemeUseCase: ApplyThemeUseCase
 ) : StateScreenModel<SettingsScreenState>(SettingsScreenState()) {
 
     init {
@@ -33,7 +35,12 @@ class SettingsScreenModel(
     }
 
     fun applyTheme(themeName: String) {
-        println("Applying theme: $themeName")
+        screenModelScope.launch {
+            applyThemeUseCase(themeName).fold(
+                onSuccess = { println("Theme applied: ${it.name}") }, // TODO: Apply theme
+                onFailure = { println("Error applying theme: $it") }
+            )
+        }
     }
 
     private fun onGetUserHomeSuccess(userHome: String) {

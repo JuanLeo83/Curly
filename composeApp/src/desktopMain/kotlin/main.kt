@@ -98,5 +98,5 @@ private val domainModule = module {
 private val presentationModule = module {
     factory { RequestScreenModel(get(), get(), get()) }
     factory { RequestScreenMapper() }
-    factory { SettingsScreenModel(get(), get(), get()) }
+    factory { SettingsScreenModel(get(), get(), get(), get()) }
 }

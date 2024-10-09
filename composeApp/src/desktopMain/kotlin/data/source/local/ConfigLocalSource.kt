@@ -1,19 +1,15 @@
 package data.source.local
 
-import curly.composeapp.generated.resources.Res
 import data.source.local.entity.ConfigEntity
 import data.source.local.mapper.ConfigLocalMapper
-import domain.error.ConfigFileAlreadyExistsException
-import domain.error.CreateConfigException
+import domain.error.ReadConfigException
 import domain.model.AppTheme
 import domain.model.ThemesModel
+import io.github.xxfast.kstore.KStore
+import io.github.xxfast.kstore.file.extensions.storeOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
+import okio.Path.Companion.toPath
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -23,17 +19,18 @@ import kotlin.io.path.pathString
 interface ConfigLocalSource {
     suspend fun createConfigDirectory(): Result<Unit>
     fun getUserHome(): Result<String>
-    fun loadAllThemes(): Result<ThemesModel>
+    suspend fun loadAllThemes(): Result<ThemesModel>
     fun importTheme(path: String): Result<Unit>
-    fun setTheme(name: String): Result<AppTheme>
-    fun loadCurrentTheme(): Result<AppTheme>
+    suspend fun setTheme(name: String): Result<AppTheme>
+    suspend fun loadCurrentTheme(): Result<AppTheme>
 }
 
-@OptIn(ExperimentalResourceApi::class)
 class ConfigLocalSourceImpl(
     private val themeSource: ThemeSource,
     private val mapper: ConfigLocalMapper
 ) : ConfigLocalSource {
+
+    private lateinit var store: KStore<ConfigEntity>
 
     override suspend fun createConfigDirectory(): Result<Unit> {
         val configDir = getConfigDirectory()
@@ -43,29 +40,29 @@ class ConfigLocalSourceImpl(
                 println("Configuration directory created at: $configDir")
                 setConfigFile(configDir)
             }
-        } else createConfigFileIfNotExists(configDir)
+        } else setConfigFile(configDir)
     }
 
-    override fun getUserHome(): Result<String> =
-        Result.success(System.getProperty(USER_HOME))
+    override fun getUserHome(): Result<String> = Result.success(System.getProperty(USER_HOME))
 
-    override fun loadAllThemes(): Result<ThemesModel> {
-        val currentTheme = readConfigFile().theme
-        val allThemes = themeSource.loadAllThemes(getConfigDirectory())
-        return Result.success(mapper.mapToThemesModel(currentTheme, allThemes))
+    override suspend fun loadAllThemes(): Result<ThemesModel> {
+        return store.get()?.let {
+            val allThemes = themeSource.loadAllThemes(getConfigDirectory())
+            Result.success(mapper.mapToThemesModel(it.theme, allThemes))
+        } ?: Result.failure(ReadConfigException())
     }
 
     override fun importTheme(path: String): Result<Unit> =
         themeSource.importTheme(getConfigDirectory(), path)
 
-    override fun setTheme(name: String): Result<AppTheme> {
-        val config = readConfigFile().copy(theme = name)
-        // TODO: write config file
-        return themeSource.loadCurrentTheme(getConfigDirectory(), config)
+    override suspend fun setTheme(name: String): Result<AppTheme> {
+        store.update { it?.copy(theme = name) }
+        return loadCurrentTheme()
     }
 
-    override fun loadCurrentTheme(): Result<AppTheme> =
-        themeSource.loadCurrentTheme(getConfigDirectory(), readConfigFile())
+    override suspend fun loadCurrentTheme(): Result<AppTheme> = store.get()?.let {
+        themeSource.loadCurrentTheme(getConfigDirectory(), it.theme)
+    } ?: Result.failure(ReadConfigException())
 
     private fun getConfigDirectory(): Path {
         val os = System.getProperty(PROPERTY_OS_NAME).lowercase(Locale.getDefault())
@@ -86,34 +83,10 @@ class ConfigLocalSourceImpl(
     }
 
     private suspend fun setConfigFile(configDirectory: Path): Result<Unit> {
-        val configContent = Res.readBytes(CONFIG_PATH).decodeToString()
         val destiny = configDirectory.pathString + PATH_SEPARATOR + CONFIG_FILE
-        val configFile = File(destiny)
-        return try {
-            withContext(Dispatchers.IO) {
-                FileWriter(configFile).use { writer ->
-                    writer.write(configContent)
-                }
-            }
-            println("File written successfully at: $destiny")
-            Result.success(Unit)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Result.failure(CreateConfigException())
-        }
-    }
-
-    private fun readConfigFile(): ConfigEntity {
-        val configFile = Paths.get(getConfigDirectory().toString(), CONFIG_FILE)
-        val textContent = Files.readString(configFile)
-        return Json.decodeFromString<ConfigEntity>(textContent)
-    }
-
-    private suspend fun createConfigFileIfNotExists(configDir: Path): Result<Unit> {
-        val configFile = Paths.get(configDir.toString(), CONFIG_FILE)
-        return if (Files.notExists(configFile)) {
-            setConfigFile(configDir)
-        } else Result.failure(ConfigFileAlreadyExistsException())
+        store = storeOf(file = destiny.toPath(), version = 1)
+        store.set(ConfigEntity())
+        return Result.success(Unit)
     }
 
     companion object {
@@ -132,6 +105,5 @@ class ConfigLocalSourceImpl(
         private const val UNIX_CONFIG = ".config"
         private const val PATH_SEPARATOR = "/"
         private const val CONFIG_FILE = "config.json"
-        private const val CONFIG_PATH = "files/$CONFIG_FILE"
     }
 }

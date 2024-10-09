@@ -10,6 +10,7 @@ ktor = "2.3.11"
 napier = "2.7.1"
 ksoup = "0.1.2"
 filePicker = "0.8.2"
+kstore = "0.8.0"
 
 
 [libraries]
@@ -40,6 +41,10 @@ log-napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 
 filePicker = { module = "io.github.vinceglb:filekit-compose", version.ref="filePicker"}
+
+kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
+kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
+
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
