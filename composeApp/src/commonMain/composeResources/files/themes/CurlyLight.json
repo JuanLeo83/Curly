@@ -1,0 +1,94 @@
+{
+  "colors": {
+    "primary": "#2c95f5",
+    "secondary": "#5adff5",
+    "background": "#ffffff",
+    "button": {
+      "primary": {
+        "text": "#ffffff",
+        "background": "#2c95f5"
+      },
+      "secondary": {
+        "text": "#6b7281",
+        "background": "#f8fafc"
+      }
+    },
+    "input": {
+      "border": "#f2f4f6",
+      "background": "#f8fafc",
+      "text": "#111827",
+      "placeholder": "#bfc2c1"
+    },
+    "tab": {
+      "background": "#ffffff",
+      "text": "#6b7281",
+      "active": {
+        "background": "#2c95f5",
+        "text": "#111829"
+      }
+    },
+    "checkbox": {
+      "border": "#f2f4f6",
+      "background": "#ffffff",
+      "checked": {
+        "border": "#2c95f5",
+        "background": "#2c95f5",
+        "icon": "#ffffff"
+      }
+    },
+    "requestTypes": {
+      "getRequest": "#1bb63e",
+      "postRequest": "#d99b22",
+      "putRequest": "#2952a4",
+      "patchRequest": "#8918ad",
+      "deleteRequest": "#ba8654",
+      "headRequest": "#1a8a34",
+      "optionsRequest": "#951d17"
+    },
+    "syntax": {
+      "markup": {
+        "tag": "#333333",
+        "tagName": "#333333",
+        "attributeName": "#dc2525",
+        "attributeValue": "#2663ec",
+        "content": "#000000"
+      },
+      "json": {
+        "curlyBraces": "#000000",
+        "brackets": "#000000",
+        "key": "#dc2525",
+        "stringValue": "#2663ec",
+        "numberValue": "#1a8a34",
+        "booleanValue": "#2952a4",
+        "nullValue": "#cd3c99"
+      }
+    },
+    "response": {
+      "attributes": "#1bb63e",
+      "error": "#ef4445"
+    },
+
+    "body": {
+      "lineCounter": {
+        "background": "#e3e3e3",
+        "text": "#9ba3af"
+      },
+      "background": "#ffffff",
+      "rawText": "#9ba3af"
+    },
+
+    "table": {
+      "header": {
+        "background": "#f8fafc",
+        "text": "#9ba3af"
+      },
+      "row": {
+        "background": "#ffffff",
+        "text": "#111827",
+        "placeholder": "#c3c3c3"
+      },
+      "icon": "#ef4445",
+      "border": "#f2f4f6"
+    }
+  }
+}

@@ -33,6 +33,8 @@ import org.koin.dsl.module
 import presentation.screen.request.RequestScreenMapper
 import presentation.screen.request.RequestScreenModel
 import presentation.screen.settings.SettingsScreenModel
+import presentation.screen.splash.SplashScreenModel
+import presentation.theme.ThemeMapper
 import java.awt.Dimension
 
 fun main() = application {
@@ -96,7 +98,9 @@ private val domainModule = module {
 }
 
 private val presentationModule = module {
-    factory { RequestScreenModel(get(), get(), get()) }
+    single { ThemeMapper() }
+    factory { SplashScreenModel(get(), get(), get()) }
+    factory { RequestScreenModel(get(), get()) }
     factory { RequestScreenMapper() }
     factory { SettingsScreenModel(get(), get(), get(), get()) }
 }

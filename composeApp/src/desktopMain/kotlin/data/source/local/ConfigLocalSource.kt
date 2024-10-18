@@ -3,7 +3,7 @@ package data.source.local
 import data.source.local.entity.ConfigEntity
 import data.source.local.mapper.ConfigLocalMapper
 import domain.error.ReadConfigException
-import domain.model.AppTheme
+import domain.model.ThemeModel
 import domain.model.ThemesModel
 import io.github.xxfast.kstore.KStore
 import io.github.xxfast.kstore.file.extensions.storeOf
@@ -20,9 +20,9 @@ interface ConfigLocalSource {
     suspend fun createConfigDirectory(): Result<Unit>
     fun getUserHome(): Result<String>
     suspend fun loadAllThemes(): Result<ThemesModel>
-    fun importTheme(path: String): Result<Unit>
-    suspend fun setTheme(name: String): Result<AppTheme>
-    suspend fun loadCurrentTheme(): Result<AppTheme>
+    suspend fun importTheme(path: String): Result<Unit>
+    suspend fun setTheme(name: String): Result<ThemeModel>
+    suspend fun loadCurrentTheme(): Result<ThemeModel>
 }
 
 class ConfigLocalSourceImpl(
@@ -38,6 +38,7 @@ class ConfigLocalSourceImpl(
             withContext(Dispatchers.IO) {
                 Files.createDirectories(configDir)
                 println("Configuration directory created at: $configDir")
+                themeSource.getThemeDirectory(configDir)
                 setConfigFile(configDir)
             }
         } else setConfigFile(configDir)
@@ -52,15 +53,15 @@ class ConfigLocalSourceImpl(
         } ?: Result.failure(ReadConfigException())
     }
 
-    override fun importTheme(path: String): Result<Unit> =
+    override suspend fun importTheme(path: String): Result<Unit> =
         themeSource.importTheme(getConfigDirectory(), path)
 
-    override suspend fun setTheme(name: String): Result<AppTheme> {
+    override suspend fun setTheme(name: String): Result<ThemeModel> {
         store.update { it?.copy(theme = name) }
         return loadCurrentTheme()
     }
 
-    override suspend fun loadCurrentTheme(): Result<AppTheme> = store.get()?.let {
+    override suspend fun loadCurrentTheme(): Result<ThemeModel> = store.get()?.let {
         themeSource.loadCurrentTheme(getConfigDirectory(), it.theme)
     } ?: Result.failure(ReadConfigException())
 

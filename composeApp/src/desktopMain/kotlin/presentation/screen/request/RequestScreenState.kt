@@ -10,6 +10,7 @@ import presentation.screen.request.component.request.param.vo.ParamTableVo
 import presentation.screen.request.component.request.url.vo.UrlVo
 
 data class RequestScreenState(
+    val initialized: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String = "",
     val responseViewMode: ResponseViewMode = ResponseViewMode.PRETTY,

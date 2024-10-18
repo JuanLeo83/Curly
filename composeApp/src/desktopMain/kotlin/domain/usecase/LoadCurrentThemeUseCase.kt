@@ -1,10 +1,10 @@
 package domain.usecase
 
-import domain.model.AppTheme
+import domain.model.ThemeModel
 import domain.repository.ConfigRepository
 
 class LoadCurrentThemeUseCase(private val repository: ConfigRepository) {
-    operator fun invoke(): Result<AppTheme> {
+    suspend operator fun invoke(): Result<ThemeModel> {
         return repository.loadCurrentTheme()
     }
 }

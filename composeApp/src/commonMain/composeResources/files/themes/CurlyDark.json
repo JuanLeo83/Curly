@@ -1,0 +1,47 @@
+{
+  "isDarkTheme": true,
+  "colors": {
+    "accent": "#2c95f5",
+    "secondary": "#5adff5",
+    "background": "#515151",
+    "highlight": "#46daac",
+    "hover": "#c5c5c5",
+    "bodyBackground": "#383838",
+    "text": {
+      "primary": "#d7d7d7",
+      "secondary": "#acacac",
+      "highlight": "#5adff5",
+      "placeholder": "#8a8a8a",
+      "button": "#ffffff"
+    },
+    "requestTypes": {
+      "getRequest": "#1ed748",
+      "postRequest": "#ffb923",
+      "putRequest": "#317be2",
+      "patchRequest": "b51bdf",
+      "deleteRequest": "#e8a863",
+      "headRequest": "#1fc145",
+      "optionsRequest": "#b8211a"
+    },
+    "syntax": {
+      "markup": {
+        "tag": "#bfbfbf",
+        "tagName": "#bfbfbf",
+        "attributeName": "#cd241b",
+        "attributeValue": "#2e7ce1",
+        "content": "#e8e8e8"
+      },
+      "json": {
+        "curlyBraces": "#ffffff",
+        "brackets": "#ffffff",
+        "key": "#cd241b",
+        "stringValue": "#2e7ce1",
+        "numberValue": "#1fc145",
+        "booleanValue": "#317be2",
+        "nullValue": "#ef45b6"
+      }
+    },
+    "responseAttributes": "#1bb63e",
+    "responseErrorStatus": "#cd241b"
+  }
+}

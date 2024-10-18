@@ -28,16 +28,18 @@ class SettingsScreenModel(
     fun importTheme(platformFile: PlatformFile?) {
         if (platformFile == null) return
 
-        importThemeUseCase(platformFile.file.path).fold(
-            onSuccess = { loadThemes() },
-            onFailure = { println("Error importing theme: $it") }
-        )
+        screenModelScope.launch {
+            importThemeUseCase(platformFile.file.path).fold(
+                onSuccess = { loadThemes() },
+                onFailure = { println("Error importing theme: $it") }
+            )
+        }
     }
 
     fun applyTheme(themeName: String) {
         screenModelScope.launch {
             applyThemeUseCase(themeName).fold(
-                onSuccess = { println("Theme applied: ${it.name}") }, // TODO: Apply theme
+                onSuccess = { println("Theme applied: $it") }, // TODO: Apply theme
                 onFailure = { println("Error applying theme: $it") }
             )
         }

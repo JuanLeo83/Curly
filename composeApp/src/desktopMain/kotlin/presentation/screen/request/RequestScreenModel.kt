@@ -4,7 +4,6 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import domain.model.RequestMethod
 import domain.model.ResponseModel
-import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.DoRequestUseCase
 import extension.list.modify
 import extension.list.remove
@@ -12,19 +11,29 @@ import extension.list.sortRequestParams
 import kotlinx.coroutines.launch
 
 class RequestScreenModel(
-    private val createConfigDirectoryUseCase: CreateConfigDirectoryUseCase,
+//    private val createConfigDirectoryUseCase: CreateConfigDirectoryUseCase,
+//    private val loadCurrentThemeUseCase: LoadCurrentThemeUseCase,
     private val doRequestUseCase: DoRequestUseCase,
-    private val mapper: RequestScreenMapper
+    private val mapper: RequestScreenMapper,
+//    private val themeMapper: ThemeMapper
 ) : StateScreenModel<RequestScreenState>(RequestScreenState()) {
 
-    init {
-        screenModelScope.launch {
-            createConfigDirectoryUseCase().fold(
-                onSuccess = {},
-                onFailure = { println("Error creating config directory: $it") }
-            )
-        }
-    }
+//    init {
+//        screenModelScope.launch {
+//            createConfigDirectoryUseCase().fold(
+//                onSuccess = {
+//                    loadCurrentThemeUseCase().fold(
+//                        onSuccess = {
+//                            theme = themeMapper.mapToTheme(it)
+//                            mutableState.value = state.value.copy(initialized = true)
+//                        },
+//                        onFailure = { println("Error loading current theme: $it") }
+//                    )
+//                },
+//                onFailure = { println("Error creating config directory: $it") }
+//            )
+//        }
+//    }
 
     fun setUrl(url: String) {
         mutableState.value = state.value.copy(

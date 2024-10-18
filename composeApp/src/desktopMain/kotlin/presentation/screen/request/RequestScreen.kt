@@ -7,6 +7,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +40,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import presentation.screen.request.component.request.RequestFragmentComponent
 import presentation.screen.request.component.response.ResponseFragmentComponent
 import presentation.screen.settings.SettingsScreen
+import theme
 
 class RequestScreen : Screen {
 
@@ -55,7 +57,7 @@ class RequestScreen : Screen {
 
         val navigator = LocalNavigator.currentOrThrow
 
-        Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Box(modifier = Modifier.fillMaxSize().background(color = theme.colors.background).padding(16.dp)) {
             Column {
                 Button(onClick = { navigator.push(SettingsScreen()) }) { Text("Settings") }
                 RequestFragmentComponent(
@@ -127,11 +129,13 @@ class RequestScreen : Screen {
                         modifier = Modifier
                             .height(1.dp)
                             .fillMaxWidth()
-                            .background(if (hover || isDragging) Color.Blue else Color.LightGray)
+                            .background(if (hover || isDragging) theme.colors.secondary else Color.LightGray)
                     )
 
                     if (state.isLoading) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(1.dp))
+                        LinearProgressIndicator(
+                            modifier = Modifier.fillMaxWidth().height(1.dp),
+                            color = theme.colors.secondary)
                     }
                 }
 

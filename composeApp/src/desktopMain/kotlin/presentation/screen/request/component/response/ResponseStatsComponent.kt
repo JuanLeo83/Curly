@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import theme
 
 @Composable
 fun ResponseStatsComponent(
@@ -27,7 +28,9 @@ fun ResponseStatsComponent(
 ) {
 
     fun colorizeStatus(status: String): Color {
-        return if (status.startsWith("2")) Color.Green else Color.Red
+        return if (status.startsWith("2")) {
+            theme.colors.response.attributes
+        } else theme.colors.response.error
     }
 
     Row(
@@ -38,6 +41,7 @@ fun ResponseStatsComponent(
         Icon(
             imageVector = Icons.Default.Public,
             contentDescription = "Network icon",
+            tint = theme.colors.tab.text,
             modifier = Modifier.width(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
@@ -53,6 +57,7 @@ fun ResponseStatsComponent(
         Icon(
             imageVector = Icons.Default.Timer,
             contentDescription = "Timer icon",
+            tint = theme.colors.tab.text,
             modifier = Modifier.width(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
@@ -60,21 +65,23 @@ fun ResponseStatsComponent(
         Text(
             text = responseTime,
             fontSize = 12.sp,
-            color = Color.Green,
+            color = theme.colors.response.attributes,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
+        // "accent": "#2c95f5"
 
         Icon(
             imageVector = Icons.Default.FileDownload,
             contentDescription = "Size icon",
+            tint = theme.colors.tab.text,
             modifier = Modifier.width(16.dp)
         )
         Text(text = "Size: ", fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
         Text(
             text = size,
             fontSize = 12.sp,
-            color = Color.Green,
+            color = theme.colors.response.attributes,
             modifier = Modifier.padding(bottom = 4.dp)
         )
     }

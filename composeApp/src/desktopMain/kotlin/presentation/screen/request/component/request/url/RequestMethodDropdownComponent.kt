@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import domain.model.RequestMethod
+import theme
 
 @Composable
 fun RequestMethodDropdownComponent(
@@ -71,6 +72,7 @@ fun RequestMethodDropdownComponent(
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Open Menu",
+                tint = theme.colors.input.placeholder,
                 modifier = Modifier.rotate(rotation)
             )
         }
@@ -93,7 +95,7 @@ private fun RequestMethodMenuItem(
     onOptionSelected: (RequestMethod) -> Unit
 ) {
     val backgroundColor = if (optionSelected == requestMethod) {
-        Color.LightGray
+        theme.colors.secondary.copy(alpha = 0.3f)
     } else {
         Color.Transparent
     }
@@ -112,11 +114,11 @@ private fun RequestMethodMenuItem(
 }
 
 private fun selectColor(option: RequestMethod): Color = when (option) {
-    RequestMethod.GET -> Color.Green
-    RequestMethod.POST -> Color.Yellow
-    RequestMethod.PUT -> Color.Blue
-    RequestMethod.PATCH -> Color.Red
-    RequestMethod.DELETE -> Color.Magenta
-    RequestMethod.HEAD -> Color.Cyan
-    RequestMethod.OPTIONS -> Color.Gray
+    RequestMethod.GET -> theme.colors.requestTypes.getRequest
+    RequestMethod.POST -> theme.colors.requestTypes.postRequest
+    RequestMethod.PUT -> theme.colors.requestTypes.putRequest
+    RequestMethod.PATCH -> theme.colors.requestTypes.patchRequest
+    RequestMethod.DELETE -> theme.colors.requestTypes.deleteRequest
+    RequestMethod.HEAD -> theme.colors.requestTypes.headRequest
+    RequestMethod.OPTIONS -> theme.colors.requestTypes.optionsRequest
 }
