@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -42,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import presentation.screen.request.RequestParam
 import presentation.screen.request.component.request.param.vo.ParamTableVo
+import theme
 
 @Composable
 fun ParamTableComponent(vo: ParamTableVo) {
@@ -164,7 +167,10 @@ fun RequestParamsHeaderComponent(
     keyColumnWeight: Float = 0.5f,
     valueColumnWeight: Float = 0.5f
 ) {
-    Row(Modifier.background(Color.LightGray)) {
+    Row(modifier = Modifier
+        .clip(shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+        .background(color = theme.colors.table.header.background)
+    ) {
         Spacer(modifier = Modifier.width(44.dp))
         TableTitleCellComponent(text = "Key", weight = keyColumnWeight)
         TableTitleCellComponent(text = "Value", weight = valueColumnWeight)
@@ -181,8 +187,9 @@ fun RowScope.TableTitleCellComponent(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 12.sp,
+        color = theme.colors.table.header.text,
         modifier = Modifier
-            .border(1.dp, Color.LightGray)
+            .border(1.dp, color = theme.colors.table.border)
             .weight(weight)
             .padding(4.dp)
     )

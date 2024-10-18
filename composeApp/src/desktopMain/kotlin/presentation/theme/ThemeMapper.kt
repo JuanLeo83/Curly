@@ -140,10 +140,12 @@ class ThemeMapper {
     )
 
     private fun mapToTableHeaderColor(model: TableHeaderColorModel) = TableHeaderColor(
-        background = Color(model.background.toColorInt())
+        background = Color(model.background.toColorInt()),
+        text = Color(model.text.toColorInt())
     )
 
     private fun mapToTableRowColor(model: TableRowColorModel) = TableRowColor(
-        background = Color(model.background.toColorInt())
+        background = Color(model.background.toColorInt()),
+        text = Color(model.text.toColorInt())
     )
 }

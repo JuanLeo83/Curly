@@ -51,13 +51,6 @@ fun RequestUrlComponent(vo: UrlVo) {
         modifier = Modifier
             .height(40.dp)
             .fillMaxWidth()
-//            .background(theme.colors.input.background)
-//            .fillMaxWidth()
-//            .border(
-//                width = 1.dp,
-//                color = theme.colors.input.border,
-//                shape = MaterialTheme.shapes.small
-//            )
     ) {
         Row(modifier = Modifier
             .height(40.dp)
@@ -100,17 +93,21 @@ fun RequestUrlComponent(vo: UrlVo) {
                         } else false
                     },
                 decorationBox = { innerTextField ->
+                    val paddingTop = if (vo.url.isEmpty()) 8.dp else 13.dp
+
                     Box(
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(top = paddingTop, start = 8.dp, end = 8.dp, bottom = 8.dp),
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        innerTextField()
                         if (vo.url.isEmpty()) {
+                            innerTextField()
                             Text(
                                 "Enter URL...",
                                 fontSize = 14.sp,
                                 color = theme.colors.input.placeholder
                             )
+                        } else {
+                            innerTextField()
                         }
                     }
                 },

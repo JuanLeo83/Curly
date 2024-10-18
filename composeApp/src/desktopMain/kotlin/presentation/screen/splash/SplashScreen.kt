@@ -17,7 +17,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import presentation.screen.request.RequestScreen
 
-class SplashScreen : Screen {
+class SplashScreen(
+    val onLoadTheme: () -> Unit
+) : Screen {
 
     @Composable
     override fun Content() {
@@ -26,6 +28,7 @@ class SplashScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
 
         if (state.initialized) {
+            onLoadTheme()
             navigator.replace(RequestScreen())
         }
 

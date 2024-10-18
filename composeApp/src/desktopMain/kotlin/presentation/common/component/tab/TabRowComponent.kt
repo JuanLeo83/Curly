@@ -2,6 +2,7 @@ package presentation.common.component.tab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +39,8 @@ fun TabRowComponent(tabs: List<String>, selectedTabIndex: Int, onTabSelected: (I
                 text = tab,
                 selected = selectedTabIndex == index,
                 index = index,
+                isFirst = index == 0,
+                isLast = index == tabs.lastIndex,
                 onClick = { onTabSelected(index) }
             )
         }
@@ -48,6 +52,8 @@ fun TabComponent(
     text: String,
     selected: Boolean,
     index: Int,
+    isFirst: Boolean,
+    isLast: Boolean,
     onClick: (Int) -> Unit
 ) {
     var width by remember { mutableStateOf(0.dp) }
@@ -59,8 +65,8 @@ fun TabComponent(
             .widthIn(min = 64.dp)
             .clip(
                 shape = RoundedCornerShape(
-                    topStart = if (index == 0) 4.dp else 0.dp,
-                    topEnd = if (index == 3) 4.dp else 0.dp
+                    topStart = if (isFirst) 4.dp else 0.dp,
+                    topEnd = if (isLast) 4.dp else 0.dp
                 )
             )
             .onGloballyPositioned {
@@ -68,11 +74,17 @@ fun TabComponent(
                     it.size.width.toDp()
                 }
             }
-            .clickable { onClick(index) }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    color = theme.colors.secondary
+                )
+            ) { onClick(index) }
     ) {
         Text(
             text = text,
             fontSize = 12.sp,
+            color = if (selected) theme.colors.tab.active.text else theme.colors.tab.text,
             modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
             overflow = TextOverflow.Ellipsis,
             maxLines = 1
@@ -83,7 +95,7 @@ fun TabComponent(
                 modifier = Modifier
                     .height(3.dp)
                     .width(width)
-                    .background(color = theme.colors.secondary)
+                    .background(color = theme.colors.tab.active.background)
                     .align(Alignment.BottomCenter)
             )
         }
