@@ -3,6 +3,7 @@ package presentation.theme
 import androidx.compose.ui.graphics.Color
 
 data class Theme(
+    val isLight: Boolean = true,
     val colors: ThemeColor = ThemeColor()
 )
 
@@ -13,7 +14,7 @@ data class ThemeColor(
     val button: Button = Button(),
     val input: InputColor = InputColor(),
     val tab: TabColor = TabColor(),
-    val checkbox: CheckboxColor = CheckboxColor(),
+    val checkbox: Checkbox = Checkbox(),
     val requestTypes: RequestTypesColor = RequestTypesColor(),
     val syntax: SyntaxColor = SyntaxColor(),
     val response: ResponseColor = ResponseColor(),
@@ -47,6 +48,11 @@ data class TabColor(
 data class TabActiveColor(
     val background: Color = Color.Transparent,
     val text: Color = Color.Transparent
+)
+
+data class Checkbox(
+    val enabled: CheckboxColor = CheckboxColor(),
+    val disabled: CheckboxColor = CheckboxColor()
 )
 
 data class CheckboxColor(

@@ -1,47 +1,104 @@
 {
-  "isDarkTheme": true,
+  "isLight": false,
   "colors": {
-    "accent": "#2c95f5",
+    "primary": "#2c95f5",
     "secondary": "#5adff5",
-    "background": "#515151",
-    "highlight": "#46daac",
-    "hover": "#c5c5c5",
-    "bodyBackground": "#383838",
-    "text": {
-      "primary": "#d7d7d7",
-      "secondary": "#acacac",
-      "highlight": "#5adff5",
-      "placeholder": "#8a8a8a",
-      "button": "#ffffff"
+    "background": "#111827",
+    "button": {
+      "primary": {
+        "text": "#ffffff",
+        "background": "#2c95f5"
+      },
+      "secondary": {
+        "text": "#ffffff",
+        "background": "#1f2937"
+      }
+    },
+    "input": {
+      "border": "#374151",
+      "background": "#1f2937",
+      "text": "#e5e7eb",
+      "placeholder": "#9ca3af"
+    },
+    "tab": {
+      "background": "#111827",
+      "text": "#d1d5db",
+      "active": {
+        "background": "#5adff5",
+        "text": "#ffffff"
+      }
+    },
+    "checkbox": {
+      "enabled": {
+        "border": "#374151",
+        "background": "#1f2937",
+        "checked": {
+          "border": "#2c95f5",
+          "background": "#2c95f5",
+          "icon": "#ffffff"
+        }
+      },
+        "disabled": {
+            "border": "#374151",
+            "background": "#1f2937",
+            "checked": {
+            "border": "#374151",
+            "background": "#374151",
+            "icon": "#ffffff"
+            }
+        }
     },
     "requestTypes": {
-      "getRequest": "#1ed748",
-      "postRequest": "#ffb923",
-      "putRequest": "#317be2",
-      "patchRequest": "b51bdf",
-      "deleteRequest": "#e8a863",
-      "headRequest": "#1fc145",
-      "optionsRequest": "#b8211a"
+      "getRequest": "#1bb63e",
+      "postRequest": "#d99b22",
+      "putRequest": "#2952a4",
+      "patchRequest": "#8918ad",
+      "deleteRequest": "#ba8654",
+      "headRequest": "#1a8a34",
+      "optionsRequest": "#951d17"
     },
     "syntax": {
       "markup": {
-        "tag": "#bfbfbf",
-        "tagName": "#bfbfbf",
-        "attributeName": "#cd241b",
-        "attributeValue": "#2e7ce1",
-        "content": "#e8e8e8"
+        "tag": "#e5e7eb",
+        "tagName": "#e5e7eb",
+        "attributeName": "#f87171",
+        "attributeValue": "#93c5fd",
+        "content": "#ffffff"
       },
       "json": {
         "curlyBraces": "#ffffff",
         "brackets": "#ffffff",
-        "key": "#cd241b",
-        "stringValue": "#2e7ce1",
-        "numberValue": "#1fc145",
-        "booleanValue": "#317be2",
-        "nullValue": "#ef45b6"
+        "key": "#f87171",
+        "stringValue": "#93c5fd",
+        "numberValue": "#34d399",
+        "booleanValue": "#3b82f6",
+        "nullValue": "#f472b6"
       }
     },
-    "responseAttributes": "#1bb63e",
-    "responseErrorStatus": "#cd241b"
+    "response": {
+      "attributes": "#34d399",
+      "error": "#f87171"
+    },
+    "body": {
+      "lineCounter": {
+        "background": "#374151",
+        "text": "#9ba3af"
+      },
+      "background": "#111827",
+      "rawText": "#d1d5db"
+    },
+    "table": {
+      "header": {
+        "background": "#1f2937",
+        "text": "#9ba3af"
+      },
+      "row": {
+        "background": "#111827",
+        "text": "#e5e7eb",
+        "placeholder": "#6b7280"
+      },
+      "icon": "#f87171",
+      "border": "#374151"
+    }
   }
 }

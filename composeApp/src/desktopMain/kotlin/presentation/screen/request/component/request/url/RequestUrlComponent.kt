@@ -111,7 +111,7 @@ fun RequestUrlComponent(vo: UrlVo) {
                         }
                     }
                 },
-                cursorBrush = SolidColor(theme.colors.primary)
+                cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary)
             )
         }
 

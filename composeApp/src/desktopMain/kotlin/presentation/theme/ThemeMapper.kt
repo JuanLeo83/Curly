@@ -6,6 +6,7 @@ import domain.model.ButtonColorModel
 import domain.model.ButtonModel
 import domain.model.CheckboxCheckedColorModel
 import domain.model.CheckboxColorModel
+import domain.model.CheckboxModel
 import domain.model.InputColorModel
 import domain.model.JsonColorModel
 import domain.model.LineCounterColorModel
@@ -25,6 +26,7 @@ import extension.toColorInt
 class ThemeMapper {
 
     fun mapToTheme(model: ThemeModel) = Theme(
+        isLight = model.isLight,
         colors = mapToThemeColors(model.colors)
     )
 
@@ -35,7 +37,7 @@ class ThemeMapper {
         button = mapToButton(model.button),
         input = mapToInputColor(model.input),
         tab = mapToTabColor(model.tab),
-        checkbox = mapToCheckboxColor(model.checkbox),
+        checkbox = mapToCheckbox(model.checkbox),
         requestTypes = mapToRequestTypesColor(model.requestTypes),
         syntax = mapToSyntaxColor(model.syntax),
         response = mapToResponseColor(model.response),
@@ -69,6 +71,11 @@ class ThemeMapper {
     private fun mapToTabActiveColor(model: TabActiveColorModel) = TabActiveColor(
         background = Color(model.background.toColorInt()),
         text = Color(model.text.toColorInt())
+    )
+
+    private fun mapToCheckbox(model: CheckboxModel) = Checkbox(
+        enabled = mapToCheckboxColor(model.enabled),
+        disabled = mapToCheckboxColor(model.disabled)
     )
 
     private fun mapToCheckboxColor(model: CheckboxColorModel) = CheckboxColor(

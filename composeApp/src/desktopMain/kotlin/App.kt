@@ -18,7 +18,8 @@ fun App() {
         colors = MaterialTheme.colors.copy(
             primary = appTheme.colors.primary,
             secondary = appTheme.colors.secondary,
-            background = appTheme.colors.background
+            background = appTheme.colors.background,
+            isLight = appTheme.isLight
         )
     ) {
         Navigator(SplashScreen(onLoadTheme = { appTheme = theme }))

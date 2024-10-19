@@ -1,4 +1,5 @@
 {
+  "isLight": true,
   "colors": {
     "primary": "#2c95f5",
     "secondary": "#5adff5",
@@ -28,12 +29,23 @@
       }
     },
     "checkbox": {
-      "border": "#f2f4f6",
-      "background": "#ffffff",
-      "checked": {
-        "border": "#2c95f5",
-        "background": "#2c95f5",
-        "icon": "#ffffff"
+      "enabled": {
+        "border": "#f2f4f6",
+        "background": "#ffffff",
+        "checked": {
+          "border": "#2c95f5",
+          "background": "#2c95f5",
+          "icon": "#ffffff"
+        }
+      },
+      "disabled": {
+        "border": "#f2f4f6",
+        "background": "#f8fafc",
+        "checked": {
+          "border": "#f2f4f6",
+          "background": "#f2f4f6",
+          "icon": "#ffffff"
+        }
       }
     },
     "requestTypes": {

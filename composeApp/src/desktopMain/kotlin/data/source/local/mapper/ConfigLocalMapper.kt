@@ -5,6 +5,7 @@ import data.source.local.entity.ButtonColorEntity
 import data.source.local.entity.ButtonEntity
 import data.source.local.entity.CheckboxCheckedColorEntity
 import data.source.local.entity.CheckboxColorEntity
+import data.source.local.entity.CheckboxEntity
 import data.source.local.entity.InputColorEntity
 import data.source.local.entity.JsonColorEntity
 import data.source.local.entity.LineCounterColorEntity
@@ -24,6 +25,7 @@ import domain.model.ButtonColorModel
 import domain.model.ButtonModel
 import domain.model.CheckboxCheckedColorModel
 import domain.model.CheckboxColorModel
+import domain.model.CheckboxModel
 import domain.model.InputColorModel
 import domain.model.JsonColorModel
 import domain.model.LineCounterColorModel
@@ -43,6 +45,7 @@ import domain.model.ThemesModel
 class ConfigLocalMapper {
 
     fun mapToModel(entity: ThemeEntity) = ThemeModel(
+        isLight = entity.isLight,
         colors = mapToThemeColorModel(entity.colors)
     )
 
@@ -58,7 +61,7 @@ class ConfigLocalMapper {
         button = mapToButtonModel(entity.button),
         input = mapToInputColorModel(entity.input),
         tab = mapToTabColorModel(entity.tab),
-        checkbox = mapToCheckboxColorModel(entity.checkbox),
+        checkbox = mapToCheckboxModel(entity.checkbox),
         requestTypes = mapToRequestTypesColorModel(entity.requestTypes),
         syntax = mapToSyntaxColorModel(entity.syntax),
         response = mapToResponseColorModel(entity.response),
@@ -92,6 +95,11 @@ class ConfigLocalMapper {
     private fun mapToTabActiveColorModel(entity: TabActiveColorEntity) = TabActiveColorModel(
         background = entity.background,
         text = entity.text
+    )
+
+    private fun mapToCheckboxModel(entity: CheckboxEntity) = CheckboxModel(
+        enabled = mapToCheckboxColorModel(entity.enabled),
+        disabled = mapToCheckboxColorModel(entity.disabled)
     )
 
     private fun mapToCheckboxColorModel(entity: CheckboxColorEntity) = CheckboxColorModel(

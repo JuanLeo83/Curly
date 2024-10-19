@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -15,12 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -36,12 +36,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import presentation.common.component.checkbox.CustomCheckbox
 import presentation.screen.request.RequestParam
 import presentation.screen.request.component.request.param.vo.ParamTableVo
 import theme
@@ -51,48 +56,57 @@ fun ParamTableComponent(vo: ParamTableVo) {
     val column1Weight = .5f
     val column2Weight = .5f
 
-    LazyColumn(Modifier.fillMaxWidth()) {
-        item {
-            RequestParamsHeaderComponent(
-                keyColumnWeight = column1Weight,
-                valueColumnWeight = column2Weight
-            )
-        }
+    Column {
+        LazyColumn(Modifier.fillMaxWidth()) {
+            item {
+                RequestParamsHeaderComponent(
+                    keyColumnWeight = column1Weight,
+                    valueColumnWeight = column2Weight
+                )
+            }
 
-        items(vo.params) { data ->
-            TableRowComponent(
-                param = data,
-                keyColumnWeight = column1Weight,
-                valueColumnWeight = column2Weight,
-                onValueChange = { param -> vo.onValueChange(vo.tableType, param) },
-                deleteRow = { vo.deleteRow(vo.tableType, data.index) }
-            )
-        }
+            itemsIndexed(vo.params) { index, data ->
+                TableRowComponent(
+                    index = index,
+                    param = data,
+                    keyColumnWeight = column1Weight,
+                    valueColumnWeight = column2Weight,
+                    onValueChange = { param -> vo.onValueChange(vo.tableType, param) },
+                    deleteRow = { vo.deleteRow(vo.tableType, data.index) }
+                )
+            }
 
-        item {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 16.dp)
-            ) {
-                Button(
-                    onClick = { vo.addRow(vo.tableType) },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
-                    modifier = Modifier.height(28.dp)
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 16.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add icon",
-                        modifier = Modifier.size(18.dp)
-                    )
+                    Button(
+                        onClick = { vo.addRow(vo.tableType) },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = theme.colors.button.secondary.background
+                        ),
+                        modifier = Modifier.height(28.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add icon",
+                            modifier = Modifier.size(18.dp),
+                            tint = theme.colors.button.secondary.text
+                        )
+                    }
                 }
             }
         }
+
+
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TableRowComponent(
+    index: Int,
     param: RequestParam,
     keyColumnWeight: Float,
     valueColumnWeight: Float,
@@ -106,22 +120,51 @@ fun TableRowComponent(
         modifier = Modifier
             .fillMaxWidth()
             .height(32.dp)
-            .border(1.dp, Color.LightGray)
             .onPointerEvent(PointerEventType.Enter) { isHover = true }
             .onPointerEvent(PointerEventType.Exit) { isHover = false }
+            .drawBehind {
+                if (index == 0) {
+                    drawLine(
+                        color = theme.colors.table.border,
+                        start = Offset(0f, 0f),
+                        end = Offset(size.width, 0f),
+                        strokeWidth = 1.5f
+                    )
+                }
+                drawLine(
+                    color = theme.colors.table.border,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 1.5f
+                )
+                drawLine(
+                    color = theme.colors.table.border,
+                    start = Offset(0f, 0f),
+                    end = Offset(0f, size.height),
+                    strokeWidth = 1.5f
+                )
+                drawLine(
+                    color = theme.colors.table.border,
+                    start = Offset(size.width, 0f),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = 1.5f
+                )
+            }
+            .padding(start = 15.dp)
     ) {
-        Checkbox(
+        CustomCheckbox(
             enabled = param.key.isNotEmpty() && param.value.isNotEmpty(),
             checked = param.isChecked,
             onCheckedChange = { onValueChange(param.copy(isChecked = !param.isChecked)) }
         )
+        Spacer(modifier = Modifier.width(15.dp))
         TableCellComponent(
             modifier = Modifier.weight(keyColumnWeight),
             text = param.key,
             onValueChange = { k -> onValueChange(param.copy(key = k)) }
         )
-        Divider(modifier = Modifier.fillMaxHeight().width(2.dp).background(color = Color.LightGray))
-        Spacer(modifier = Modifier.width(8.dp))
+        Divider(modifier = Modifier.border(1.dp, color = theme.colors.table.border).fillMaxHeight().width(1.dp))
+        Spacer(modifier = Modifier.width(7.dp))
         TableCellComponent(
             modifier = Modifier.weight(valueColumnWeight),
             text = param.value,
@@ -145,19 +188,21 @@ fun TableCellComponent(
             value = text,
             onValueChange = onValueChange,
             maxLines = 1,
+            textStyle = TextStyle(color = theme.colors.table.row.text),
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary),
+            modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
         )
         if (isHover) {
             Row {
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete icon",
-                    modifier = Modifier.width(16.dp).clickable(onClick = onClickDelete)
+                    modifier = Modifier.width(16.dp).clickable(onClick = onClickDelete),
+                    tint = theme.colors.table.icon
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-
         }
     }
 }
@@ -187,10 +232,10 @@ fun RowScope.TableTitleCellComponent(
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         fontSize = 12.sp,
+        fontWeight = FontWeight.Bold,
         color = theme.colors.table.header.text,
         modifier = Modifier
-            .border(1.dp, color = theme.colors.table.border)
             .weight(weight)
-            .padding(4.dp)
+            .padding(top = 2.dp, bottom = 6.dp, start = 4.dp, end = 4.dp)
     )
 }

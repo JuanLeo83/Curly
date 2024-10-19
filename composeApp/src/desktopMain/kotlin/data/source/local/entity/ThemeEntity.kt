@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ThemeEntity(
+    val isLight: Boolean,
     val colors: ThemeColorEntity
 )
 
@@ -15,7 +16,7 @@ data class ThemeColorEntity(
     val button: ButtonEntity,
     val input: InputColorEntity,
     val tab: TabColorEntity,
-    val checkbox: CheckboxColorEntity,
+    val checkbox: CheckboxEntity,
     val requestTypes: RequestTypesColorEntity,
     val syntax: SyntaxColorEntity,
     val response: ResponseColorEntity,
@@ -54,6 +55,12 @@ data class TabColorEntity(
 data class TabActiveColorEntity(
     val background: String,
     val text: String
+)
+
+@Serializable
+data class CheckboxEntity(
+    val enabled: CheckboxColorEntity,
+    val disabled: CheckboxColorEntity
 )
 
 @Serializable

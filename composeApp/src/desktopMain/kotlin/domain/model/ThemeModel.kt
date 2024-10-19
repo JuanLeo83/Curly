@@ -1,6 +1,7 @@
 package domain.model
 
 data class ThemeModel(
+    val isLight: Boolean,
     val colors: ThemeColorModel
 )
 
@@ -11,7 +12,7 @@ data class ThemeColorModel(
     val button: ButtonModel,
     val input: InputColorModel,
     val tab: TabColorModel,
-    val checkbox: CheckboxColorModel,
+    val checkbox: CheckboxModel,
     val requestTypes: RequestTypesColorModel,
     val syntax: SyntaxColorModel,
     val response: ResponseColorModel,
@@ -45,6 +46,11 @@ data class TabColorModel(
 data class TabActiveColorModel(
     val background: String,
     val text: String
+)
+
+data class CheckboxModel(
+    val enabled: CheckboxColorModel,
+    val disabled: CheckboxColorModel
 )
 
 data class CheckboxColorModel(
