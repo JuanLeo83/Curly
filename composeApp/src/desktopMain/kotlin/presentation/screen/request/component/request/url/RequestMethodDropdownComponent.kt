@@ -7,8 +7,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -16,6 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +50,8 @@ fun RequestMethodDropdownComponent(
         if (expanded) rotationAngle else defaultRotationAngle
     )
     val interactionSource = remember { MutableInteractionSource() }
+    var width by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     fun onClickItem(method: RequestMethod) {
         onOptionSelected(method)
@@ -57,6 +64,11 @@ fun RequestMethodDropdownComponent(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .width(150.dp)
+                .onGloballyPositioned {
+                    width = with(density) {
+                        it.size.width.toDp()
+                    }
+                }
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null
@@ -78,7 +90,7 @@ fun RequestMethodDropdownComponent(
         }
 
         DropdownMenu(
-            modifier = modifier,
+            modifier = modifier.background(color = theme.colors.input.background).width(width),
             expanded = expanded,
             onDismissRequest = { expanded = false }) {
             RequestMethod.entries.forEach { requestMethod ->
@@ -94,22 +106,41 @@ private fun RequestMethodMenuItem(
     optionSelected: RequestMethod,
     onOptionSelected: (RequestMethod) -> Unit
 ) {
-    val backgroundColor = if (optionSelected == requestMethod) {
-        theme.colors.secondary.copy(alpha = 0.3f)
+    val isSelected: Boolean = optionSelected == requestMethod
+
+    val backgroundColor = if (isSelected) {
+        theme.colors.secondary.copy(alpha = 0.1f)
     } else {
         Color.Transparent
     }
+
+    val contentColor = selectColor(requestMethod)
 
     DropdownMenuItem(
         modifier = Modifier.background(color = backgroundColor).height(32.dp),
         onClick = { onOptionSelected(requestMethod) }
     ) {
-        Text(
-            text = requestMethod.value,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = selectColor(requestMethod)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = requestMethod.value,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = contentColor
+            )
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Selected Request Method",
+                    tint = contentColor,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+
     }
 }
 
