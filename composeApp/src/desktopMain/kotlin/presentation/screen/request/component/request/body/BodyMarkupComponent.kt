@@ -2,19 +2,21 @@ package presentation.screen.request.component.request.body
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Divider
 import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,55 +24,29 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import presentation.common.Symbols.NEW_LINE
-import presentation.common.Symbols.SPACE
+import presentation.common.component.body.MarkupFormatter
+import presentation.common.component.input.getCursorBrush
 import presentation.common.component.lineNumbers.LineNumbersComponent
-import presentation.screen.request.component.response.markuptext.MarkupElement
-import presentation.screen.request.component.response.markuptext.MarkupTextUtils
-import presentation.screen.request.component.response.markuptext.XmlElementType
+import theme
 
 @Composable
 fun BodyMarkupComponent(
     modifier: Modifier = Modifier,
-    xmlValue: String,
+    markupValue: String,
     setXmlValue: (String) -> Unit
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(xmlValue)) }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(markupValue)) }
 
-    val markupAnnotatedString = remember(xmlValue) {
-        buildAnnotatedString {
-            val rows = xmlValue.split(NEW_LINE)
-            for (row in rows) {
-                val elements = MarkupTextUtils.identifyElements(row)
-                if (elements.isEmpty()) {
-                    append(row)
-                    append(NEW_LINE)
-                } else {
-                    append(MarkupTextUtils.getTabulation(row))
-                    for (element in elements) {
-                        withStyle(
-                            style = SpanStyle(
-                                color = getColor(element),
-                                fontWeight = FontWeight.Light
-                            )
-                        ) {
-                            append(element.value)
-                        }
-                    }
-                    append(NEW_LINE)
-                }
-            }
-        }
-    }
+    val markupAnnotatedString = MarkupFormatter(markupValue)
 
     XmlFormWithLineNumbers(
         modifier = modifier,
@@ -90,57 +66,58 @@ fun XmlFormWithLineNumbers(
     setTextFieldValue: (TextFieldValue) -> Unit
 ) {
     val scrollState = rememberScrollState()
+    var height by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
+    val focusRequester = remember { FocusRequester() }
 
     Box(
         modifier = modifier
-            .border(1.dp, Color.Gray, MaterialTheme.shapes.small)
+            .border(1.dp, theme.colors.input.border, RoundedCornerShape(4.dp))
             .defaultMinSize(minHeight = 100.dp)
-            .padding(8.dp)
+            .onGloballyPositioned {
+                height = with(density) {
+                    it.size.height.toDp()
+                }
+            }
+            .background(theme.colors.input.background)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { focusRequester.requestFocus() }
     ) {
         Row {
             LineNumbersComponent(annotatedString.toString(), modifier = modifier.weight(0.05f))
 
-            Divider(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color.LightGray))
+            Divider(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(height)
+                    .background(theme.colors.input.border)
+            )
 
             Row(modifier = Modifier.weight(0.95f)) {
-                SelectionContainer {
-                    BasicTextField(
-                        value = textFieldValue,
-                        onValueChange = { setTextFieldValue(it) },
-                        modifier = modifier.horizontalScroll(scrollState).fillMaxHeight()
-                            .padding(start = 4.dp),
-                        textStyle = LocalTextStyle.current.copy(
-                            color = Color.Transparent,
-                            fontSize = 14.sp
-                        )
-                    ) { innerTextField ->
-                        Text(
-                            annotatedString,
-                            fontSize = 14.sp,
-                            modifier = Modifier.weight(0.5f).padding(start = 4.dp)
-                        )
-                        innerTextField()
-                    }
+                BasicTextField(
+                    value = textFieldValue,
+                    onValueChange = { setTextFieldValue(it) },
+                    modifier = modifier
+                        .horizontalScroll(scrollState)
+                        .fillMaxHeight()
+                        .focusRequester(focusRequester)
+                        .padding(vertical = 10.dp, horizontal = 4.dp),
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.Transparent,
+                        fontSize = 14.sp
+                    ),
+                    cursorBrush = getCursorBrush(),
+                ) { innerTextField ->
+                    Text(
+                        annotatedString,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(0.5f)
+                    )
+                    innerTextField()
                 }
             }
         }
-    }
-}
-
-private fun AnnotatedString.Builder.getColor(element: MarkupElement): Color {
-    return when (element.type) {
-        XmlElementType.OPEN_TAG_SYMBOL -> Color.Blue
-        XmlElementType.TAG_NAME -> Color.Red
-        XmlElementType.ATTRIBUTE_NAME -> {
-            append(SPACE)
-            Color.Green
-        }
-
-        XmlElementType.EQUAL_SYMBOL -> Color.Black
-        XmlElementType.ATTRIBUTE_VALUE -> Color.Yellow
-        XmlElementType.CLOSE_TAG_SYMBOL -> Color.Blue
-        XmlElementType.OPEN_END_TAG_SYMBOL -> Color.Blue
-        XmlElementType.END_TAG_NAME -> Color.Red
-        XmlElementType.TAG_CONTENT -> Color.Black
     }
 }

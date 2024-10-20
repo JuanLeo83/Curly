@@ -1,16 +1,10 @@
 package presentation.common.component.body
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import presentation.common.Symbols.COLON
 import presentation.common.Symbols.COMMA
@@ -21,48 +15,6 @@ import presentation.common.Symbols.RIGHT_BRACE
 import presentation.common.Symbols.RIGHT_BRACKET
 import presentation.common.Symbols.SPACE
 import theme
-
-@Composable
-fun JsonComponent(
-    modifier: Modifier = Modifier,
-    jsonValue: String,
-    content: @Composable (Modifier, TextFieldValue, AnnotatedString) -> Unit
-) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(jsonValue)) }
-
-    val jsonAnnotatedString = remember(jsonValue) {
-        buildAnnotatedString {
-            val regex = "(\"[^\"]*\")\\s*:\\s*|\"[^\"]*\"|\\b\\d+(\\.\\d+)?\\b|[{}\\[\\],]|\\btrue\\b|\\bfalse\\b|\\bnull\\b".toRegex()
-            val matches = regex.findAll(jsonValue)
-            var lastIndex = 0
-
-            for (match in matches) {
-                append(jsonValue.substring(lastIndex, match.range.first))
-                val value = match.value
-                val color = getColor(value)
-                withStyle(style = SpanStyle(color = color, fontWeight = getFontWeight(value))) {
-                    if (value.trim().endsWith(COLON)) {
-                        append(value.dropLast(1))
-                        withStyle(
-                            style = SpanStyle(
-                                color = theme.colors.input.placeholder,
-                                fontWeight = FontWeight.Light
-                            )
-                        ) {
-                            append(SPACE)
-                        }
-                    } else {
-                        append(value)
-                    }
-                }
-                lastIndex = match.range.last + 1
-            }
-            append(jsonValue.substring(lastIndex))
-        }
-    }
-
-    content(modifier, textFieldValue, jsonAnnotatedString)
-}
 
 @Composable
 fun JsonFormatter(jsonValue: String) = remember(jsonValue) {

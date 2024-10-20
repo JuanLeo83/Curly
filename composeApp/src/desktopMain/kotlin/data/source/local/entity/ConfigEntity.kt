@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ConfigEntity(
-    val theme: String = "CurlyDark",
+    val theme: String = "CurlyLight",
     val language: String = "en"
 )
