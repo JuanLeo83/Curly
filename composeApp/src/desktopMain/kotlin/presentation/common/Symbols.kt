@@ -7,6 +7,7 @@ object Symbols {
     const val RIGHT_BRACKET = "]"
     const val QUOTE = "\""
     const val COLON = ":"
+    const val COMMA = ","
     const val SPACE = " "
     const val NEW_LINE = "\n"
     const val TAB = "\t"

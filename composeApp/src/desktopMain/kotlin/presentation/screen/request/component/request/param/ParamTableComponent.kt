@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.text.TextStyle
@@ -47,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import presentation.common.component.checkbox.CustomCheckbox
+import presentation.common.component.input.getCursorBrush
 import presentation.screen.request.RequestParam
 import presentation.screen.request.component.request.param.vo.ParamTableVo
 import theme
@@ -190,7 +190,7 @@ fun TableCellComponent(
             maxLines = 1,
             textStyle = TextStyle(color = theme.colors.table.row.text),
             singleLine = true,
-            cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary),
+            cursorBrush = getCursorBrush(),
             modifier = Modifier.fillMaxWidth().padding(end = 8.dp)
         )
         if (isHover) {

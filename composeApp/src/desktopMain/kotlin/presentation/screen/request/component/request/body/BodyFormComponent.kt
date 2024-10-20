@@ -10,11 +10,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import domain.model.BodyType
+import presentation.common.component.input.getCursorBrush
 import theme
 
 @Composable
@@ -43,7 +43,7 @@ private fun FormSelector(
                     value = value,
                     onValueChange = { setBody(it) },
                     textStyle = TextStyle(fontSize = 12.sp, color = theme.colors.input.text),
-                    cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary)
+                    cursorBrush = getCursorBrush()
                 )
             }
         }

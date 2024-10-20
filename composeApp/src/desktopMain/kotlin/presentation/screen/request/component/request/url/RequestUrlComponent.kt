@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -37,6 +36,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import presentation.common.component.input.getCursorBrush
 import presentation.screen.request.component.request.url.vo.UrlVo
 import theme
 
@@ -112,7 +112,7 @@ fun RequestUrlComponent(vo: UrlVo) {
                         }
                     }
                 },
-                cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary)
+                cursorBrush = getCursorBrush()
             )
         }
 

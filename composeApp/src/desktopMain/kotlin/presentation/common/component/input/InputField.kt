@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -82,7 +81,7 @@ fun InputField(
                 singleLine = true,
                 maxLines = 1,
                 textStyle = TextStyle(color = theme.colors.input.text, fontSize = 13.sp),
-                cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary),
+                cursorBrush = getCursorBrush(),
                 visualTransformation = visualTransformation,
                 decorationBox = { innerTextField ->
                     val paddingTop = if (value.isEmpty()) 0.dp else 7.dp
