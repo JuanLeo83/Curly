@@ -58,6 +58,7 @@ class ThemeMapper {
     private fun mapToInputColor(model: InputColorModel) = InputColor(
         border = Color(model.border.toColorInt()),
         background = Color(model.background.toColorInt()),
+        label = Color(model.label.toColorInt()),
         text = Color(model.text.toColorInt()),
         placeholder = Color(model.placeholder.toColorInt())
     )

@@ -15,7 +15,6 @@ import presentation.screen.request.component.request.authorization.vo.ApiKeyAuth
 
 @Composable
 fun ApiKeyAuthComponent(
-    modifier: Modifier = Modifier,
     vo: ApiKeyAuthVo
 ) {
     Row {

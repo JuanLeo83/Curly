@@ -82,6 +82,7 @@ class ConfigLocalMapper {
     private fun mapToInputColorModel(entity: InputColorEntity) = InputColorModel(
         border = entity.border,
         background = entity.background,
+        label = entity.label,
         text = entity.text,
         placeholder = entity.placeholder
     )

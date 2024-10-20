@@ -35,6 +35,7 @@ data class ButtonColor(
 data class InputColor(
     val border: Color = Color.Transparent,
     val background: Color = Color.Transparent,
+    val label: Color = Color.Transparent,
     val text: Color = Color.Transparent,
     val placeholder: Color = Color.Transparent
 )

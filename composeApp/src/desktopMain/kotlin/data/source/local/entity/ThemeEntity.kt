@@ -40,6 +40,7 @@ data class ButtonColorEntity(
 data class InputColorEntity(
     val border: String,
     val background: String,
+    val label: String,
     val text: String,
     val placeholder: String
 )

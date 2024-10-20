@@ -17,6 +17,7 @@
     "input": {
       "border": "#374151",
       "background": "#1f2937",
+        "label": "#9ca3af",
       "text": "#e5e7eb",
       "placeholder": "#9ca3af"
     },

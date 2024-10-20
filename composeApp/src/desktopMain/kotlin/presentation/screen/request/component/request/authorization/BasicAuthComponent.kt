@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import presentation.common.component.input.InputField
+import presentation.common.component.input.PasswordInputField
+import presentation.common.component.input.TrailingIconVisibility
 import presentation.screen.request.component.request.authorization.vo.BasicAuthVo
 
 @Composable
@@ -17,18 +20,23 @@ fun BasicAuthComponent(
     vo: BasicAuthVo
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        OutlinedTextField(
+        InputField(
+            label = "Username",
             value = vo.userName,
             onValueChange = vo.onUserNameChange,
-            label = { Text("Username") }
+            placeholder = "Enter a valid username",
+            trailingIcon = Icons.Default.Close,
+            onTrailingIconClick =  { vo.onUserNameChange("") },
+            trailingIconVisibility = TrailingIconVisibility.Condition(vo.userName.isNotEmpty())
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
+        PasswordInputField(
+            label = "Password",
             value = vo.password,
             onValueChange = vo.onPasswordChange,
-            label = { Text("Password") }
+            placeholder = "Enter a password",
         )
     }
 }

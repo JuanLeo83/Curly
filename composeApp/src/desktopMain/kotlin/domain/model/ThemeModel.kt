@@ -33,6 +33,7 @@ data class ButtonColorModel(
 data class InputColorModel(
     val border: String,
     val background: String,
+    val label: String,
     val text: String,
     val placeholder: String
 )
