@@ -1,6 +1,5 @@
 package presentation.common.component.textWithLineNumbers
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +24,10 @@ fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = M
     Row {
         LineNumbersComponent(annotatedString.toString(), modifier = modifier.weight(0.05f))
 
-        Divider(modifier = Modifier.width(1.dp).fillMaxHeight().background(theme.colors.input.border))
+        Divider(
+            modifier = Modifier.width(2.dp).fillMaxHeight(),
+            color = theme.colors.input.border
+        )
 
         Column(modifier = Modifier.weight(0.95f).padding(top = 8.dp)) {
             SelectionContainer {

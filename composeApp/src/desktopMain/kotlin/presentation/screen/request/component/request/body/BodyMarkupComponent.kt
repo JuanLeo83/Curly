@@ -90,9 +90,9 @@ fun XmlFormWithLineNumbers(
 
             Divider(
                 modifier = Modifier
-                    .width(1.dp)
-                    .height(height)
-                    .background(theme.colors.input.border)
+                    .width(2.dp)
+                    .height(height),
+                color = theme.colors.input.border
             )
 
             Row(modifier = Modifier.weight(0.95f)) {

@@ -1,6 +1,7 @@
 package presentation.screen.request.component.response
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,16 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +32,7 @@ import presentation.common.component.tab.TabRowComponent
 import presentation.screen.request.ResponseData
 import presentation.screen.request.ResponseViewMode
 import presentation.screen.request.TabResponse
+import theme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -74,8 +75,12 @@ fun ResponseFragmentComponent(
                 .fillMaxSize()
                 .border(
                     width = 1.dp,
-                    color = Color.Gray,
-                    shape = MaterialTheme.shapes.small
+                    color = theme.colors.input.border,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .background(
+                    color = theme.colors.input.background,
+                    shape = RoundedCornerShape(4.dp)
                 )
         ) {
             TabContentComponent(pagerState) { index ->
@@ -109,7 +114,7 @@ fun Table(data: Map<String, String>) {
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Divider(color = Color.Gray, thickness = 1.dp)
+            Divider(color = theme.colors.input.border, thickness = 1.dp)
             data.forEach { (key, value) ->
                 Row(
                     modifier = Modifier
@@ -121,16 +126,18 @@ fun Table(data: Map<String, String>) {
                         modifier = Modifier
                             .weight(1f)
                             .padding(end = 8.dp),
+                        color = theme.colors.input.label,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp
                     )
                     Text(
                         text = value,
                         modifier = Modifier.weight(1f).padding(start = 8.dp),
+                        color = theme.colors.input.label,
                         fontSize = 12.sp
                     )
                 }
-                Divider(color = Color.Gray, thickness = 1.dp)
+                Divider(color = theme.colors.input.border, thickness = 1.dp)
             }
         }
     }

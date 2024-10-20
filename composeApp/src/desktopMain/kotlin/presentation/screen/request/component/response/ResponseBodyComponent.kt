@@ -27,6 +27,7 @@ import presentation.screen.request.ResponseData
 import presentation.screen.request.ResponseViewMode
 import presentation.screen.request.component.response.json.JsonText
 import presentation.screen.request.component.response.markuptext.MarkupTextComponent
+import theme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -57,7 +58,12 @@ fun ResponseBodyComponent(
                 else -> Spacer(modifier = Modifier.width(0.dp))
             }
         } else SelectionContainer {
-            Text(text = response.rawBody, modifier = modifier, fontSize = 12.sp)
+            Text(
+                text = response.rawBody,
+                modifier = modifier,
+                fontSize = 12.sp,
+                color = theme.colors.input.label
+            )
         }
 
         if (hover) {

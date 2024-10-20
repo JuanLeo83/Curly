@@ -41,11 +41,16 @@ fun ResponseStatsComponent(
         Icon(
             imageVector = Icons.Default.Public,
             contentDescription = "Network icon",
-            tint = theme.colors.tab.text,
+            tint = theme.colors.table.header.text,
             modifier = Modifier.width(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text = "Status: ", fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(
+            text = "Status: ",
+            fontSize = 12.sp,
+            color = theme.colors.table.header.text,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
         Text(
             text = statusCode,
             fontSize = 12.sp,
@@ -57,11 +62,15 @@ fun ResponseStatsComponent(
         Icon(
             imageVector = Icons.Default.Timer,
             contentDescription = "Timer icon",
-            tint = theme.colors.tab.text,
+            tint = theme.colors.table.header.text,
             modifier = Modifier.width(16.dp)
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text = "Time: ", fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(
+            text = "Time: ",
+            fontSize = 12.sp,
+            color = theme.colors.table.header.text,
+            modifier = Modifier.padding(bottom = 4.dp))
         Text(
             text = responseTime,
             fontSize = 12.sp,
@@ -69,15 +78,19 @@ fun ResponseStatsComponent(
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        // "accent": "#2c95f5"
 
         Icon(
             imageVector = Icons.Default.FileDownload,
             contentDescription = "Size icon",
-            tint = theme.colors.tab.text,
+            tint = theme.colors.table.header.text,
             modifier = Modifier.width(16.dp)
         )
-        Text(text = "Size: ", fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(
+            text = "Size: ",
+            fontSize = 12.sp,
+            color = theme.colors.table.header.text,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
         Text(
             text = size,
             fontSize = 12.sp,

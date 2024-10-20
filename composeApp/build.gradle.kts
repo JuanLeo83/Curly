@@ -58,6 +58,9 @@ compose.desktop {
             linux {
                 modules("jdk.security.auth")
             }
+            jvmArgs(
+                "-Dapple.awt.application.appearance=system"
+            )
         }
     }
 }
