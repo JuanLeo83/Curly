@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -69,12 +69,15 @@ fun DropdownComponent(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null
                 ) { expanded = true }
+                .background(
+                    color = theme.colors.input.background,
+                    shape = RoundedCornerShape(4.dp)
+                )
                 .border(
                     width = 1.dp,
                     color = theme.colors.input.border,
-                    shape = MaterialTheme.shapes.small
+                    shape = RoundedCornerShape(4.dp)
                 )
-                .background(color = theme.colors.input.background)
                 .onGloballyPositioned {
                     width = with(density) {
                         it.size.width.toDp()

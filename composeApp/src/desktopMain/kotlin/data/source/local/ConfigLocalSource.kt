@@ -86,7 +86,9 @@ class ConfigLocalSourceImpl(
     private suspend fun setConfigFile(configDirectory: Path): Result<Unit> {
         val destiny = configDirectory.pathString + PATH_SEPARATOR + CONFIG_FILE
         store = storeOf(file = destiny.toPath(), version = 1)
-        store.set(ConfigEntity())
+        if (store.get() == null) {
+            store.set(ConfigEntity())
+        }
         return Result.success(Unit)
     }
 

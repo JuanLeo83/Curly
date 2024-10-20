@@ -8,12 +8,15 @@ import domain.usecase.GetUserHomeUseCase
 import domain.usecase.ImportThemeUseCase
 import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.launch
+import presentation.theme.ThemeMapper
+import theme
 
 class SettingsScreenModel(
     private val getUserHomeUseCase: GetUserHomeUseCase,
     private val importThemeUseCase: ImportThemeUseCase,
     private val getThemesUseCase: GetThemesUseCase,
-    private val applyThemeUseCase: ApplyThemeUseCase
+    private val applyThemeUseCase: ApplyThemeUseCase,
+    private val themeMapper: ThemeMapper
 ) : StateScreenModel<SettingsScreenState>(SettingsScreenState()) {
 
     init {
@@ -39,10 +42,20 @@ class SettingsScreenModel(
     fun applyTheme(themeName: String) {
         screenModelScope.launch {
             applyThemeUseCase(themeName).fold(
-                onSuccess = { println("Theme applied: $it") }, // TODO: Apply theme
+                onSuccess = {
+                    theme = themeMapper.mapToTheme(it)
+                    mutableState.value = state.value.copy(
+                        currentTheme = themeName,
+                        newThemeLoaded = true
+                    )
+                },
                 onFailure = { println("Error applying theme: $it") }
             )
         }
+    }
+
+    fun resetNewThemeLoaded() {
+        mutableState.value = state.value.copy(newThemeLoaded = false)
     }
 
     private fun onGetUserHomeSuccess(userHome: String) {

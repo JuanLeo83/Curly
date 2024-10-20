@@ -79,7 +79,7 @@ fun XmlFormWithLineNumbers(
                     it.size.height.toDp()
                 }
             }
-            .background(theme.colors.input.background)
+            .background(theme.colors.input.background, RoundedCornerShape(4.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null

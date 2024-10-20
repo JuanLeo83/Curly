@@ -29,7 +29,7 @@ class SplashScreen(
 
         if (state.initialized) {
             onLoadTheme()
-            navigator.replace(RequestScreen())
+            navigator.replace(RequestScreen(onLoadTheme))
         }
 
         Box(

@@ -102,5 +102,5 @@ private val presentationModule = module {
     factory { SplashScreenModel(get(), get(), get()) }
     factory { RequestScreenModel(get(), get()) }
     factory { RequestScreenMapper() }
-    factory { SettingsScreenModel(get(), get(), get(), get()) }
+    factory { SettingsScreenModel(get(), get(), get(), get(), get()) }
 }

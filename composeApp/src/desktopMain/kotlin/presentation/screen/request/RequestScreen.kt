@@ -42,7 +42,9 @@ import presentation.screen.request.component.response.ResponseFragmentComponent
 import presentation.screen.settings.SettingsScreen
 import theme
 
-class RequestScreen : Screen {
+class RequestScreen(
+    private val onLoadTheme: () -> Unit
+) : Screen {
 
     @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
     @Composable
@@ -59,7 +61,7 @@ class RequestScreen : Screen {
 
         Box(modifier = Modifier.fillMaxSize().background(color = theme.colors.background).padding(16.dp)) {
             Column {
-                Button(onClick = { navigator.push(SettingsScreen()) }) { Text("Settings") }
+                Button(onClick = { navigator.push(SettingsScreen(onLoadTheme)) }) { Text("Settings") }
                 RequestFragmentComponent(
                     modifier = Modifier.height(height),
                     urlVo = state.urlVo.copy(
