@@ -5,16 +5,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import domain.model.BodyType
+import theme
 
 @Composable
 fun BodyFormComponent(
@@ -38,10 +39,11 @@ private fun FormSelector(
         BodyType.TEXT -> {
             FormWrapperComponent(modifier, value, "Raw content here...") {
                 BasicTextField(
-                    modifier = modifier.fillMaxHeight(),
+                    modifier = modifier.fillMaxHeight().padding(top = 2.dp),
                     value = value,
                     onValueChange = { setBody(it) },
-                    textStyle = TextStyle(fontSize = 14.sp)
+                    textStyle = TextStyle(fontSize = 12.sp, color = theme.colors.input.text),
+                    cursorBrush = SolidColor(if (theme.isLight) theme.colors.primary else theme.colors.secondary)
                 )
             }
         }
@@ -53,25 +55,25 @@ private fun FormSelector(
 }
 
 @Composable
-fun FormWrapperComponent(
+private fun FormWrapperComponent(
     modifier: Modifier = Modifier,
     value: String,
-    hintMessage: String,
+    placeholder: String,
     content: @Composable () -> Unit
 ) {
     Box {
         if (value.isEmpty()) {
             Text(
-                hintMessage,
-                fontSize = 14.sp,
-                color = Color.LightGray,
+                placeholder,
+                fontSize = 12.sp,
+                color = theme.colors.input.placeholder,
                 modifier = Modifier.padding(start = 8.dp, top = 2.dp)
             )
         }
 
         Box(
             modifier = modifier
-                .border(1.dp, Color.Gray, MaterialTheme.shapes.small)
+                .border(1.dp, theme.colors.input.border, RoundedCornerShape(4.dp))
                 .defaultMinSize(minHeight = 100.dp)
                 .padding(8.dp)
         ) {
