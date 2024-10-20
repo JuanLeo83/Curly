@@ -59,7 +59,8 @@ fun RequestUrlComponent(vo: UrlVo) {
                 width = 1.dp,
                 color = theme.colors.input.border,
                 shape = MaterialTheme.shapes.small
-            ).weight(1f)
+            ).weight(1f),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             RequestMethodDropdownComponent(
                 modifier = Modifier.weight(0.2f),
