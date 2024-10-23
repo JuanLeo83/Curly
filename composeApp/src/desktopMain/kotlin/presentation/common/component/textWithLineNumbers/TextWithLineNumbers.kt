@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import presentation.common.component.lineNumbers.LineNumbersComponent
 import theme
 
@@ -33,7 +32,7 @@ fun TextWithLineNumbers(annotatedString: AnnotatedString, modifier: Modifier = M
             SelectionContainer {
                 Text(
                     text = annotatedString,
-                    fontSize = 12.sp,
+                    fontSize = theme.fonts.body,
                     modifier = modifier.horizontalScroll(scrollState)
                 )
             }

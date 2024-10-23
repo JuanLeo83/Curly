@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
@@ -88,7 +87,7 @@ fun DropdownComponent(
             Text(
                 modifier = Modifier.padding(bottom = 4.dp),
                 text = optionSelected,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.dropdown,
                 fontWeight = FontWeight.Bold,
                 color = theme.colors.input.text,
                 overflow = TextOverflow.Ellipsis,
@@ -139,7 +138,7 @@ private fun MenuItemComponent(
         ) {
             Text(
                 text = item,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.dropdown,
                 fontWeight = FontWeight.Bold,
                 color = theme.colors.input.text,
                 overflow = TextOverflow.Ellipsis,

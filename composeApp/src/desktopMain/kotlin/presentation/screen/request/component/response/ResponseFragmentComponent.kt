@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import presentation.common.component.tab.TabContentComponent
 import presentation.common.component.tab.TabRowComponent
@@ -128,13 +127,13 @@ fun Table(data: Map<String, String>) {
                             .padding(end = 8.dp),
                         color = theme.colors.input.label,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
+                        fontSize = theme.fonts.responseHeaders.key
                     )
                     Text(
                         text = value,
                         modifier = Modifier.weight(1f).padding(start = 8.dp),
                         color = theme.colors.input.label,
-                        fontSize = 12.sp
+                        fontSize = theme.fonts.responseHeaders.value
                     )
                 }
                 Divider(color = theme.colors.input.border, thickness = 1.dp)

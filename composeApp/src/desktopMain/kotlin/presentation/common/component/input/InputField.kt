@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
@@ -70,7 +69,7 @@ fun InputField(
             Text(
                 text = label,
                 color = theme.colors.input.label,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.input.label,
                 modifier = Modifier.padding(start = 8.dp)
             )
 
@@ -80,7 +79,10 @@ fun InputField(
                 onValueChange = onValueChange,
                 singleLine = true,
                 maxLines = 1,
-                textStyle = TextStyle(color = theme.colors.input.text, fontSize = 13.sp),
+                textStyle = TextStyle(
+                    color = theme.colors.input.text,
+                    fontSize = theme.fonts.input.text
+                ),
                 cursorBrush = getCursorBrush(),
                 visualTransformation = visualTransformation,
                 decorationBox = { innerTextField ->
@@ -99,7 +101,7 @@ fun InputField(
                             innerTextField()
                             Text(
                                 text = placeholder,
-                                fontSize = 14.sp,
+                                fontSize = theme.fonts.input.placeholder,
                                 color = theme.colors.input.placeholder
                             )
                         } else {

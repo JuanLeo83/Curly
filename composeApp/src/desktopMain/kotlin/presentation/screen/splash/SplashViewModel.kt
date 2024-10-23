@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.LoadCurrentThemeUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ class SplashViewModel(
 
     init {
         viewModelScope.launch {
-            delay(3000)
             createConfigDirectoryUseCase().fold(
                 onSuccess = {
                     loadCurrentThemeUseCase().fold(

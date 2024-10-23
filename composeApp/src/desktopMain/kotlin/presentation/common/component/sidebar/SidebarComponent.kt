@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
@@ -114,7 +113,7 @@ private fun SidebarItemComponent(
         if (showTitle) {
             Text(
                 text = title,
-                fontSize = 8.sp,
+                fontSize = theme.fonts.sidebar,
                 color = if (isSelected) theme.colors.primary else theme.colors.table.header.text,
                 modifier = Modifier.padding(bottom = 4.dp)
             )

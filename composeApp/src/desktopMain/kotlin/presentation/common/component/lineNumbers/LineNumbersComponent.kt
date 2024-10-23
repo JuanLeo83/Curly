@@ -7,14 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
 fun LineNumbersComponent(text: String, modifier: Modifier = Modifier) {
     Text(
         text = getLineNumbers(text),
-        fontSize = 12.sp,
+        fontSize = theme.fonts.body,
         overflow = TextOverflow.Clip,
         textAlign = TextAlign.End,
         color = theme.colors.body.lineCounter.text,

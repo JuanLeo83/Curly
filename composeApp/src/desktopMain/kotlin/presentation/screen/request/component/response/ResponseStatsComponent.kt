@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
@@ -47,13 +46,13 @@ fun ResponseStatsComponent(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "Status: ",
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = theme.colors.table.header.text,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
             text = statusCode,
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = colorizeStatus(statusCode),
             modifier = Modifier.padding(bottom = 4.dp)
         )
@@ -68,12 +67,12 @@ fun ResponseStatsComponent(
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "Time: ",
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = theme.colors.table.header.text,
             modifier = Modifier.padding(bottom = 4.dp))
         Text(
             text = responseTime,
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = theme.colors.response.attributes,
             modifier = Modifier.padding(bottom = 4.dp)
         )
@@ -87,13 +86,13 @@ fun ResponseStatsComponent(
         )
         Text(
             text = "Size: ",
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = theme.colors.table.header.text,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
             text = size,
-            fontSize = 12.sp,
+            fontSize = theme.fonts.responseStats,
             color = theme.colors.response.attributes,
             modifier = Modifier.padding(bottom = 4.dp)
         )

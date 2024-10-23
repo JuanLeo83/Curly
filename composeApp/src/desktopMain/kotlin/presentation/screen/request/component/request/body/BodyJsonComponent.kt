@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import presentation.common.component.body.JsonFormatter
 import presentation.common.component.input.getCursorBrush
 import presentation.common.component.lineNumbers.LineNumbersComponent
@@ -99,16 +98,16 @@ fun JsonFormWithLineNumbers(
                         .horizontalScroll(scrollState)
                         .fillMaxHeight()
                         .focusRequester(focusRequester)
-                        .padding(vertical = 10.dp, horizontal = 4.dp),
+                        .padding(vertical = 8.dp, horizontal = 4.dp),
                     textStyle = LocalTextStyle.current.copy(
                         color = Color.Transparent,
-                        fontSize = 14.sp
+                        fontSize = theme.fonts.body
                     ),
                     cursorBrush = getCursorBrush(),
                 ) { innerTextField ->
                     Text(
                         text = annotatedString,
-                        fontSize = 14.sp,
+                        fontSize = theme.fonts.body,
                         modifier = Modifier.weight(0.5f)
                     )
                     innerTextField()

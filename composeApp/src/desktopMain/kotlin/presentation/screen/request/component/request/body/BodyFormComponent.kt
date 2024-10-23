@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import domain.model.BodyType
 import presentation.common.component.input.getCursorBrush
 import theme
@@ -42,7 +41,10 @@ private fun FormSelector(
                     modifier = modifier.fillMaxHeight().padding(top = 2.dp),
                     value = value,
                     onValueChange = { setBody(it) },
-                    textStyle = TextStyle(fontSize = 12.sp, color = theme.colors.input.text),
+                    textStyle = TextStyle(
+                        fontSize = theme.fonts.body,
+                        color = theme.colors.input.text
+                    ),
                     cursorBrush = getCursorBrush()
                 )
             }
@@ -65,7 +67,7 @@ private fun FormWrapperComponent(
         if (value.isEmpty()) {
             Text(
                 placeholder,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.input.placeholder,
                 color = theme.colors.input.placeholder,
                 modifier = Modifier.padding(start = 8.dp, top = 2.dp)
             )

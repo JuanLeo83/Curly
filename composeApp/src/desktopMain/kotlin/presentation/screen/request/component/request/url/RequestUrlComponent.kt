@@ -35,7 +35,6 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import presentation.common.component.input.getCursorBrush
 import presentation.screen.request.component.request.url.vo.UrlVo
 import theme
@@ -52,17 +51,18 @@ fun RequestUrlComponent(vo: UrlVo) {
             .height(40.dp)
             .fillMaxWidth()
     ) {
-        Row(modifier = Modifier
-            .height(40.dp)
-            .background(
-                theme.colors.input.background,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .border(
-                width = 1.dp,
-                color = theme.colors.input.border,
-                shape = RoundedCornerShape(4.dp)
-            ).weight(1f),
+        Row(
+            modifier = Modifier
+                .height(40.dp)
+                .background(
+                    theme.colors.input.background,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = theme.colors.input.border,
+                    shape = RoundedCornerShape(4.dp)
+                ).weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             RequestMethodDropdownComponent(
@@ -85,7 +85,10 @@ fun RequestUrlComponent(vo: UrlVo) {
                 onValueChange = { vo.setUrl(it) },
                 singleLine = true,
                 maxLines = 1,
-                textStyle = TextStyle(color = theme.colors.input.text),
+                textStyle = TextStyle(
+                    color = theme.colors.input.text,
+                    fontSize = theme.fonts.url.text
+                ),
                 modifier = Modifier
                     .weight(0.6f)
                     .focusRequester(focusRequester)
@@ -100,14 +103,19 @@ fun RequestUrlComponent(vo: UrlVo) {
                     val paddingTop = if (vo.url.isEmpty()) 8.dp else 13.dp
 
                     Box(
-                        modifier = Modifier.padding(top = paddingTop, start = 8.dp, end = 8.dp, bottom = 8.dp),
+                        modifier = Modifier.padding(
+                            top = paddingTop,
+                            start = 8.dp,
+                            end = 8.dp,
+                            bottom = 8.dp
+                        ),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         if (vo.url.isEmpty()) {
                             innerTextField()
                             Text(
                                 "Enter URL...",
-                                fontSize = 14.sp,
+                                fontSize = theme.fonts.url.placeholder,
                                 color = theme.colors.input.placeholder
                             )
                         } else {

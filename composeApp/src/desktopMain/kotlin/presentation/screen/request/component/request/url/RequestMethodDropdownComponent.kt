@@ -32,7 +32,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import domain.model.RequestMethod
 import theme
 
@@ -77,7 +76,7 @@ fun RequestMethodDropdownComponent(
         ) {
             Text(
                 text = optionSelected.value,
-                fontSize = 14.sp,
+                fontSize = theme.fonts.requestTypes.optionSelected,
                 fontWeight = FontWeight.Bold,
                 color = selectColor(optionSelected)
             )
@@ -127,7 +126,7 @@ private fun RequestMethodMenuItem(
         ) {
             Text(
                 text = requestMethod.value,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.requestTypes.option,
                 fontWeight = FontWeight.Bold,
                 color = contentColor
             )

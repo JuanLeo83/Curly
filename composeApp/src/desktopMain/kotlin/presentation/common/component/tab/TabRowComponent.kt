@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import theme
 
 @Composable
@@ -83,7 +82,7 @@ fun TabComponent(
     ) {
         Text(
             text = text,
-            fontSize = 12.sp,
+            fontSize = theme.fonts.tab,
             color = if (selected) theme.colors.tab.active.text else theme.colors.tab.text,
             modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, end = 8.dp),
             overflow = TextOverflow.Ellipsis,

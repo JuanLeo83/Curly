@@ -30,7 +30,7 @@ fun SplashScreen(
         modifier = Modifier.fillMaxSize().background(Color.Black),
         contentAlignment = Alignment.Center
     ) {
-        Text("Curly", fontSize = 32.sp)
+        Text("Curly", fontSize = 32.sp, color = Color.White)
     }
 
 }

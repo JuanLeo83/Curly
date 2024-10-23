@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import domain.model.BodyType
 import presentation.screen.request.ResponseData
 import presentation.screen.request.ResponseViewMode
@@ -49,19 +48,24 @@ fun ResponseBodyComponent(
             when (response.type) {
                 BodyType.TEXT -> {
                     SelectionContainer {
-                        Text(text = response.body, modifier = modifier, fontSize = 12.sp)
+                        Text(text = response.body, modifier = modifier, fontSize = theme.fonts.body)
                     }
                 }
+
                 BodyType.JSON -> JsonText(jsonString = response.body, modifier = modifier)
                 BodyType.HTML,
-                BodyType.XML -> MarkupTextComponent(markupString = response.body, modifier = modifier)
+                BodyType.XML -> MarkupTextComponent(
+                    markupString = response.body,
+                    modifier = modifier
+                )
+
                 else -> Spacer(modifier = Modifier.width(0.dp))
             }
         } else SelectionContainer {
             Text(
                 text = response.rawBody,
                 modifier = modifier,
-                fontSize = 12.sp,
+                fontSize = theme.fonts.body,
                 color = theme.colors.input.label
             )
         }
@@ -72,9 +76,19 @@ fun ResponseBodyComponent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = { showPretty() }) { Text(text = "Pretty", fontSize = 12.sp) }
+                Button(onClick = { showPretty() }) {
+                    Text(
+                        text = "Pretty",
+                        fontSize = theme.fonts.button
+                    )
+                }
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = { showRaw() }) { Text(text = "Raw", fontSize = 12.sp) }
+                Button(onClick = { showRaw() }) {
+                    Text(
+                        text = "Raw",
+                        fontSize = theme.fonts.button
+                    )
+                }
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }

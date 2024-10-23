@@ -44,7 +44,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import presentation.common.component.checkbox.CustomCheckbox
 import presentation.common.component.input.getCursorBrush
 import presentation.screen.request.RequestParam
@@ -231,7 +230,7 @@ fun RowScope.TableTitleCellComponent(
         text = text,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        fontSize = 12.sp,
+        fontSize = theme.fonts.table.header,
         fontWeight = FontWeight.Bold,
         color = theme.colors.table.header.text,
         modifier = Modifier
