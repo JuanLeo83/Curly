@@ -14,69 +14,54 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.koinScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
+import org.koin.compose.viewmodel.koinViewModel
 import presentation.common.component.dropdown.DropdownComponent
 import theme
 
-class SettingsScreen(
-    val onLoadTheme: () -> Unit
-) : Screen {
+@Composable
+fun SettingsScreen(
+    viewModel: SettingsViewModel = koinViewModel(),
+    onLoadTheme: () -> Unit
+) {
 
-    @Composable
-    override fun Content() {
-        val screenModel = koinScreenModel<SettingsScreenModel>()
-        val state by screenModel.state.collectAsState()
-        val navigator = LocalNavigator.current
+    val state by viewModel.state.collectAsState()
 
-        val launcher = rememberFilePickerLauncher(
-            type = PickerType.File(extensions = listOf(JSON)),
-            mode = PickerMode.Single,
-            title = "Pick a theme file",
-            initialDirectory = state.userHomeDirectory
-        ) { file ->
-            screenModel.importTheme(file)
-        }
-
-        if (state.newThemeLoaded) {
-            onLoadTheme()
-            screenModel.resetNewThemeLoaded()
-        }
-
-        Box(Modifier.fillMaxSize().background(color = theme.colors.background).padding(16.dp)) {
-            Button(
-                modifier = Modifier.align(Alignment.TopEnd),
-                onClick = { navigator?.pop() }
-            ) {
-                Text("Back")
-            }
-
-            Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                Button(onClick = { launcher.launch() }) {
-                    Text("Import theme")
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                DropdownComponent(
-                    modifier = Modifier.width(200.dp),
-                    options = state.themesList,
-                    optionSelected = state.currentTheme,
-                ) { themeName ->
-                    screenModel.applyTheme(themeName)
-                }
-            }
-        }
+    val launcher = rememberFilePickerLauncher(
+        type = PickerType.File(extensions = listOf(JSON)),
+        mode = PickerMode.Single,
+        title = "Pick a theme file",
+        initialDirectory = state.userHomeDirectory
+    ) { file ->
+        viewModel.importTheme(file)
     }
 
-    companion object {
-        private const val JSON = "json"
+    if (state.newThemeLoaded) {
+        onLoadTheme()
+        viewModel.resetNewThemeLoaded()
+    }
+
+    Box(Modifier.fillMaxSize().background(color = theme.colors.background).padding(16.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            Button(onClick = { launcher.launch() }) {
+                Text("Import theme")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            DropdownComponent(
+                modifier = Modifier.width(200.dp),
+                options = state.themesList,
+                optionSelected = state.currentTheme,
+            ) { themeName ->
+                viewModel.applyTheme(themeName)
+            }
+        }
     }
 }
+
+private const val JSON = "json"

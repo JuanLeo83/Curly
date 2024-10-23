@@ -30,6 +30,8 @@ kotlin {
             implementation(libs.ksoup)
             implementation(libs.kstore)
             implementation(libs.kstore.file)
+            implementation(libs.viewModel)
+            implementation(libs.navigation)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -37,9 +39,11 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.screenModel)
-            implementation(libs.voyager.koin)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewModel)
+//            implementation(libs.voyager.navigator)
+//            implementation(libs.voyager.screenModel)
+//            implementation(libs.voyager.koin)
             implementation(libs.ktor.client.cio)
             implementation(libs.filePicker)
         }

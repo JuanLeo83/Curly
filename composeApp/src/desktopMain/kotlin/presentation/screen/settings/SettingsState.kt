@@ -1,6 +1,6 @@
 package presentation.screen.settings
 
-data class SettingsScreenState(
+data class SettingsState(
     val userHomeDirectory: String = "",
     val currentTheme: String = "",
     val newThemeLoaded: Boolean = false,

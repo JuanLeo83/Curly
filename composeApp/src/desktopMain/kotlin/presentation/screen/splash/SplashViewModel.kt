@@ -1,27 +1,34 @@
 package presentation.screen.splash
 
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import domain.usecase.CreateConfigDirectoryUseCase
 import domain.usecase.LoadCurrentThemeUseCase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import presentation.theme.ThemeMapper
 import theme
 
-class SplashScreenModel(
+class SplashViewModel(
     private val createConfigDirectoryUseCase: CreateConfigDirectoryUseCase,
     private val loadCurrentThemeUseCase: LoadCurrentThemeUseCase,
     private val themeMapper: ThemeMapper
-) : StateScreenModel<SplashScreenState>(SplashScreenState()) {
+) : ViewModel() {
+
+    private val _state = MutableStateFlow(SplashState())
+    val state = _state.asStateFlow()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
+            delay(3000)
             createConfigDirectoryUseCase().fold(
                 onSuccess = {
                     loadCurrentThemeUseCase().fold(
                         onSuccess = {
                             theme = themeMapper.mapToTheme(it)
-                            mutableState.value = state.value.copy(initialized = true)
+                            _state.value = state.value.copy(initialized = true)
                         },
                         onFailure = { println("Error loading current theme: $it") }
                     )

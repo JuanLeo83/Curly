@@ -1,26 +1,31 @@
 package presentation.screen.settings
 
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import domain.usecase.ApplyThemeUseCase
 import domain.usecase.GetThemesUseCase
 import domain.usecase.GetUserHomeUseCase
 import domain.usecase.ImportThemeUseCase
 import io.github.vinceglb.filekit.core.PlatformFile
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import presentation.theme.ThemeMapper
 import theme
 
-class SettingsScreenModel(
+class SettingsViewModel(
     private val getUserHomeUseCase: GetUserHomeUseCase,
     private val importThemeUseCase: ImportThemeUseCase,
     private val getThemesUseCase: GetThemesUseCase,
     private val applyThemeUseCase: ApplyThemeUseCase,
     private val themeMapper: ThemeMapper
-) : StateScreenModel<SettingsScreenState>(SettingsScreenState()) {
+) : ViewModel() {
+
+    private val _state = MutableStateFlow(SettingsState())
+    val state = _state.asStateFlow()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             getUserHomeUseCase().fold(
                 onSuccess = ::onGetUserHomeSuccess,
                 onFailure = { println("Error getting user home directory: $it") }
@@ -31,7 +36,7 @@ class SettingsScreenModel(
     fun importTheme(platformFile: PlatformFile?) {
         if (platformFile == null) return
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             importThemeUseCase(platformFile.file.path).fold(
                 onSuccess = { loadThemes() },
                 onFailure = { println("Error importing theme: $it") }
@@ -40,11 +45,11 @@ class SettingsScreenModel(
     }
 
     fun applyTheme(themeName: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             applyThemeUseCase(themeName).fold(
                 onSuccess = {
                     theme = themeMapper.mapToTheme(it)
-                    mutableState.value = state.value.copy(
+                    _state.value = state.value.copy(
                         currentTheme = themeName,
                         newThemeLoaded = true
                     )
@@ -55,19 +60,19 @@ class SettingsScreenModel(
     }
 
     fun resetNewThemeLoaded() {
-        mutableState.value = state.value.copy(newThemeLoaded = false)
+        _state.value = state.value.copy(newThemeLoaded = false)
     }
 
     private fun onGetUserHomeSuccess(userHome: String) {
-        mutableState.value = state.value.copy(userHomeDirectory = userHome)
+        _state.value = state.value.copy(userHomeDirectory = userHome)
         loadThemes()
     }
 
     private fun loadThemes() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             getThemesUseCase().fold(
                 onSuccess = {
-                    mutableState.value = state.value.copy(
+                    _state.value = state.value.copy(
                         currentTheme = it.currentTheme,
                         themesList = it.allThemes
                     )

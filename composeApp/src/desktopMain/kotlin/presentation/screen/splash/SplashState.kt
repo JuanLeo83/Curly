@@ -1,5 +1,5 @@
 package presentation.screen.splash
 
-data class SplashScreenState(
+data class SplashState(
     val initialized: Boolean = false
 )

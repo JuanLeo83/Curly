@@ -31,9 +31,9 @@ import domain.usecase.LoadCurrentThemeUseCase
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import presentation.screen.request.RequestScreenMapper
-import presentation.screen.request.RequestScreenModel
-import presentation.screen.settings.SettingsScreenModel
-import presentation.screen.splash.SplashScreenModel
+import presentation.screen.request.RequestViewModel
+import presentation.screen.settings.SettingsViewModel
+import presentation.screen.splash.SplashViewModel
 import presentation.theme.ThemeMapper
 import java.awt.Dimension
 
@@ -99,8 +99,8 @@ private val domainModule = module {
 
 private val presentationModule = module {
     single { ThemeMapper() }
-    factory { SplashScreenModel(get(), get(), get()) }
-    factory { RequestScreenModel(get(), get()) }
+    factory { SplashViewModel(get(), get(), get()) }
+    factory { RequestViewModel(get(), get()) }
     factory { RequestScreenMapper() }
-    factory { SettingsScreenModel(get(), get(), get(), get(), get()) }
+    factory { SettingsViewModel(get(), get(), get(), get(), get()) }
 }

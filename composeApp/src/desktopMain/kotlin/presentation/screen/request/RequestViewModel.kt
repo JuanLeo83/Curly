@@ -1,56 +1,42 @@
 package presentation.screen.request
 
-import cafe.adriel.voyager.core.model.StateScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import domain.model.RequestMethod
 import domain.model.ResponseModel
 import domain.usecase.DoRequestUseCase
 import extension.list.modify
 import extension.list.remove
 import extension.list.sortRequestParams
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class RequestScreenModel(
-//    private val createConfigDirectoryUseCase: CreateConfigDirectoryUseCase,
-//    private val loadCurrentThemeUseCase: LoadCurrentThemeUseCase,
+class RequestViewModel(
     private val doRequestUseCase: DoRequestUseCase,
-    private val mapper: RequestScreenMapper,
-//    private val themeMapper: ThemeMapper
-) : StateScreenModel<RequestScreenState>(RequestScreenState()) {
-
-//    init {
-//        screenModelScope.launch {
-//            createConfigDirectoryUseCase().fold(
-//                onSuccess = {
-//                    loadCurrentThemeUseCase().fold(
-//                        onSuccess = {
-//                            theme = themeMapper.mapToTheme(it)
-//                            mutableState.value = state.value.copy(initialized = true)
-//                        },
-//                        onFailure = { println("Error loading current theme: $it") }
-//                    )
-//                },
-//                onFailure = { println("Error creating config directory: $it") }
-//            )
-//        }
-//    }
+    private val mapper: RequestScreenMapper
+) : ViewModel() {
+    
+    private val _state: MutableStateFlow<RequestScreenState> = MutableStateFlow(RequestScreenState())
+    val state: StateFlow<RequestScreenState> = _state.asStateFlow()
 
     fun setUrl(url: String) {
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             urlVo = state.value.urlVo.copy(url = url),
             paramsVo = state.value.paramsVo.copy(params = getRequestParams(url))
         )
     }
 
     fun setRequestMethod(method: RequestMethod) {
-        mutableState.value = state.value.setMethod(method)
+        _state.value = state.value.setMethod(method)
     }
 
-    fun sendRequest() = screenModelScope.launch {
+    fun sendRequest() = viewModelScope.launch {
         if (state.value.urlVo.url.isEmpty()) return@launch
 
         val params = mapper.mapToRequestParams(state.value)
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             urlVo = state.value.urlVo.copy(url = params.url),
             isLoading = true
         )
@@ -61,11 +47,11 @@ class RequestScreenModel(
     }
 
     fun showPretty() {
-        mutableState.value = state.value.copy(responseViewMode = ResponseViewMode.PRETTY)
+        _state.value = state.value.copy(responseViewMode = ResponseViewMode.PRETTY)
     }
 
     fun showRaw() {
-        mutableState.value = state.value.copy(responseViewMode = ResponseViewMode.RAW)
+        _state.value = state.value.copy(responseViewMode = ResponseViewMode.RAW)
     }
 
     fun addRow(type: TableType) {
@@ -94,45 +80,45 @@ class RequestScreenModel(
 
     fun setRequestBodyType(optionSelected: String) {
         val bodyType = mapper.mapBodyTypeByName(optionSelected)
-        mutableState.value = state.value.setBodyType(bodyType)
+        _state.value = state.value.setBodyType(bodyType)
     }
 
     fun setRequestBody(value: String) {
-        mutableState.value = state.value.setBody(value)
+        _state.value = state.value.setBody(value)
     }
 
     fun setAuthorizationType(authorizationType: String) {
         val authType = mapper.mapAuthorizationTypeByName(authorizationType)
-        mutableState.value = state.value.setAuthorizationType(authType)
+        _state.value = state.value.setAuthorizationType(authType)
     }
 
     fun onBasicAuthUserNameChange(userName: String) {
-        mutableState.value = state.value.setBasicUserName(userName)
+        _state.value = state.value.setBasicUserName(userName)
     }
 
     fun onBasicAuthPasswordChange(password: String) {
-        mutableState.value = state.value.setBasicPassword(password)
+        _state.value = state.value.setBasicPassword(password)
     }
 
     fun onBearerTokenChange(token: String) {
-        mutableState.value = state.value.setBearerToken(token)
+        _state.value = state.value.setBearerToken(token)
     }
 
     fun onApiKeyAddToSelected(optionSelected: String) {
         val addTo = mapper.mapAddToByName(optionSelected)
-        mutableState.value = state.value.setApiKeyAddTo(addTo)
+        _state.value = state.value.setApiKeyAddTo(addTo)
     }
 
     fun onApiKeyChange(apiKey: String) {
-        mutableState.value = state.value.setApiKey(apiKey)
+        _state.value = state.value.setApiKey(apiKey)
     }
 
     fun onApiKeyValueChange(apiKeyValue: String) {
-        mutableState.value = state.value.setApiKeyValue(apiKeyValue)
+        _state.value = state.value.setApiKeyValue(apiKeyValue)
     }
 
     private fun requestSuccessHandler(result: ResponseModel) {
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             isLoading = false,
             responseData = mapper.mapToResponseData(result),
             errorMessage = ""
@@ -140,7 +126,7 @@ class RequestScreenModel(
     }
 
     private fun requestFailureHandler(throwable: Throwable) {
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             isLoading = false,
             responseData = null,
             errorMessage = throwable.message ?: ""
@@ -148,16 +134,16 @@ class RequestScreenModel(
     }
 
     private fun addRequestParam() {
-        mutableState.value = state.value.addParamSocket()
+        _state.value = state.value.addParamSocket()
     }
 
     private fun addRequestHeader() {
-        mutableState.value = state.value.addHeaderSocket()
+        _state.value = state.value.addHeaderSocket()
     }
 
     private fun modifyRequestParam(param: RequestParam) {
         val updatedParams = state.value.paramsVo.params.modify(param, param.index)
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             urlVo = state.value.urlVo.copy(
                 url = buildUrlWithParams(state.value.urlVo.url, updatedParams)
             ),
@@ -166,12 +152,12 @@ class RequestScreenModel(
     }
 
     private fun modifyRequestHeader(param: RequestParam) {
-        mutableState.value = state.value.modifyHeaderSocket(param)
+        _state.value = state.value.modifyHeaderSocket(param)
     }
 
     private fun deleteRequestParam(index: Int) {
         val updatedParams = state.value.paramsVo.params.remove(index)
-        mutableState.value = state.value.copy(
+        _state.value = state.value.copy(
             urlVo = state.value.urlVo.copy(
                 url = buildUrlWithParams(state.value.urlVo.url, updatedParams)
             ),
@@ -180,7 +166,7 @@ class RequestScreenModel(
     }
 
     private fun deleteRequestHeader(index: Int) {
-        mutableState.value = state.value.deleteHeaderSocket(index)
+        _state.value = state.value.deleteHeaderSocket(index)
     }
 
     private fun getRequestParams(url: String): List<RequestParam> {

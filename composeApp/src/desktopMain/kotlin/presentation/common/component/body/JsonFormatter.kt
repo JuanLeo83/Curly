@@ -48,7 +48,7 @@ fun JsonFormatter(jsonValue: String) = remember(jsonValue) {
     }
 }
 
-fun getColor(value: String) = when {
+private fun getColor(value: String) = when {
     value.trim().endsWith(COLON) -> theme.colors.syntax.json.key // Keys
     value == COMMA -> theme.colors.input.placeholder // Comma
     value.startsWith(QUOTE) && value.endsWith(QUOTE) -> theme.colors.syntax.json.stringValue // String value
@@ -60,7 +60,7 @@ fun getColor(value: String) = when {
     else -> theme.colors.input.placeholder
 }
 
-fun getFontWeight(value: String): FontWeight = when {
+private fun getFontWeight(value: String): FontWeight = when {
     value == "true" || value == "false" || value == "null" -> FontWeight.Bold
     else -> FontWeight.Light
 }

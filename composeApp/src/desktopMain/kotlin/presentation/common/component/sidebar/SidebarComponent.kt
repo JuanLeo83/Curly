@@ -1,5 +1,7 @@
 package presentation.common.component.sidebar
 
+import AppState
+import Route
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,40 +31,40 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.Navigator
-import presentation.screen.settings.SettingsScreen
 import theme
 
 @Composable
 fun SidebarComponent(
-    modifier: Modifier = Modifier,
-    isExpanded: Boolean,
-    navigator: Navigator,
-    onLoadTheme: () -> Unit,
-    onExpandClick: () -> Unit
+    appState: AppState,
+    onExpandClick: () -> Unit,
+    navigateToRequest: () -> Unit,
+    navigateToSettings: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxHeight()
-            .width(if (isExpanded) 80.dp else 50.dp)
+            .width(if (appState.isSidebarExpanded) 80.dp else 50.dp)
             .background(color = theme.colors.table.header.background)
     ) {
         Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
             SidebarItemComponent(
                 imageVector = Icons.AutoMirrored.Outlined.Send,
+                currentScreen = appState.currentScreen,
+                screenToNavigate = Route.Request,
                 title = "Request",
-                showTitle = isExpanded
-            ) {
-                navigator.push(SettingsScreen(onLoadTheme))
-            }
+                showTitle = appState.isSidebarExpanded,
+                onClick = navigateToRequest
+            )
+
             SidebarItemComponent(
                 imageVector = Icons.Outlined.Settings,
+                currentScreen = appState.currentScreen,
+                screenToNavigate = Route.Settings,
                 title = "Settings",
-                showTitle = isExpanded
-            ) {
-                navigator.push(SettingsScreen(onLoadTheme))
-            }
+                showTitle = appState.isSidebarExpanded,
+                onClick = navigateToSettings
+            )
         }
 
         Box(
@@ -70,7 +72,7 @@ fun SidebarComponent(
             modifier = Modifier.fillMaxWidth().padding(4.dp)
         ) {
             Icon(
-                imageVector = if (isExpanded) Icons.Outlined.ChevronLeft else Icons.Outlined.ChevronRight,
+                imageVector = if (appState.isSidebarExpanded) Icons.Outlined.ChevronLeft else Icons.Outlined.ChevronRight,
                 contentDescription = null,
                 modifier = Modifier.size(18.dp)
                     .clickable(
@@ -86,10 +88,14 @@ fun SidebarComponent(
 @Composable
 private fun SidebarItemComponent(
     imageVector: ImageVector,
+    currentScreen: Route,
+    screenToNavigate: Route,
     title: String,
     showTitle: Boolean,
     onClick: () -> Unit
 ) {
+    val isSelected = currentScreen == screenToNavigate
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -103,13 +109,13 @@ private fun SidebarItemComponent(
             imageVector = imageVector,
             contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = theme.colors.table.header.text
+            tint = if (isSelected) theme.colors.primary else theme.colors.table.header.text
         )
         if (showTitle) {
             Text(
                 text = title,
                 fontSize = 8.sp,
-                color = theme.colors.table.header.text,
+                color = if (isSelected) theme.colors.primary else theme.colors.table.header.text,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         } else {

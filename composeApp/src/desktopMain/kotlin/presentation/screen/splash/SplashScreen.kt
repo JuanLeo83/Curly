@@ -11,32 +11,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.koinScreenModel
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import presentation.screen.request.RequestScreen
+import org.koin.compose.viewmodel.koinViewModel
 
-class SplashScreen(
-    val onLoadTheme: () -> Unit
-) : Screen {
+@Composable
+fun SplashScreen(
+    viewModel: SplashViewModel = koinViewModel(),
+    onLoadTheme: () -> Unit,
+    navigateNext: () -> Unit
+) {
+    val state by viewModel.state.collectAsState()
 
-    @Composable
-    override fun Content() {
-        val screenModel = koinScreenModel<SplashScreenModel>()
-        val state by screenModel.state.collectAsState()
-        val navigator = LocalNavigator.currentOrThrow
-
-        if (state.initialized) {
-            onLoadTheme()
-            navigator.replace(RequestScreen(onLoadTheme))
-        }
-
-        Box(
-            modifier = Modifier.fillMaxSize().background(Color.Black),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Curly", fontSize = 32.sp)
-        }
+    if (state.initialized) {
+        onLoadTheme()
+        navigateNext()
     }
+
+    Box(
+        modifier = Modifier.fillMaxSize().background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Curly", fontSize = 32.sp)
+    }
+
 }
